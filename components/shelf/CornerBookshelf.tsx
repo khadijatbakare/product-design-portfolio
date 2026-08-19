@@ -1,11 +1,57 @@
 'use client'
+
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { shelfVolumes, type ModalView } from '@/data/content'
-export interface CornerBookshelfProps { readonly onOpen: (view: ModalView) => void }
-const placements = [{x:158,y:126,width:34,height:126,angle:1},{x:198,y:113,width:38,height:139,angle:-1},{x:436,y:126,width:34,height:126,angle:-1},{x:476,y:139,width:31,height:113,angle:1}]
+import { volumes, type ModalView, type VolumeId } from '@/data/content'
+
+export interface CornerBookshelfProps {
+  readonly onOpen: (view: ModalView, volumeId?: VolumeId) => void
+}
+
+const placements = [
+  { x: 158, y: 126, width: 34, height: 126, angle: 1 },
+  { x: 198, y: 113, width: 38, height: 139, angle: -1 },
+  { x: 436, y: 126, width: 34, height: 126, angle: -1 },
+  { x: 476, y: 139, width: 31, height: 113, angle: 1 },
+]
+
 export function CornerBookshelf({ onOpen }: CornerBookshelfProps) {
-  const [hovered,setHovered]=useState<string|null>(null)
-  const active=shelfVolumes.find(volume=>volume.id===hovered)
-  return <section className="relative mx-auto flex min-h-[590px] w-full max-w-5xl flex-col items-center justify-end select-none" aria-label="Portfolio library"><div className="absolute top-4 z-20 flex h-14 items-center justify-center"><AnimatePresence mode="wait">{active?<motion.div key={active.id} initial={{opacity:0,y:8,scale:.96}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-4,scale:.96}} className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"><p className="text-xs font-medium">{active.subtitle}</p><p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">{active.volume}</p></motion.div>:<p className="font-mono text-[10px] uppercase tracking-[.18em] text-stone-500">Hover over a volume to explore</p>}</AnimatePresence></div><svg viewBox="0 0 680 520" className="h-auto w-full overflow-visible drop-shadow-2xl" role="img" aria-label="L-shaped corner bookshelf with four interactive volumes"><defs><linearGradient id="left-shelf"><stop stopColor="#343941"/><stop offset="1" stopColor="#25282e"/></linearGradient><linearGradient id="right-shelf"><stop stopColor="#282c32"/><stop offset="1" stopColor="#1d1f23"/></linearGradient><linearGradient id="wall-left"><stop stopColor="#ece8df"/><stop offset="1" stopColor="#ddd7cc"/></linearGradient><linearGradient id="wall-right"><stop stopColor="#ded8cd"/><stop offset="1" stopColor="#f0ece4"/></linearGradient></defs><path d="M35 20L340 52V500H35Z" fill="url(#wall-left)" opacity=".7"/><path d="M340 52L645 20V500H340Z" fill="url(#wall-right)" opacity=".7"/><line x1="340" y1="52" x2="340" y2="500" stroke="#bdb6aa" strokeWidth="2"/><polygon points="110,62 334,84 334,474 110,454" fill="url(#left-shelf)"/><polygon points="346,84 570,62 570,454 346,474" fill="url(#right-shelf)"/><polygon points="98,50 334,74 346,84 110,62" fill="#414650"/><polygon points="346,84 582,50 570,62 346,94" fill="#343840"/>{[260,390].map(y=><g key={y}><polygon points={`110,${y} 334,${y+20} 334,${y+31} 110,${y+11}`} fill="#202329" stroke="#454a53"/><polygon points={`346,${y+20} 570,${y} 570,${y+11} 346,${y+31}`} fill="#1b1d21" stroke="#343840"/></g>)}<rect x="330" y="75" width="22" height="402" fill="#111318" opacity=".45"/>{shelfVolumes.map((volume,index)=>{const place=placements[index];const isHovered=hovered===volume.id;return <motion.g key={volume.id} tabIndex={0} role="button" aria-label={`Open ${volume.volume}: ${volume.title}`} onClick={()=>onOpen(volume.modal)} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onOpen(volume.modal)}}} onMouseEnter={()=>setHovered(volume.id)} onMouseLeave={()=>setHovered(null)} onFocus={()=>setHovered(volume.id)} onBlur={()=>setHovered(null)} animate={{y:isHovered?-16:0}} transition={{type:'spring',stiffness:340,damping:25}} className="cursor-pointer outline-none"><rect x={place.x} y={place.y} width={place.width} height={place.height} rx="2" fill={volume.color} stroke="#0e0f11" transform={`rotate(${place.angle} ${place.x} ${place.y+place.height})`}/><rect x={place.x+3} y={place.y-3} width={place.width-6} height="3" rx="1" fill="#f3eee5" opacity=".85"/><text x={place.x+place.width/2} y={place.y+14} fill={index===3?'#292722':'#ddd8ce'} fontSize="6" fontFamily="monospace" textAnchor="middle">{volume.volume}</text><text x={place.x+place.width/2} y={place.y+place.height/2} fill={index===3?'#292722':'#eee9df'} fontSize="8" fontFamily="monospace" textAnchor="middle" transform={`rotate(-90 ${place.x+place.width/2} ${place.y+place.height/2})`}>{volume.title}</text><line x1={place.x+8} x2={place.x+place.width-8} y1={place.y+place.height-12} y2={place.y+place.height-12} stroke={index===3?'#292722':'#ddd8ce'} opacity=".45"/></motion.g>})}<polygon points="94,454 334,474 346,486 106,466" fill="#414650"/><polygon points="346,474 574,454 586,466 346,486" fill="#30343b"/></svg></section>
+  const [hovered, setHovered] = useState<VolumeId | null>(null)
+  const active = volumes.find((volume) => volume.id === hovered)
+
+  return (
+    <section className="relative mx-auto flex min-h-[590px] w-full max-w-5xl flex-col items-center justify-end select-none" aria-label="Portfolio library">
+      <div className="absolute top-4 z-20 flex h-14 items-center justify-center">
+        <AnimatePresence mode="wait">
+          {active ? (
+            <motion.div key={active.id} initial={{ opacity: 0, y: 8, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: .96 }} className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur">
+              <p className="text-xs font-medium">{active.subtitle}</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">{active.label}</p>
+            </motion.div>
+          ) : <p className="font-mono text-[10px] uppercase tracking-[.18em] text-stone-500">Hover over a volume to explore</p>}
+        </AnimatePresence>
+      </div>
+      <svg viewBox="0 0 680 520" className="h-auto w-full overflow-visible drop-shadow-2xl" role="img" aria-label="L-shaped corner bookshelf with four interactive volumes">
+        <defs>
+          <linearGradient id="left-shelf"><stop stopColor="#343941"/><stop offset="1" stopColor="#25282e"/></linearGradient>
+          <linearGradient id="right-shelf"><stop stopColor="#282c32"/><stop offset="1" stopColor="#1d1f23"/></linearGradient>
+          <linearGradient id="wall-left"><stop stopColor="#ece8df"/><stop offset="1" stopColor="#ddd7cc"/></linearGradient>
+          <linearGradient id="wall-right"><stop stopColor="#ded8cd"/><stop offset="1" stopColor="#f0ece4"/></linearGradient>
+        </defs>
+        <path d="M35 20L340 52V500H35Z" fill="url(#wall-left)" opacity=".7"/><path d="M340 52L645 20V500H340Z" fill="url(#wall-right)" opacity=".7"/><line x1="340" y1="52" x2="340" y2="500" stroke="#bdb6aa" strokeWidth="2"/>
+        <polygon points="110,62 334,84 334,474 110,454" fill="url(#left-shelf)"/><polygon points="346,84 570,62 570,454 346,474" fill="url(#right-shelf)"/><polygon points="98,50 334,74 346,84 110,62" fill="#414650"/><polygon points="346,84 582,50 570,62 346,94" fill="#343840"/>
+        {[260, 390].map((y) => <g key={y}><polygon points={`110,${y} 334,${y+20} 334,${y+31} 110,${y+11}`} fill="#202329" stroke="#454a53"/><polygon points={`346,${y+20} 570,${y} 570,${y+11} 346,${y+31}`} fill="#1b1d21" stroke="#343840"/></g>)}
+        <rect x="330" y="75" width="22" height="402" fill="#111318" opacity=".45"/>
+        {volumes.map((volume, index) => {
+          const place = placements[index]
+          const isHovered = hovered === volume.id
+          const open = () => onOpen(volume.view, volume.id)
+          return <motion.g key={volume.id} tabIndex={0} role="button" aria-label={`Open ${volume.label}: ${volume.title}`} onClick={open} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open() } }} onMouseEnter={() => setHovered(volume.id)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(volume.id)} onBlur={() => setHovered(null)} animate={{ y: isHovered ? -16 : 0 }} transition={{ type: 'spring', stiffness: 340, damping: 25 }} className="cursor-pointer outline-none">
+            <rect x={place.x} y={place.y} width={place.width} height={place.height} rx="2" fill={volume.color} stroke="#0e0f11" transform={`rotate(${place.angle} ${place.x} ${place.y+place.height})`}/><rect x={place.x+3} y={place.y-3} width={place.width-6} height="3" rx="1" fill="#f3eee5" opacity=".85"/><text x={place.x+place.width/2} y={place.y+14} fill={index===3?'#292722':'#ddd8ce'} fontSize="6" fontFamily="monospace" textAnchor="middle">{volume.label}</text><text x={place.x+place.width/2} y={place.y+place.height/2} fill={index===3?'#292722':'#eee9df'} fontSize="8" fontFamily="monospace" textAnchor="middle" transform={`rotate(-90 ${place.x+place.width/2} ${place.y+place.height/2})`}>{volume.title}</text><line x1={place.x+8} x2={place.x+place.width-8} y1={place.y+place.height-12} y2={place.y+place.height-12} stroke={index===3?'#292722':'#ddd8ce'} opacity=".45"/>
+          </motion.g>
+        })}
+        <polygon points="94,454 334,474 346,486 106,466" fill="#414650"/><polygon points="346,474 574,454 586,466 346,486" fill="#30343b"/>
+      </svg>
+    </section>
+  )
 }
