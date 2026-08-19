@@ -1,4 +1,0 @@
-import { useState } from 'react'
-import type { MediaAsset } from '../../types/content'
-export interface MediaProps { readonly asset: MediaAsset; readonly priority?: boolean; readonly className?: string; readonly placeholderLabel?: string }
-export function Media({ asset, priority = false, className = '', placeholderLabel }: MediaProps) { const [failed, setFailed] = useState(false); return <div className={`media ${className}`.trim()} style={{ aspectRatio: `${asset.width}/${asset.height}`, background: asset.placeholder }}>{!failed && <img src={asset.src} alt={asset.alt} width={asset.width} height={asset.height} loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} onError={() => setFailed(true)} />}{failed && placeholderLabel && <span className="media-placeholder">{placeholderLabel}</span>}</div> }

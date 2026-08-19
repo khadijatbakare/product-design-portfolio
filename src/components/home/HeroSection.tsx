@@ -1,4 +1,0 @@
-import type { Availability } from '../../types/content'
-import { Container } from '../primitives'
-export interface HeroSectionProps { readonly headline: readonly string[]; readonly emphasis?: string; readonly intro: string; readonly availability?: Availability; readonly onScrollToWork: () => void }
-export function HeroSection({ headline, emphasis, intro, availability, onScrollToWork }: HeroSectionProps) { return <Container className="hero">{availability && <div className="eyebrow"><span className="status-dot" /> {availability.label.toUpperCase()}</div>}<h1>{headline.map(line => <span className="headline-line" key={line}>{line}</span>)}{emphasis && <em className="headline-line">{emphasis}</em>}</h1><div className="hero-bottom"><p>{intro}</p><button className="circle-link" onClick={onScrollToWork} aria-label="View selected work">→</button></div></Container> }

@@ -1,2 +1,0 @@
-import type { FigureBlock as Figure } from '../../../types/content'
-export function FigureBlock(block: Figure) { return <figure className={`case-figure figure-${block.bleed}`}><img src={block.media.src} alt={block.media.alt} width={block.media.width} height={block.media.height} style={{ backgroundColor: block.media.placeholder }} />{block.caption && <figcaption>{block.caption}</figcaption>}</figure> }

@@ -1,3 +1,0 @@
-import React from 'react'
-export interface ArrowLinkProps { readonly children: React.ReactNode; readonly href?: string; readonly onClick?: () => void; readonly direction?: 'right' | 'diagonal' | 'up'; readonly variant?: 'text' | 'circle' | 'pill' }
-export function ArrowLink({ children, href, onClick, direction = 'right', variant = 'text' }: ArrowLinkProps) { const arrow = { right: '→', diagonal: '↗', up: '↑' }[direction]; const className = `arrow-link arrow-link-${variant}`; return href ? <a className={className} href={href}>{children} <span aria-hidden="true">{arrow}</span></a> : <button className={className} onClick={onClick}>{children} <span aria-hidden="true">{arrow}</span></button> }

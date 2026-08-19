@@ -1,0 +1,2 @@
+import { profile, type ModalView } from '@/data/content'
+export function LibraryCheckoutFooter({ onOpen }: { onOpen: (view: ModalView) => void }) { return <footer className="border-t border-black/15 px-6 py-7 md:px-12"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 font-mono text-[10px] uppercase tracking-widest"><span>© 2026 {profile.name}</span><div className="flex gap-6"><button onClick={() => onOpen('resume')}>Résumé</button><button onClick={() => onOpen('contact')}>Checkout / Contact</button></div></div></footer> }

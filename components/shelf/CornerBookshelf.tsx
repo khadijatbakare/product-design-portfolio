@@ -1,0 +1,6 @@
+'use client'
+import { motion } from 'framer-motion'
+import { shelfVolumes, type ModalView } from '@/data/content'
+export function CornerBookshelf({ onOpen }: { onOpen: (view: ModalView) => void }) {
+  return <section className="flex min-h-[470px] w-full flex-col justify-end" aria-label="Portfolio library"><div className="mx-auto flex items-end gap-3 px-6">{shelfVolumes.map(volume => <motion.button key={volume.id} onClick={() => onOpen(volume.id)} whileHover={{ y: -18 }} whileFocus={{ y: -12 }} className="book-shadow relative flex w-16 flex-col items-center justify-between rounded-t px-2 py-4 text-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500" style={{ height: volume.height, background: volume.color }} aria-label={`Open ${volume.title}`}><span className="font-mono text-[8px] tracking-widest opacity-60">{volume.volume}</span><strong className="[writing-mode:vertical-rl] rotate-180 font-mono text-[11px] tracking-[.16em]">{volume.title}</strong><span className="h-px w-4 bg-current opacity-30" /></motion.button>)}</div><div className="relative mx-auto flex h-5 w-full max-w-2xl items-center justify-between bg-[#d8d1c5] px-4 font-mono text-[9px] uppercase tracking-widest text-stone-500 shadow-xl"><span>Khadijat — Folio Index</span><span>4 volumes</span></div></section>
+}
