@@ -12,7 +12,10 @@ export type DarkFace = NumberFace | DarkAction | DarkWild
 export type CardFace = LightFace | DarkFace
 
 export interface UnoFlipCard { readonly id: string; readonly pairId: string; readonly value: string; readonly icon: string; readonly side: Side; readonly color: CardColor; readonly face: CardFace; readonly isMatchable: boolean }
-export interface UnoGrid { readonly cards: readonly UnoFlipCard[]; readonly columns: number }
+export type CellStatus = 'face-down' | 'face-up' | 'matched'
+export interface GridCell { readonly index: number; readonly card: UnoFlipCard; readonly status: CellStatus }
+export interface GameGrid { readonly columns: number; readonly rows: number; readonly side: Side; readonly seed: number; readonly cells: readonly GridCell[]; readonly flipCard: UnoFlipCard; readonly pairCount: number }
+export interface GridOptions { readonly columns: number; readonly rows: number; readonly side?: Side; readonly seed?: number }
 export type GamePhase = 'idle' | 'one-selected' | 'resolving' | 'complete'
-export interface UnoFlipState { readonly seed: number; readonly grid: UnoGrid; readonly side: Side; readonly selectedIds: readonly string[]; readonly matchedPairIds: readonly string[]; readonly moves: number; readonly phase: GamePhase; readonly flipCount: number }
+export interface UnoFlipState { readonly seed: number; readonly grid: GameGrid; readonly selectedIds: readonly string[]; readonly matchedPairIds: readonly string[]; readonly moves: number; readonly phase: GamePhase; readonly flipCount: number }
 export type UnoFlipAction = { readonly type: 'select'; readonly cardId: string } | { readonly type: 'resolve' } | { readonly type: 'reset'; readonly seed: number } | { readonly type: 'restore'; readonly state: UnoFlipState }
