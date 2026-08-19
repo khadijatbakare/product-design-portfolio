@@ -1,0 +1,3 @@
+import type { OutcomeBlock as Outcome } from '../../../types/content'
+import { beatLabel } from './shared'
+export function OutcomeBlock({ number, ...block }: Outcome & { number: string }) { return <section className="outcome section-wrap"><span className="kicker">{beatLabel(block.beat, number)}</span><h2>{block.heading}</h2><p>{block.body}</p>{block.metrics && <div className="metric-grid">{block.metrics.map(metric => <div key={metric.label}><strong>{metric.value}</strong><span>{metric.label}</span><small>Source: {metric.source}</small></div>)}</div>}{block.unverifiedNote && <small>{block.unverifiedNote}</small>}</section> }

@@ -12,7 +12,7 @@ export function useRoute() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
-  const navigate = useCallback((target) => {
+  const navigate = useCallback((target: string) => {
     const nextHash = target === 'home' ? '' : target
 
     if (getRoute() === target) {

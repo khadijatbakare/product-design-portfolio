@@ -1,0 +1,3 @@
+import type { DecisionBlock as Decision } from '../../../types/content'
+import { beatLabel } from './shared'
+export function DecisionBlock({ number, ...block }: Decision & { number: string }) { const items = [{ label: 'DIFFICULTY', value: block.difficulty }, { label: 'PROPOSAL', value: block.proposal }, { label: 'TRADE-OFF', value: block.tradeoff }]; return <section className="decision section-wrap"><span className="kicker">{beatLabel(block.beat, number)}</span><h2>{block.heading}</h2><div className="decision-grid">{items.map(item => <div key={item.label}><span>{item.label}</span><p>{item.value}</p></div>)}</div></section> }

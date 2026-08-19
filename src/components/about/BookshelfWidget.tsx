@@ -1,4 +1,5 @@
-import type { Book } from '../types/content'
+import type { Book } from '../../types/content'
+import { BookSpine } from './BookSpine'
 
 export interface BookshelfWidgetProps {
   readonly books: readonly Book[]
@@ -6,12 +7,6 @@ export interface BookshelfWidgetProps {
   readonly limit?: number
   readonly featureCurrent?: boolean
 }
-export interface BookSpineProps { readonly book: Book; readonly height: number }
-
-export function BookSpine({ book, height }: BookSpineProps) {
-  return <div className="book-spine" style={{ backgroundColor: book.spineColor, height: `${height}%` }} title={`${book.title} — ${book.author}`}><span>{book.title}</span></div>
-}
-
 export function BookshelfWidget({ books, display = 'spines', limit, featureCurrent = false }: BookshelfWidgetProps) {
   const current = featureCurrent ? books.find(book => book.status === 'reading') : undefined
   const ordered = current ? [current, ...books.filter(book => book.id !== current.id)] : books

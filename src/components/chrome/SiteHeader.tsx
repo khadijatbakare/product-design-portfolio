@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { siteConfig } from '../data/site'
+import { siteConfig } from '../../content/site'
 
 export function SiteHeader({ route, navigate }: { route: string; navigate: (route: string) => void }) {
   const [open, setOpen] = useState(false)

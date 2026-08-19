@@ -1,5 +1,5 @@
-import type { ProjectSummary } from '../types/content'
-import { ProjectVisual } from './home/ProjectVisual'
+import type { ProjectSummary } from '../../types/content'
+import { ProjectVisual } from './ProjectVisual'
 
 export interface ProjectCardProps {
   readonly project: ProjectSummary
