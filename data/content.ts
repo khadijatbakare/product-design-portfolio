@@ -77,8 +77,17 @@ export interface Resume {
   readonly designSystemSkills: readonly DesignSystemSkill[]
   readonly tools: readonly string[]
 }
-export interface LedgerEntry { readonly label: string; readonly value: string; readonly href?: string }
-export interface CheckoutSlip { readonly availability: { readonly status: AvailabilityStatus; readonly label: string }; readonly ledger: readonly LedgerEntry[] }
+export interface LedgerEntry { readonly id: string; readonly label: string; readonly href: string; readonly kind: 'external' | 'mail' | 'file'; readonly stamp: string }
+export interface CheckoutSlip {
+  readonly cardNumber: string
+  readonly title: string
+  readonly classification: string
+  readonly columns: readonly [string, string]
+  readonly availability: { readonly status: AvailabilityStatus; readonly stamp: string; readonly label: string }
+  readonly ledger: readonly LedgerEntry[]
+  readonly notice: string
+  readonly footnote: string
+}
 export interface LibraryCopy { readonly eyebrow: string; readonly instruction: string; readonly back: string; readonly open: string; readonly shelfPlate: string; readonly volumeCount: string }
 
 export const libraryCopy: LibraryCopy = { eyebrow: 'PRODUCT DESIGNER · FOUNDING DESIGNER', instruction: 'Pull a volume from the shelf', back: 'Back to shelf', open: 'Start reading', shelfPlate: 'Khadijat — Folio Index', volumeCount: '4 Volumes' }
@@ -158,7 +167,18 @@ export const resume: Resume = {
   ],
   tools: ['Figma', 'FigJam', 'Prototyping', 'Design tokens'],
 }
-export const checkoutSlip: CheckoutSlip = { availability: { status: 'selective', label: 'Available for select opportunities' }, ledger: [{ label: 'Email', value: siteIdentity.email, href: `mailto:${siteIdentity.email}` }, { label: 'Location', value: 'Lagos, Nigeria' }, { label: 'Portfolio', value: '2026 edition' }] }
+export const checkoutSlip: CheckoutSlip = {
+  cardNumber: 'No. 001', classification: '745.2 BAK', title: 'BAKARE, KHADIJAT — Selected Works', columns: ['BORROWER', 'DATE'],
+  availability: { status: 'open', stamp: 'AVAILABLE', label: 'Open to select opportunities — full-time or a small number of projects.' },
+  ledger: [
+    { id: 'email', label: 'Email', href: `mailto:${siteIdentity.email}`, kind: 'mail', stamp: 'ANY TIME' },
+    { id: 'linkedin', label: 'LinkedIn', href: '#linkedin', kind: 'external', stamp: 'WEEKDAYS' },
+    { id: 'resume', label: 'Résumé (PDF)', href: '#resume', kind: 'file', stamp: '2026' },
+    { id: 'figma', label: 'Figma', href: '#figma', kind: 'external', stamp: 'ON REQUEST' },
+  ],
+  notice: 'This volume may be borrowed indefinitely. Please return with notes.',
+  footnote: 'Set in Manrope, Newsreader and DM Mono. Built by hand.',
+}
 
 export const getProjectsByVolume = (volumeId: string) => projects.filter(project => project.volumeId === volumeId)
 export const getVolume = (volumeId: string) => volumes.find(volume => volume.id === volumeId)
