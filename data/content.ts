@@ -1,9 +1,26 @@
 export interface MediaAsset { readonly src: string; readonly alt: string; readonly width: number; readonly height: number; readonly placeholder?: string }
 export type AvailabilityStatus = 'open' | 'selective' | 'closed'
-export type ModalView = 'work' | 'about' | 'resume' | 'contact'
+export type VolumeContents = 'work' | 'notes' | 'about' | 'resume'
+export type ModalView = VolumeContents | 'contact'
 export type VolumeId = 'vol-01' | 'vol-02' | 'vol-03' | 'vol-04'
 
-export interface Volume { readonly id: VolumeId; readonly view: Exclude<ModalView, 'contact'>; readonly label: string; readonly title: string; readonly subtitle: string; readonly color: string }
+export interface Volume {
+  readonly id: string
+  readonly volume: string
+  readonly spine: string
+  readonly subtitle: string
+  readonly readTime: string
+  readonly contents: VolumeContents
+  readonly heading: string
+  readonly description: string
+  readonly width: number
+  readonly height: number
+  readonly color: string
+  readonly textColor: string
+  readonly typography: 'mono' | 'serif' | 'italic' | 'sans'
+  readonly texture: 'dots' | 'gradient' | 'coarse-dots' | 'paper'
+  readonly accent: 'lines' | 'numeral' | 'stitch' | 'ribbon'
+}
 export interface Metric { readonly value: string; readonly label: string; readonly source: string; readonly verified: boolean }
 export interface SystemDecision { readonly decision: string; readonly rationale: string; readonly tradeoff: string }
 export interface VisualAsset { readonly media: MediaAsset; readonly caption: string; readonly spec: string }
@@ -15,12 +32,15 @@ export interface ResumeEntry { readonly organization: string; readonly role: str
 export interface Resume { readonly entries: readonly ResumeEntry[]; readonly coreSkills: readonly string[]; readonly designSystemSkills: readonly string[]; readonly education: string }
 export interface LedgerEntry { readonly label: string; readonly value: string; readonly href?: string }
 export interface CheckoutSlip { readonly availability: { readonly status: AvailabilityStatus; readonly label: string }; readonly ledger: readonly LedgerEntry[] }
+export interface LibraryCopy { readonly eyebrow: string; readonly instruction: string; readonly back: string; readonly open: string; readonly shelfPlate: string; readonly volumeCount: string }
+
+export const libraryCopy: LibraryCopy = { eyebrow: 'PRODUCT DESIGNER · FOUNDING DESIGNER', instruction: 'Pull a volume from the shelf', back: 'Back to shelf', open: 'Start reading', shelfPlate: 'Khadijat — Folio Index', volumeCount: '4 Volumes' }
 
 export const volumes: readonly Volume[] = [
-  { id: 'vol-01', view: 'work', label: 'VOL. 01', title: 'SYSTEMS', subtitle: 'Design systems & product architecture', color: '#22252a' },
-  { id: 'vol-02', view: 'work', label: 'VOL. 02', title: 'PRODUCTS', subtitle: 'End-to-end product design & user flows', color: '#1c2e24' },
-  { id: 'vol-03', view: 'about', label: 'VOL. 03', title: 'FIELD NOTES', subtitle: 'Bookshelf, photo logs, gym & home', color: '#6e3727' },
-  { id: 'vol-04', view: 'resume', label: 'VOL. 04', title: 'AUTHOR / COLOPHON', subtitle: 'Background, experience & résumé', color: '#dcd3c1' },
+  { id: 'vol-01', volume: 'VOL. 01', spine: 'SYSTEMS ARCHITECTURE', subtitle: 'Design system case studies', readTime: '6 min read', contents: 'work', heading: 'Systems that make complex products feel coherent.', description: 'Design-system work focused on shared language, durable foundations, and the decisions behind them.', width: 58, height: 290, color: '#22252A', textColor: '#A1A7B4', typography: 'mono', texture: 'dots', accent: 'lines' },
+  { id: 'vol-02', volume: 'VOL. 02', spine: 'Selected Products', subtitle: 'Product case studies', readTime: '8 min read', contents: 'work', heading: 'Products shaped from first principles.', description: 'End-to-end product work, from early architecture through the flows people ultimately use.', width: 66, height: 310, color: '#1C2E24', textColor: '#E2CCA2', typography: 'serif', texture: 'gradient', accent: 'numeral' },
+  { id: 'vol-03', volume: 'VOL. 03', spine: 'field notes & life', subtitle: 'Books, gym, cooking, Bambi', readTime: '4 min read', contents: 'notes', heading: 'Things I keep close when I am off the clock.', description: 'A loose scrapbook of books, training, food, home, and Bambi — no forced lesson attached.', width: 50, height: 275, color: '#6E3727', textColor: '#3E1E15', typography: 'italic', texture: 'coarse-dots', accent: 'stitch' },
+  { id: 'vol-04', volume: 'VOL. 04', spine: 'AUTHOR & COLOPHON', subtitle: 'About, experience & résumé', readTime: '3 min read', contents: 'resume', heading: 'Engineer by training. Designer by practice.', description: 'My path into product design, the principles I work by, and a practical record of my experience.', width: 46, height: 260, color: '#DCD3C1', textColor: '#1A1A1A', typography: 'sans', texture: 'paper', accent: 'ribbon' },
 ]
 
 export const projects: readonly Project[] = [
@@ -33,5 +53,5 @@ export const aboutMe: AboutMe = { name: 'Khadijat', role: 'Product Designer & Fo
 export const resume: Resume = { entries: [{ organization: 'Company / Product', role: 'Founding Product Designer', period: '2023 — Present', summary: 'Led product design from early definition through launch.', highlights: ['Defined product architecture and end-to-end journeys.', 'Established reusable foundations and contribution practices.'] }], coreSkills: ['Product architecture', 'Zero-to-one design', 'Interaction design', 'Product strategy'], designSystemSkills: ['Tokens and foundations', 'Component APIs', 'Governance', 'Documentation'], education: 'B.Eng. Mechanical Engineering' }
 export const checkoutSlip: CheckoutSlip = { availability: { status: 'selective', label: 'Available for select opportunities' }, ledger: [{ label: 'Email', value: aboutMe.email, href: `mailto:${aboutMe.email}` }, { label: 'Location', value: 'Lagos, Nigeria' }, { label: 'Portfolio', value: '2026 edition' }] }
 
-export const getProjectsByVolume = (volumeId: VolumeId) => projects.filter(project => project.volumeId === volumeId)
-export const getVolume = (volumeId: VolumeId) => volumes.find(volume => volume.id === volumeId)
+export const getProjectsByVolume = (volumeId: string) => projects.filter(project => project.volumeId === volumeId)
+export const getVolume = (volumeId: string) => volumes.find(volume => volume.id === volumeId)

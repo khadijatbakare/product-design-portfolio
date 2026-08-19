@@ -2,21 +2,17 @@
 
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { volumes, type ModalView, type VolumeId } from '@/data/content'
+import { libraryCopy, volumes, type ModalView } from '@/data/content'
 
 export interface CornerBookshelfProps {
-  readonly onOpen: (view: ModalView, volumeId?: VolumeId) => void
+  readonly onOpen: (view: ModalView, volumeId?: string) => void
 }
 
-const placements = [
-  { x: 158, y: 126, width: 34, height: 126, angle: 1 },
-  { x: 198, y: 113, width: 38, height: 139, angle: -1 },
-  { x: 436, y: 126, width: 34, height: 126, angle: -1 },
-  { x: 476, y: 139, width: 31, height: 113, angle: 1 },
-]
+const spineX = [136, 201, 414, 487]
+const spineAngle = [1, -1, -1, 1]
 
 export function CornerBookshelf({ onOpen }: CornerBookshelfProps) {
-  const [hovered, setHovered] = useState<VolumeId | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
   const active = volumes.find((volume) => volume.id === hovered)
 
   return (
@@ -26,9 +22,9 @@ export function CornerBookshelf({ onOpen }: CornerBookshelfProps) {
           {active ? (
             <motion.div key={active.id} initial={{ opacity: 0, y: 8, scale: .96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: .96 }} className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur">
               <p className="text-xs font-medium">{active.subtitle}</p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">{active.label}</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">{active.readTime} · {libraryCopy.open}</p>
             </motion.div>
-          ) : <p className="font-mono text-[10px] uppercase tracking-[.18em] text-stone-500">Hover over a volume to explore</p>}
+          ) : <p className="font-mono text-[10px] uppercase tracking-[.18em] text-stone-500">{libraryCopy.instruction}</p>}
         </AnimatePresence>
       </div>
       <svg viewBox="0 0 680 520" className="h-auto w-full overflow-visible drop-shadow-2xl" role="img" aria-label="L-shaped corner bookshelf with four interactive volumes">
@@ -37,20 +33,39 @@ export function CornerBookshelf({ onOpen }: CornerBookshelfProps) {
           <linearGradient id="right-shelf"><stop stopColor="#282c32"/><stop offset="1" stopColor="#1d1f23"/></linearGradient>
           <linearGradient id="wall-left"><stop stopColor="#ece8df"/><stop offset="1" stopColor="#ddd7cc"/></linearGradient>
           <linearGradient id="wall-right"><stop stopColor="#ded8cd"/><stop offset="1" stopColor="#f0ece4"/></linearGradient>
+          <linearGradient id="spine-gradient"><stop stopColor="#000" stopOpacity=".5"/><stop offset=".18" stopColor="#fff" stopOpacity="0"/><stop offset=".82" stopColor="#fff" stopOpacity="0"/><stop offset="1" stopColor="#000" stopOpacity=".6"/></linearGradient>
+          <pattern id="spine-dots" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#fff"/></pattern>
+          <pattern id="spine-coarse-dots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="#1e0f0b"/></pattern>
         </defs>
         <path d="M35 20L340 52V500H35Z" fill="url(#wall-left)" opacity=".7"/><path d="M340 52L645 20V500H340Z" fill="url(#wall-right)" opacity=".7"/><line x1="340" y1="52" x2="340" y2="500" stroke="#bdb6aa" strokeWidth="2"/>
         <polygon points="110,62 334,84 334,474 110,454" fill="url(#left-shelf)"/><polygon points="346,84 570,62 570,454 346,474" fill="url(#right-shelf)"/><polygon points="98,50 334,74 346,84 110,62" fill="#414650"/><polygon points="346,84 582,50 570,62 346,94" fill="#343840"/>
         {[260, 390].map((y) => <g key={y}><polygon points={`110,${y} 334,${y+20} 334,${y+31} 110,${y+11}`} fill="#202329" stroke="#454a53"/><polygon points={`346,${y+20} 570,${y} 570,${y+11} 346,${y+31}`} fill="#1b1d21" stroke="#343840"/></g>)}
         <rect x="330" y="75" width="22" height="402" fill="#111318" opacity=".45"/>
         {volumes.map((volume, index) => {
-          const place = placements[index]
+          const width = volume.width
+          const height = volume.height
+          const x = spineX[index]
+          const y = 390 - height
+          const angle = spineAngle[index]
           const isHovered = hovered === volume.id
-          const open = () => onOpen(volume.view, volume.id)
-          return <motion.g key={volume.id} tabIndex={0} role="button" aria-label={`Open ${volume.label}: ${volume.title}`} onClick={open} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open() } }} onMouseEnter={() => setHovered(volume.id)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(volume.id)} onBlur={() => setHovered(null)} animate={{ y: isHovered ? -16 : 0 }} transition={{ type: 'spring', stiffness: 340, damping: 25 }} className="cursor-pointer outline-none">
-            <rect x={place.x} y={place.y} width={place.width} height={place.height} rx="2" fill={volume.color} stroke="#0e0f11" transform={`rotate(${place.angle} ${place.x} ${place.y+place.height})`}/><rect x={place.x+3} y={place.y-3} width={place.width-6} height="3" rx="1" fill="#f3eee5" opacity=".85"/><text x={place.x+place.width/2} y={place.y+14} fill={index===3?'#292722':'#ddd8ce'} fontSize="6" fontFamily="monospace" textAnchor="middle">{volume.label}</text><text x={place.x+place.width/2} y={place.y+place.height/2} fill={index===3?'#292722':'#eee9df'} fontSize="8" fontFamily="monospace" textAnchor="middle" transform={`rotate(-90 ${place.x+place.width/2} ${place.y+place.height/2})`}>{volume.title}</text><line x1={place.x+8} x2={place.x+place.width-8} y1={place.y+place.height-12} y2={place.y+place.height-12} stroke={index===3?'#292722':'#ddd8ce'} opacity=".45"/>
+          const open = () => onOpen(volume.contents, volume.id)
+          const fontFamily = volume.typography === 'mono' ? 'monospace' : volume.typography === 'sans' ? 'sans-serif' : 'serif'
+          return <motion.g key={volume.id} tabIndex={0} role="button" aria-label={`Open ${volume.volume}: ${volume.spine}`} onClick={open} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open() } }} onMouseEnter={() => setHovered(volume.id)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(volume.id)} onBlur={() => setHovered(null)} animate={{ y: isHovered ? -16 : 0 }} transition={{ type: 'spring', stiffness: 340, damping: 25 }} className="cursor-pointer outline-none">
+            <rect x={x} y={y} width={width} height={height} rx="2" fill={volume.color} stroke="#0e0f11" transform={`rotate(${angle} ${x} 390)`}/>
+            {volume.texture === 'dots' && <rect x={x} y={y} width={width} height={height} fill="url(#spine-dots)" opacity=".22"/>}
+            {volume.texture === 'coarse-dots' && <rect x={x} y={y} width={width} height={height} fill="url(#spine-coarse-dots)" opacity=".25"/>}
+            {volume.texture === 'gradient' && <rect x={x} y={y} width={width} height={height} fill="url(#spine-gradient)" opacity=".55"/>}
+            <rect x={x+3} y={y-3} width={width-6} height="3" rx="1" fill="#f3eee5" opacity=".85"/>
+            <text x={x+width/2} y={y+16} fill={volume.textColor} fontSize="7" fontFamily="monospace" textAnchor="middle">{volume.volume}</text>
+            <text x={x+width/2} y={y+height/2} fill={volume.textColor} fontSize={volume.typography === 'sans' ? 9 : 10} fontFamily={fontFamily} fontStyle={volume.typography === 'italic' ? 'italic' : 'normal'} textAnchor="middle" transform={`rotate(-90 ${x+width/2} ${y+height/2})`}>{volume.spine}</text>
+            {volume.accent === 'lines' && <g stroke={volume.textColor} opacity=".45"><line x1={x+10} x2={x+width-10} y1={y+27} y2={y+27}/><line x1={x+10} x2={x+width-10} y1={y+31} y2={y+31}/></g>}
+            {volume.accent === 'numeral' && <text x={x+width/2} y={y+height-14} fill={volume.textColor} fontFamily="serif" fontSize="10" textAnchor="middle">II</text>}
+            {volume.accent === 'stitch' && <line x1={x+width-8} x2={x+width-8} y1={y+height-28} y2={y+height-10} stroke={volume.textColor} strokeDasharray="3 3"/>}
+            {volume.accent === 'ribbon' && <path d={`M${x+width/2-4} 390h8v18l-4-4-4 4z`} fill="#8C2D19"/>}
           </motion.g>
         })}
         <polygon points="94,454 334,474 346,486 106,466" fill="#414650"/><polygon points="346,474 574,454 586,466 346,486" fill="#30343b"/>
+        <text x="112" y="500" fill="#80796e" fontFamily="monospace" fontSize="8">{libraryCopy.shelfPlate}</text><text x="560" y="500" fill="#80796e" fontFamily="monospace" fontSize="8" textAnchor="end">{libraryCopy.volumeCount}</text>
       </svg>
     </section>
   )

@@ -5,7 +5,7 @@ import { BookPreloader } from '@/components/preloader/BookPreloader'
 import { CornerBookshelf } from '@/components/shelf/CornerBookshelf'
 import { BookSpreadModal } from '@/components/modal/BookSpreadModal'
 import { LibraryCheckoutFooter } from '@/components/footer/LibraryCheckoutFooter'
-import { aboutMe, getProjectsByVolume, projects, type ModalView, type VolumeId } from '@/data/content'
+import { aboutMe, getProjectsByVolume, libraryCopy, projects, type ModalView } from '@/data/content'
 
 export default function Home() {
   const [activeModal, setActiveModal] = useState<ModalView | null>(null)
@@ -13,7 +13,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
   const closeModal = useCallback(() => setActiveModal(null), [])
   const finishLoading = useCallback(() => setIsLoading(false), [])
-  const openModal = useCallback((view: ModalView, volumeId?: VolumeId) => {
+  const openModal = useCallback((view: ModalView, volumeId?: string) => {
     setActiveModal(view)
     if (view === 'work') {
       const volumeProjects = volumeId ? getProjectsByVolume(volumeId) : projects
@@ -37,7 +37,7 @@ export default function Home() {
 
   return <main className="paper-texture min-h-screen bg-paper">
     <AnimatePresence>{isLoading && <BookPreloader key="preloader" onFinish={finishLoading} />}</AnimatePresence>
-    <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12"><span className="font-mono text-[10px] uppercase tracking-[.18em]">{aboutMe.role}</span><h1 className="mt-8 max-w-5xl font-serif text-6xl leading-[.9] tracking-tight md:text-8xl">{aboutMe.intro}</h1><p className="mt-8 max-w-lg leading-7 text-black/60">Choose a volume from the shelf to explore the portfolio.</p></header>
+    <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12"><span className="font-mono text-[10px] uppercase tracking-[.18em]">{libraryCopy.eyebrow}</span><h1 className="mt-8 max-w-5xl font-serif text-6xl leading-[.9] tracking-tight md:text-8xl">{aboutMe.intro}</h1><p className="mt-8 max-w-lg leading-7 text-black/60">{libraryCopy.instruction}</p></header>
     <div className="mx-auto max-w-7xl px-6 md:px-12"><CornerBookshelf onOpen={openModal} /></div>
     <LibraryCheckoutFooter onOpen={openModal} />
     <AnimatePresence>{activeModal && <BookSpreadModal key={activeModal} activeModal={activeModal} selectedProject={selectedProject} onClose={closeModal} onSelectProject={setSelectedProject} />}</AnimatePresence>
