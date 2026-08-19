@@ -62,8 +62,21 @@ export interface AboutMe {
   readonly portrait: MediaAsset
 }
 export interface SiteIdentity { readonly name: string; readonly email: string }
-export interface ResumeEntry { readonly organization: string; readonly role: string; readonly period: string; readonly summary: string; readonly highlights: readonly string[] }
-export interface Resume { readonly entries: readonly ResumeEntry[]; readonly coreSkills: readonly string[]; readonly designSystemSkills: readonly string[]; readonly education: string }
+export interface ResumeEntry { readonly id: string; readonly company: string; readonly role: string; readonly period: string; readonly location: string; readonly summary: string; readonly highlights: readonly string[] }
+export interface EducationEntry { readonly id: string; readonly school: string; readonly qualification: string; readonly period: string }
+export type Proficiency = 'expert' | 'strong' | 'working'
+export interface DesignSystemSkill { readonly id: string; readonly label: string; readonly proficiency: Proficiency; readonly note: string }
+export interface Resume {
+  readonly label: string
+  readonly headline: string
+  readonly summary: string
+  readonly downloadLabel: string
+  readonly experience: readonly ResumeEntry[]
+  readonly education: readonly EducationEntry[]
+  readonly coreSkills: readonly string[]
+  readonly designSystemSkills: readonly DesignSystemSkill[]
+  readonly tools: readonly string[]
+}
 export interface LedgerEntry { readonly label: string; readonly value: string; readonly href?: string }
 export interface CheckoutSlip { readonly availability: { readonly status: AvailabilityStatus; readonly label: string }; readonly ledger: readonly LedgerEntry[] }
 export interface LibraryCopy { readonly eyebrow: string; readonly instruction: string; readonly back: string; readonly open: string; readonly shelfPlate: string; readonly volumeCount: string }
@@ -129,7 +142,22 @@ export const aboutMe: AboutMe = {
   portrait: { src: '/assets/portrait.jpg', alt: 'Portrait of Khadijat', width: 1200, height: 1500, placeholder: '#bcb6a8' },
 }
 
-export const resume: Resume = { entries: [{ organization: 'Company / Product', role: 'Founding Product Designer', period: '2023 — Present', summary: 'Led product design from early definition through launch.', highlights: ['Defined product architecture and end-to-end journeys.', 'Established reusable foundations and contribution practices.'] }], coreSkills: ['Product architecture', 'Zero-to-one design', 'Interaction design', 'Product strategy'], designSystemSkills: ['Tokens and foundations', 'Component APIs', 'Governance', 'Documentation'], education: 'B.Eng. Mechanical Engineering' }
+export const resume: Resume = {
+  label: 'Résumé',
+  headline: 'Experience & capabilities.',
+  summary: 'Product designer working across product architecture, zero-to-one journeys, and the systems that help growing teams ship coherently.',
+  downloadLabel: 'Download résumé',
+  experience: [{ id: 'founding-product-designer', company: 'Company / Product', role: 'Founding Product Designer', period: '2023 — Present', location: 'Lagos, Nigeria', summary: 'Led product design from early definition through launch.', highlights: ['Defined product architecture and end-to-end journeys.', 'Established reusable foundations and contribution practices.'] }],
+  education: [{ id: 'mechanical-engineering', school: 'University', qualification: 'B.Eng. Mechanical Engineering', period: 'Completed' }],
+  coreSkills: ['Product architecture', 'Zero-to-one design', 'Interaction design', 'Product strategy'],
+  designSystemSkills: [
+    { id: 'tokens-foundations', label: 'Tokens and foundations', proficiency: 'expert', note: 'Semantic architecture, theming, and accessible foundations.' },
+    { id: 'component-apis', label: 'Component APIs', proficiency: 'expert', note: 'Reusable patterns with deliberate extension points.' },
+    { id: 'governance', label: 'Governance', proficiency: 'strong', note: 'Contribution, review, adoption, and ownership practices.' },
+    { id: 'documentation', label: 'Documentation', proficiency: 'strong', note: 'Guidance that explains decisions, usage, and trade-offs.' },
+  ],
+  tools: ['Figma', 'FigJam', 'Prototyping', 'Design tokens'],
+}
 export const checkoutSlip: CheckoutSlip = { availability: { status: 'selective', label: 'Available for select opportunities' }, ledger: [{ label: 'Email', value: siteIdentity.email, href: `mailto:${siteIdentity.email}` }, { label: 'Location', value: 'Lagos, Nigeria' }, { label: 'Portfolio', value: '2026 edition' }] }
 
 export const getProjectsByVolume = (volumeId: string) => projects.filter(project => project.volumeId === volumeId)
