@@ -5,7 +5,7 @@ import { BookPreloader } from '@/components/preloader/BookPreloader'
 import { CornerBookshelf } from '@/components/shelf/CornerBookshelf'
 import { BookSpreadModal } from '@/components/modal/BookSpreadModal'
 import { LibraryCheckoutFooter } from '@/components/footer/LibraryCheckoutFooter'
-import { UnoFlipMatch } from '@/components/game/UnoFlipMatch'
+import { UnoFlipModal } from '@/components/game/UnoFlipModal'
 import { aboutMe, getProjectsByVolume, libraryCopy, projects, type ModalView } from '@/data/content'
 
 export default function Home() {
@@ -44,6 +44,6 @@ export default function Home() {
     <div className="mx-auto flex max-w-7xl justify-end px-6 pb-10 md:px-12"><button type="button" onClick={() => setIsGameOpen(true)} className="font-mono text-[9px] uppercase tracking-[.18em] text-black/45 transition-colors hover:text-black">Play UNO Flip Match ↗</button></div>
     <LibraryCheckoutFooter onOpen={openModal} />
     <AnimatePresence>{activeModal && <BookSpreadModal key={activeModal} activeModal={activeModal} selectedProject={selectedProject} onClose={closeModal} onSelectProject={setSelectedProject} />}</AnimatePresence>
-    <AnimatePresence>{isGameOpen && <UnoFlipMatch key="uno-flip-match" onClose={() => setIsGameOpen(false)} />}</AnimatePresence>
+    <UnoFlipModal open={isGameOpen} onClose={() => setIsGameOpen(false)} />
   </main>
 }
