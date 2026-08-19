@@ -17,7 +17,7 @@ export default function Home() {
     setActiveModal(view)
     if (view === 'work') {
       const volumeProjects = volumeId ? getProjectsByVolume(volumeId) : projects
-      setSelectedProject(volumeProjects[0]?.id ?? null)
+      setSelectedProject(volumeProjects[0]?.slug ?? null)
     }
   }, [])
 
@@ -25,11 +25,11 @@ export default function Home() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeModal()
       if (activeModal !== 'work') return
-      const current = projects.find(project => project.id === selectedProject)
+      const current = projects.find(project => project.slug === selectedProject)
       const visibleProjects = current ? getProjectsByVolume(current.volumeId) : projects
-      const index = Math.max(0, visibleProjects.findIndex(project => project.id === selectedProject))
-      if (event.key === 'ArrowRight') setSelectedProject(visibleProjects[(index + 1) % visibleProjects.length].id)
-      if (event.key === 'ArrowLeft') setSelectedProject(visibleProjects[(index - 1 + visibleProjects.length) % visibleProjects.length].id)
+      const index = Math.max(0, visibleProjects.findIndex(project => project.slug === selectedProject))
+      if (event.key === 'ArrowRight') setSelectedProject(visibleProjects[(index + 1) % visibleProjects.length].slug)
+      if (event.key === 'ArrowLeft') setSelectedProject(visibleProjects[(index - 1 + visibleProjects.length) % visibleProjects.length].slug)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
