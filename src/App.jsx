@@ -1,29 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import content from './data/content.json'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
 
-const projects = [
-  {
-    id: 'atlas',
-    number: '01',
-    type: 'DESIGN SYSTEMS · PRODUCT ARCHITECTURE',
-    title: 'Giving a growing product one shared language',
-    summary: 'A new foundation that aligned fragmented workflows, reduced repeated decisions, and helped teams build with confidence.',
-    meta: ['Lead product designer', '8 months', 'Web + mobile'],
-    className: 'project-atlas',
-    art: <AtlasArt />,
-  },
-  {
-    id: 'northstar',
-    number: '02',
-    type: 'FOUNDING DESIGN · ZERO TO ONE',
-    title: 'Turning an early idea into a product people could trust',
-    summary: 'From the first product model to the core experience: shaping a complex financial tool around clarity and control.',
-    meta: ['Founding designer', '0→1 product', 'Strategy + execution'],
-    className: 'project-northstar',
-    art: <NorthstarArt />,
-  },
-]
+const projectArt = { atlas: <AtlasArt />, northstar: <NorthstarArt /> }
+const projects = content.projects.map(project => ({
+  ...project,
+  meta: [project.role, project.timeline, project.scope],
+  className: project.theme,
+  art: projectArt[project.id],
+}))
 
 function AtlasArt() {
   return (
@@ -64,13 +50,13 @@ function Header({ page, navigate }) {
   const go = (target) => { setOpen(false); navigate(target) }
   return (
     <header className="site-header">
-      <button className="wordmark" onClick={() => go('home')} aria-label="Go home">KB<span>.</span></button>
+      <button className="wordmark" onClick={() => go('home')} aria-label="Go home">{content.site.initials}<span>.</span></button>
       <button className="menu-button" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? 'Close' : 'Menu'}</button>
       <nav className={open ? 'nav-open' : ''} aria-label="Main navigation">
         <button className={page === 'home' ? 'active' : ''} onClick={() => go('home')}>Work</button>
         <button className={page === 'about' ? 'active' : ''} onClick={() => go('about')}>About</button>
-        <a href="/resume.pdf">Résumé <Arrow diagonal /></a>
-        <a className="nav-cta" href="mailto:hello@example.com">Let’s talk <Arrow /></a>
+        <a href={content.site.resumePath}>Résumé <Arrow diagonal /></a>
+        <a className="nav-cta" href={`mailto:${content.site.email}`}>Let’s talk <Arrow /></a>
       </nav>
     </header>
   )
@@ -80,10 +66,10 @@ function Home({ navigate }) {
   return <>
     <main>
       <section className="hero section-wrap">
-        <div className="eyebrow"><span className="status-dot" /> AVAILABLE FOR SELECT OPPORTUNITIES</div>
+        <div className="eyebrow"><span className="status-dot" /> {content.site.availability}</div>
         <h1>I design clear,<br />coherent products<br />from <em>complex ideas.</em></h1>
         <div className="hero-bottom">
-          <p>I’m a product and founding designer focused on product architecture, design systems, and end-to-end experiences.</p>
+          <p>{content.hero.intro}</p>
           <button className="circle-link" onClick={() => document.querySelector('#work').scrollIntoView({ behavior: 'smooth' })} aria-label="View selected work"><Arrow /></button>
         </div>
       </section>
@@ -104,7 +90,7 @@ function Home({ navigate }) {
       <section className="messy-section section-wrap">
         <div className="messy-mark">✳</div>
         <h2>I’m most useful when the problem is still <em>a little messy.</em></h2>
-        <div className="messy-copy"><p>I work across the structure of a product: understanding what needs to exist, defining how the pieces connect, and designing the flows and systems that make it usable.</p><p>Sometimes that means shaping a new product from the ground up. Other times, it means bringing order and consistency to something already growing.</p></div>
+        <div className="messy-copy">{content.positioning.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
       </section>
 
       <section className="about-preview section-wrap">
@@ -117,12 +103,7 @@ function Home({ navigate }) {
 }
 
 function About() {
-  const personal = [
-    ['books', '01 / BOOKS', 'My shelves are steadily running out of room.', 'Usually reading one book and thinking about the next three.'],
-    ['bambi', '02 / BAMBI', 'Household supervisor. Frequent meeting guest.', 'Bambi keeps her feedback direct.'],
-    ['gym', '03 / TRAINING', 'Where I go to reset.', 'A few heavy lifts and considerably fewer notifications.'],
-    ['cooking', '04 / COOKING', 'The results vary. The enthusiasm does not.', 'Trying new recipes, then changing them halfway through.'],
-  ]
+  const personal = content.personal.map(item => [item.id, item.label, item.title, item.caption])
   return <><main>
     <section className="about-hero section-wrap">
       <span className="kicker">ABOUT ME</span>
@@ -140,7 +121,7 @@ function About() {
     <section className="principles section-wrap">
       <div className="section-heading"><div><span>HOW I WORK</span><h2>Principles, not<br />a fixed process.</h2></div><p>Every project is different. These are the ideas I return to.</p></div>
       <div className="principle-grid">
-        {[['01','See the whole system','I map the product, people, and dependencies before narrowing in on individual screens. It helps reveal where the real problem lives.'],['02','Make decisions visible','I use flows, prototypes, and shared frameworks to help teams evaluate decisions—and their tradeoffs—together.'],['03','Design for what comes next','I consider the immediate experience and the patterns behind it, so today’s solution does not become tomorrow’s limitation.']].map(x => <article key={x[0]}><span>{x[0]}</span><h3>{x[1]}</h3><p>{x[2]}</p></article>)}
+        {content.principles.map(item => <article key={item.number}><span>{item.number}</span><h3>{item.title}</h3><p>{item.body}</p></article>)}
       </div>
     </section>
     <section className="off-clock section-wrap">
@@ -166,7 +147,7 @@ function CaseStudy({ project, navigate }) {
 }
 
 function Footer() {
-  return <footer className="footer"><div className="section-wrap"><span className="kicker">HAVE A COMPLICATED PRODUCT PROBLEM?</span><h2>Let’s make sense<br />of it <em>together.</em></h2><a href="mailto:hello@example.com">hello@example.com <Arrow /></a><div className="footer-bottom"><span>© 2026 YOUR NAME</span><div><a href="#linkedin">LINKEDIN ↗</a><a href="/resume.pdf">RÉSUMÉ ↗</a></div><button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>BACK TO TOP ↑</button></div></div></footer>
+  return <footer className="footer"><div className="section-wrap"><span className="kicker">{content.footer.eyebrow}</span><h2>Let’s make sense<br />of it <em>together.</em></h2><a href={`mailto:${content.site.email}`}>{content.site.email} <Arrow /></a><div className="footer-bottom"><span>© 2026 {content.site.name}</span><div><a href={content.site.linkedinUrl}>LINKEDIN ↗</a><a href={content.site.resumePath}>RÉSUMÉ ↗</a></div><button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>BACK TO TOP ↑</button></div></div></footer>
 }
 
 export default function App() {
