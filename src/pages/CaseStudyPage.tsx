@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { CaseStudy } from '../types/content'
 import { caseStudies } from '../data/projects'
-import { artRegistry } from '../components/artRegistry'
+import { ProjectVisual } from '../components/home/ProjectVisual'
 import { CaseStudyBody } from '../components/CaseStudyBody'
 
 function CaseStudyHeader({ study, navigate }: { study: CaseStudy; navigate: (route: string) => void }) {
@@ -10,8 +10,7 @@ function CaseStudyHeader({ study, navigate }: { study: CaseStudy; navigate: (rou
 }
 
 function CaseStudyCover({ study }: { study: CaseStudy }) {
-  const Art = artRegistry[study.artKey]
-  return <div className={`case-cover project-${study.artKey}`} style={{ backgroundColor: study.accent }}><Art /></div>
+  return <div className="case-cover"><ProjectVisual artKey={study.artKey} accent={study.accent} scale="cover" /></div>
 }
 
 function NextProject({ current, navigate }: { current: CaseStudy; navigate: (route: string) => void }) {

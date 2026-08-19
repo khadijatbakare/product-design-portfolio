@@ -1,5 +1,5 @@
 import { BookshelfWidget } from '../components/BookshelfWidget'
-import { Container, Eyebrow, SectionHeading } from '../primitives'
+import { Container, Eyebrow, Media, SectionHeading } from '../primitives'
 import { bio, books, personalTiles, principles } from '../data/site'
 import type { PersonalTile } from '../types/content'
 
@@ -16,19 +16,21 @@ function PrincipleCard({ principle, index }: { principle: typeof principles[numb
 }
 
 function PrinciplesGrid() {
-  return <Container className="principles"><SectionHeading eyebrow="HOW I WORK" title={<>Principles, not<br />a fixed process.</>} intro="Every project is different. These are the ideas I return to." /><div className="principle-grid">{principles.map((principle, index) => <PrincipleCard principle={principle} index={index} key={principle.id} />)}</div></Container>
+  return <Container className="principles"><SectionHeading kicker="HOW I WORK" headline={['Principles, not', 'a fixed process.']} support="Every project is different. These are the ideas I return to." /><div className="principle-grid">{principles.map((principle, index) => <PrincipleCard principle={principle} index={index} key={principle.id} />)}</div></Container>
 }
 
-function PhotoTile({ item, index }: { item: PersonalTile; index: number }) {
-  return <article className={`personal-card ${item.id} photo-${item.span}`}><div className="personal-image" style={{ backgroundColor: item.media.placeholder }}><span>ADD {item.label} PHOTO</span></div><div className="personal-caption"><span>{String(index + 2).padStart(2, '0')} / {item.label}</span><h3>{item.headline}</h3><p>{item.caption}</p></div></article>
+export interface PhotoGridProps { readonly tiles: readonly PersonalTile[]; readonly columns?: 2 | 3 }
+export interface PhotoTileProps { readonly tile: PersonalTile; readonly index: number; readonly priority?: boolean }
+export function PhotoTile({ tile, index, priority = false }: PhotoTileProps) {
+  return <article className={`personal-card ${tile.id} photo-${tile.span}`}><Media className="personal-image" asset={tile.media} priority={priority} placeholderLabel={`ADD ${tile.label} PHOTO`} /><div className="personal-caption"><span>{String(index + 2).padStart(2, '0')} / {tile.label}</span><h3>{tile.headline}</h3><p>{tile.caption}</p></div></article>
 }
 
-function PhotoGrid() {
-  return <>{personalTiles.map((item, index) => <PhotoTile item={item} index={index} key={item.id} />)}</>
+export function PhotoGrid({ tiles, columns = 2 }: PhotoGridProps) {
+  return <div className={`photo-grid photo-grid-${columns}`}>{tiles.map((tile, index) => <PhotoTile tile={tile} index={index} priority={index === 0} key={tile.id} />)}</div>
 }
 
 function OffTheClock() {
-  return <section className="off-clock section-wrap"><div className="off-heading"><Eyebrow>OFF THE CLOCK</Eyebrow><h2>Away from work,<br />life looks <em>like this.</em></h2></div><div className="personal-grid"><article className="personal-card books photo-tall"><div className="personal-image"><BookshelfWidget books={books} /></div><div className="personal-caption"><span>01 / BOOKS</span><h3>My shelves are steadily running out of room.</h3><p>Usually reading one book and thinking about the next three.</p></div></article><PhotoGrid /></div></section>
+  return <section className="off-clock section-wrap"><div className="off-heading"><Eyebrow>OFF THE CLOCK</Eyebrow><h2>Away from work,<br />life looks <em>like this.</em></h2></div><div className="personal-grid"><article className="personal-card books photo-tall"><div className="personal-image"><BookshelfWidget books={books} display="spines" featureCurrent /></div><div className="personal-caption"><span>01 / BOOKS</span><h3>My shelves are steadily running out of room.</h3><p>Usually reading one book and thinking about the next three.</p></div></article><PhotoGrid tiles={personalTiles} columns={2} /></div></section>
 }
 
 export function AboutPage() {

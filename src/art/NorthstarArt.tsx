@@ -1,0 +1,3 @@
+export function NorthstarArt() {
+  return <div className="northstar-art" aria-hidden="true"><div className="orbit orbit-one" /><div className="orbit orbit-two" /><div className="phone phone-left"><div className="notch" /><span>Balance</span><strong>$24,860</strong><div className="wave" /><div className="phone-row" /><div className="phone-row short" /></div><div className="phone phone-center"><div className="notch" /><span>Send money</span><div className="avatar">AO</div><strong>Almost there</strong><div className="field" /><div className="field" /><button>Continue</button></div><div className="phone phone-right"><div className="notch" /><span>Activity</span><div className="activity-row" /><div className="activity-row" /><div className="activity-row" /></div></div>
+}
