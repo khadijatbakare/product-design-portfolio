@@ -16,6 +16,6 @@ export type CellStatus = 'face-down' | 'face-up' | 'matched'
 export interface GridCell { readonly index: number; readonly card: UnoFlipCard; readonly status: CellStatus }
 export interface GameGrid { readonly columns: number; readonly rows: number; readonly side: Side; readonly seed: number; readonly cells: readonly GridCell[]; readonly flipCard: UnoFlipCard; readonly pairCount: number }
 export interface GridOptions { readonly columns: number; readonly rows: number; readonly side?: Side; readonly seed?: number }
-export type GamePhase = 'idle' | 'one-selected' | 'resolving' | 'complete'
-export interface UnoFlipState { readonly seed: number; readonly grid: GameGrid; readonly selectedIds: readonly string[]; readonly matchedPairIds: readonly string[]; readonly moves: number; readonly phase: GamePhase; readonly flipCount: number }
-export type UnoFlipAction = { readonly type: 'select'; readonly cardId: string } | { readonly type: 'resolve' } | { readonly type: 'reset'; readonly seed: number } | { readonly type: 'restore'; readonly state: UnoFlipState }
+export type TurnState = 'idle' | 'oneFlipped' | 'twoFlipped' | 'sideFlipping' | 'complete'
+export type GameEvent = { type: 'FLIP_CARD'; index: number } | { type: 'RESOLVE' } | { type: 'TRIGGER_SIDE_FLIP' } | { type: 'SIDE_FLIP_COMPLETE' } | { type: 'RESET'; seed?: number }
+export interface GameState { readonly status: TurnState; readonly grid: GameGrid; readonly selected: readonly number[]; readonly lastOutcome: 'match' | 'mismatch' | null; readonly moves: number; readonly matches: number; readonly sideFlipUsed: boolean; readonly resumeTo: Exclude<TurnState, 'sideFlipping'> }
