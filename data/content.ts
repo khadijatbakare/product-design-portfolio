@@ -43,9 +43,25 @@ export interface Project {
   readonly reflection: string
   readonly volumeId: string
 }
-export interface Principle { readonly title: string; readonly body: string }
-export interface Hobby { readonly id: string; readonly title: string; readonly caption: string; readonly media: MediaAsset }
-export interface AboutMe { readonly name: string; readonly role: string; readonly email: string; readonly intro: string; readonly story: readonly string[]; readonly portrait: MediaAsset; readonly principles: readonly Principle[]; readonly hobbies: readonly Hobby[] }
+export interface Hobby {
+  readonly id: 'books' | 'gym' | 'cooking' | 'bambi'
+  readonly label: string
+  readonly headline: string
+  readonly caption: string
+  readonly media: MediaAsset
+  readonly span: 'square' | 'tall' | 'wide'
+}
+export interface AboutMe {
+  readonly kicker: string
+  readonly headline: readonly string[]
+  readonly emphasis: string
+  readonly intro: string
+  readonly story: readonly string[]
+  readonly principles: readonly { readonly id: string; readonly title: string; readonly body: string }[]
+  readonly hobbies: readonly Hobby[]
+  readonly portrait: MediaAsset
+}
+export interface SiteIdentity { readonly name: string; readonly email: string }
 export interface ResumeEntry { readonly organization: string; readonly role: string; readonly period: string; readonly summary: string; readonly highlights: readonly string[] }
 export interface Resume { readonly entries: readonly ResumeEntry[]; readonly coreSkills: readonly string[]; readonly designSystemSkills: readonly string[]; readonly education: string }
 export interface LedgerEntry { readonly label: string; readonly value: string; readonly href?: string }
@@ -92,10 +108,29 @@ export const projects: readonly Project[] = [
   },
 ]
 
-export const aboutMe: AboutMe = { name: 'Khadijat', role: 'Product Designer & Founding Designer', email: 'hello@example.com', intro: 'I design clear, coherent products from complex ideas.', story: ['I originally studied mechanical engineering, where I learned to understand how different parts affect one another and how to work within real constraints.', 'Product design gave me a more human place to apply that structured way of thinking. Today I work across product architecture, design systems, and end-to-end experiences.'], portrait: { src: '/assets/portrait.jpg', alt: 'Portrait of Khadijat', width: 1200, height: 1500, placeholder: '#bcb6a8' }, principles: [{ title: 'See the whole system', body: 'Map the product, people, and dependencies before narrowing in on screens.' }, { title: 'Make decisions visible', body: 'Use flows and prototypes to help teams evaluate trade-offs together.' }, { title: 'Design for what comes next', body: 'Solve the immediate experience without creating tomorrow’s limitation.' }], hobbies: [{ id: 'books', title: 'Books', caption: 'Physical books, marginal notes, and an optimistic reading list.', media: { src: '/assets/books.jpg', alt: 'Personal book collection', width: 1200, height: 900, placeholder: '#9c4f35' } }, { id: 'training', title: 'Training', caption: 'A few heavy lifts and considerably fewer notifications.', media: { src: '/assets/training.jpg', alt: 'Weight training', width: 1200, height: 900, placeholder: '#7f8581' } }, { id: 'cooking', title: 'Cooking', caption: 'Trying recipes, then changing them halfway through.', media: { src: '/assets/cooking.jpg', alt: 'Food being prepared', width: 1200, height: 900, placeholder: '#d8a16c' } }, { id: 'bambi', title: 'Bambi', caption: 'Household supervisor and frequent meeting guest.', media: { src: '/assets/bambi.jpg', alt: 'Bambi the cat', width: 1200, height: 900, placeholder: '#c5b39b' } }] }
+export const siteIdentity: SiteIdentity = { name: 'Khadijat', email: 'hello@example.com' }
+export const aboutMe: AboutMe = {
+  kicker: 'About', headline: ['Engineer by training.', 'Designer by practice.'], emphasis: 'Designer by practice.', intro: 'I design clear, coherent products from complex ideas.',
+  story: [
+    'I started out in mechanical engineering.',
+    'Four years of it taught me one thing that stuck: how to take something complicated, break it into parts, and work out which part is actually causing the problem. I liked that a lot. I liked the machines less.',
+    '[TODO — the turn. One or two sentences on the project, class, or person that made design look like the more interesting version of the same work. The most valuable paragraph on the page, and the only one I can’t write for you.]',
+    'I moved into product design and it clicked faster than I expected. Same instinct — understand the system, find the constraints, work out where it’s failing — pointed at software and the people using it. The difference is that the constraint isn’t always physical. Sometimes it’s a regulator. Sometimes it’s someone with thirty seconds and no patience.',
+    'These days I work in fintech, mostly on products for people that banks tend to keep waiting. My work sits in two places: architecture — deciding what a product is made of and how the pieces relate, usually before there’s a single screen — and the design system that stops a growing product from drifting into inconsistency.',
+    'The engineering degree shows up less as a metaphor and more as a set of habits. I want to know why something works before I redraw it. I write things down. And I’m suspicious of designs that only work when everything goes right, which is why an unglamorous share of my time goes to error states, empty states, and the paths nobody wants to think about.',
+  ],
+  principles: [{ id: 'whole-system', title: 'See the whole system', body: 'Map the product, people, and dependencies before narrowing in on screens.' }, { id: 'visible-decisions', title: 'Make decisions visible', body: 'Use flows and prototypes to help teams evaluate trade-offs together.' }, { id: 'design-forward', title: 'Design for what comes next', body: 'Solve the immediate experience without creating tomorrow’s limitation.' }],
+  hobbies: [
+    { id: 'books', label: 'BOOKS', headline: 'I buy books faster than I read them.', caption: 'Physical only — I’ve tried e-readers and it never sticks. Currently halfway through [title], and three others I’ve temporarily abandoned.', span: 'tall', media: { src: '/assets/books.jpg', alt: 'Personal book collection', width: 1200, height: 1600, placeholder: '#9c4f35' } },
+    { id: 'gym', label: 'TRAINING', headline: 'Weight training, most mornings.', caption: 'It’s the one hour in the day nobody can put a meeting on.', span: 'square', media: { src: '/assets/training.jpg', alt: 'Weight training', width: 1200, height: 1200, placeholder: '#7f8581' } },
+    { id: 'cooking', label: 'COOKING', headline: 'I cook most nights.', caption: 'Better at improvising than following the recipe, which has gone badly maybe twice.', span: 'wide', media: { src: '/assets/cooking.jpg', alt: 'Food being prepared', width: 1600, height: 1000, placeholder: '#d8a16c' } },
+    { id: 'bambi', label: 'BAMBI', headline: 'This is Bambi.', caption: 'She sits on the desk, not next to it.', span: 'square', media: { src: '/assets/bambi.jpg', alt: 'Bambi the cat', width: 1200, height: 1200, placeholder: '#c5b39b' } },
+  ],
+  portrait: { src: '/assets/portrait.jpg', alt: 'Portrait of Khadijat', width: 1200, height: 1500, placeholder: '#bcb6a8' },
+}
 
 export const resume: Resume = { entries: [{ organization: 'Company / Product', role: 'Founding Product Designer', period: '2023 — Present', summary: 'Led product design from early definition through launch.', highlights: ['Defined product architecture and end-to-end journeys.', 'Established reusable foundations and contribution practices.'] }], coreSkills: ['Product architecture', 'Zero-to-one design', 'Interaction design', 'Product strategy'], designSystemSkills: ['Tokens and foundations', 'Component APIs', 'Governance', 'Documentation'], education: 'B.Eng. Mechanical Engineering' }
-export const checkoutSlip: CheckoutSlip = { availability: { status: 'selective', label: 'Available for select opportunities' }, ledger: [{ label: 'Email', value: aboutMe.email, href: `mailto:${aboutMe.email}` }, { label: 'Location', value: 'Lagos, Nigeria' }, { label: 'Portfolio', value: '2026 edition' }] }
+export const checkoutSlip: CheckoutSlip = { availability: { status: 'selective', label: 'Available for select opportunities' }, ledger: [{ label: 'Email', value: siteIdentity.email, href: `mailto:${siteIdentity.email}` }, { label: 'Location', value: 'Lagos, Nigeria' }, { label: 'Portfolio', value: '2026 edition' }] }
 
 export const getProjectsByVolume = (volumeId: string) => projects.filter(project => project.volumeId === volumeId)
 export const getVolume = (volumeId: string) => volumes.find(volume => volume.id === volumeId)
