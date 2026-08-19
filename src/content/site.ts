@@ -15,3 +15,13 @@ export const homeContent = {
 }
 
 export const footerContent = { eyebrow: 'HAVE A COMPLICATED PRODUCT PROBLEM?', headline: ['Let’s make sense', 'of it'], emphasis: 'together.' }
+
+export const libraryNavigation = {
+  eyebrow: 'PRODUCT DESIGNER · FOUNDING DESIGNER', instruction: 'Choose a volume', backLabel: 'Back to shelf', openLabel: 'Open section',
+  books: [
+    { id: 'systems', spine: 'SYSTEMS', number: '01', color: '#292824', route: 'atlas', heading: 'Systems that help products hold together.', description: 'Design systems, product architecture, and the foundations that help teams move with clarity.', detail: 'Featured case study · Atlas' },
+    { id: 'products', spine: 'PRODUCTS', number: '02', color: '#315746', route: 'northstar', heading: 'Products shaped from first principles.', description: 'End-to-end experiences, zero-to-one product work, and the decisions behind what ships.', detail: 'Featured case study · Northstar' },
+    { id: 'notes', spine: 'NOTES & LIFE', number: '03', color: '#7b4933', route: 'about', scrollId: 'off-the-clock', heading: 'Books, training, food, and Bambi.', description: 'The things I make time for when I am away from product work.', detail: 'Off the clock' },
+    { id: 'about', spine: 'ABOUT ME', number: '04', color: '#766f63', route: 'about', heading: 'Engineer by training. Designer by practice.', description: 'How mechanical engineering shaped the structured way I approach complex product problems.', detail: 'Background and approach' },
+  ],
+} as const
