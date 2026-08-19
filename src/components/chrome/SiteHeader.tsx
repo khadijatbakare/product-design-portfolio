@@ -3,9 +3,21 @@ import { siteConfig } from '../../content/site'
 
 export function SiteHeader({ route, navigate }: { route: string; navigate: (route: string) => void }) {
   const [open, setOpen] = useState(false)
-  const go = (target: string) => { setOpen(false); navigate(target) }
+  const scrollToWork = () => document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
+  const go = (target: string) => {
+    setOpen(false)
+    if (target === 'home') {
+      if (route === 'home') scrollToWork()
+      else {
+        navigate('home')
+        requestAnimationFrame(() => requestAnimationFrame(scrollToWork))
+      }
+      return
+    }
+    navigate(target)
+  }
   return <header className="site-header">
-    <button className="wordmark" onClick={() => go('home')} aria-label="Go home">{siteConfig.wordmark}<span>.</span></button>
+    <button className="wordmark" onClick={() => { setOpen(false); navigate('home') }} aria-label="Go home">{siteConfig.wordmark}<span>.</span></button>
     <button className="menu-button" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? 'Close' : 'Menu'}</button>
     <nav className={open ? 'nav-open' : ''} aria-label="Main navigation">
       {siteConfig.nav.map(item => item.kind === 'route'
