@@ -155,7 +155,7 @@ export const resume: Resume = {
   label: 'Résumé',
   headline: 'Experience & capabilities.',
   summary: 'Product designer working across product architecture, zero-to-one journeys, and the systems that help growing teams ship coherently.',
-  downloadLabel: 'Download résumé',
+  downloadLabel: 'Download Resume PDF ↗',
   experience: [{ id: 'founding-product-designer', company: 'Company / Product', role: 'Founding Product Designer', period: '2023 — Present', location: 'Lagos, Nigeria', summary: 'Led product design from early definition through launch.', highlights: ['Defined product architecture and end-to-end journeys.', 'Established reusable foundations and contribution practices.'] }],
   education: [{ id: 'mechanical-engineering', school: 'University', qualification: 'B.Eng. Mechanical Engineering', period: 'Completed' }],
   coreSkills: ['Product architecture', 'Zero-to-one design', 'Interaction design', 'Product strategy'],
@@ -169,12 +169,12 @@ export const resume: Resume = {
 }
 export const checkoutSlip: CheckoutSlip = {
   cardNumber: 'No. 001', classification: '745.2 BAK', title: 'BAKARE, KHADIJAT — Selected Works', columns: ['BORROWER', 'DATE'],
-  availability: { status: 'open', stamp: 'AVAILABLE', label: 'Open to select opportunities — full-time or a small number of projects.' },
+  availability: { status: 'open', stamp: 'AUGUST 2026 — AVAILABLE FOR WORK', label: 'Open to select opportunities — full-time or a small number of projects.' },
   ledger: [
     { id: 'email', label: 'Email', href: `mailto:${siteIdentity.email}`, kind: 'mail', stamp: 'ANY TIME' },
     { id: 'linkedin', label: 'LinkedIn', href: '#linkedin', kind: 'external', stamp: 'WEEKDAYS' },
-    { id: 'resume', label: 'Résumé (PDF)', href: '#resume', kind: 'file', stamp: '2026' },
-    { id: 'figma', label: 'Figma', href: '#figma', kind: 'external', stamp: 'ON REQUEST' },
+    { id: 'medium', label: 'Medium', href: '#medium', kind: 'external', stamp: 'WEEKENDS' },
+    { id: 'github', label: 'GitHub', href: 'https://github.com/khadijatbakare', kind: 'external', stamp: 'OPEN LATE' },
   ],
   notice: 'This volume may be borrowed indefinitely. Please return with notes.',
   footnote: 'Set in Manrope, Newsreader and DM Mono. Built by hand.',

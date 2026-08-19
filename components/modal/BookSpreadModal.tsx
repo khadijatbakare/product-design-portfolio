@@ -40,7 +40,7 @@ const hobbySpan: Record<Hobby["span"], string> = {
 
 function WorkArgument({ project }: { readonly project: Project }) {
   return (
-    <div className="p-8 md:p-12">
+    <div className="p-8 pt-20 md:p-12 md:pt-24">
       <Label>
         {project.category} · {project.role} · {project.timeline}
       </Label>
@@ -98,6 +98,20 @@ function WorkArgument({ project }: { readonly project: Project }) {
             </article>
           ))}
         </section>
+        {project.metrics.length > 0 && (
+          <section className="border-y border-black/15 py-6">
+            <Label>Metrics</Label>
+            <div className="mt-4 grid gap-5 sm:grid-cols-2">
+              {project.metrics.map((metric) => (
+                <article key={metric.label}>
+                  <p className="font-serif text-5xl">{metric.value}</p>
+                  <p className="mt-1 text-sm">{metric.label}</p>
+                  <p className="mt-2 font-mono text-[8px] uppercase tracking-widest text-black/45">Source: {metric.source} · {metric.verified ? "verified" : "pending verification"}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
@@ -119,7 +133,7 @@ function WorkEvidence({
     volumeProjects[(index - 1 + volumeProjects.length) % volumeProjects.length];
   const next = volumeProjects[(index + 1) % volumeProjects.length];
   return (
-    <div className="bg-white/35 p-8 md:p-12">
+    <div className="relative bg-white/35 p-8 pb-24 pt-20 md:p-12 md:pb-24 md:pt-24">
       <Label>Evidence / annotated plates</Label>
       <div className="mt-6 space-y-8">
         {project.visualAssets.map((asset) => (
@@ -147,23 +161,6 @@ function WorkEvidence({
           </figure>
         ))}
       </div>
-      {project.metrics.length > 0 && (
-        <section className="mt-10 border-y border-black/15 py-7">
-          <Label>Measured outcome</Label>
-          <div className="mt-5 grid gap-5 sm:grid-cols-2">
-            {project.metrics.map((metric) => (
-              <article key={metric.label}>
-                <p className="font-serif text-5xl">{metric.value}</p>
-                <p className="mt-1 text-sm">{metric.label}</p>
-                <p className="mt-2 font-mono text-[8px] uppercase tracking-widest text-black/45">
-                  Source: {metric.source} ·{" "}
-                  {metric.verified ? "verified" : "pending verification"}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
       <section className="mt-10">
         <Label>Reflection</Label>
         <p className="mt-4 font-serif text-2xl leading-9">
@@ -188,6 +185,7 @@ function WorkEvidence({
           </button>
         </div>
       )}
+      <a href="/resume.pdf" download="Khadijat-Bakare-Resume.pdf" className="sticky bottom-4 mt-10 ml-auto flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-paper shadow-lg"><Download size={15}/>{resume.downloadLabel}</a>
     </div>
   );
 }
@@ -221,15 +219,10 @@ export function BookSpreadModal({
         exit={{ scale: 0.95, y: 20 }}
         transition={{ type: "spring", stiffness: 260, damping: 28 }}
       >
-        <button
-          autoFocus
-          onClick={onClose}
-          className="fixed right-7 top-7 z-10 flex items-center gap-2 rounded-full border border-black/20 bg-white/85 px-4 py-2 font-mono text-[9px] uppercase tracking-widest"
-          aria-label={libraryCopy.back}
-        >
-          <X size={15} />
-          {libraryCopy.back}
-        </button>
+        <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3 backdrop-blur" aria-label="Book controls">
+          <button autoFocus onClick={onClose} className="font-mono text-[9px] uppercase tracking-widest">← {libraryCopy.back}</button>
+          <button onClick={onClose} className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest" aria-label="Close book"><X size={14}/> Close</button>
+        </nav>
         {activeModal === "work" ? (
           <>
             <WorkArgument project={project} />
@@ -237,7 +230,7 @@ export function BookSpreadModal({
           </>
         ) : (
           <>
-            <div className="p-10 md:p-16">
+            <div className="p-10 pt-20 md:p-16 md:pt-24">
               <Label>
                 {activeModal === "resume"
                   ? aboutMe.kicker
@@ -300,7 +293,7 @@ export function BookSpreadModal({
                 </p>
               )}
             </div>
-            <div className="flex flex-col justify-center bg-white/35 p-10 md:p-16">
+            <div className="flex flex-col justify-center bg-white/35 p-10 pt-20 md:p-16 md:pt-24">
               {activeModal === "notes" && (
                 <div className="grid auto-rows-min gap-5 sm:grid-cols-2">
                   {aboutMe.hobbies.map((hobby, index) => (
