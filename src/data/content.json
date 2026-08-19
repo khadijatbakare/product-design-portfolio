@@ -80,30 +80,6 @@
       "caption": "Trying new recipes, then changing them halfway through."
     }
   ],
-  "projects": [
-    {
-      "id": "atlas",
-      "number": "01",
-      "type": "DESIGN SYSTEMS · PRODUCT ARCHITECTURE",
-      "title": "Giving a growing product one shared language",
-      "summary": "A new foundation that aligned fragmented workflows, reduced repeated decisions, and helped teams build with confidence.",
-      "role": "Lead product designer",
-      "timeline": "8 months",
-      "scope": "Web + mobile",
-      "theme": "project-atlas"
-    },
-    {
-      "id": "northstar",
-      "number": "02",
-      "type": "FOUNDING DESIGN · ZERO TO ONE",
-      "title": "Turning an early idea into a product people could trust",
-      "summary": "From the first product model to the core experience: shaping a complex financial tool around clarity and control.",
-      "role": "Founding designer",
-      "timeline": "0→1 product",
-      "scope": "Strategy + execution",
-      "theme": "project-northstar"
-    }
-  ],
   "footer": {
     "eyebrow": "HAVE A COMPLICATED PRODUCT PROBLEM?",
     "heading": "Let’s make sense of it together."

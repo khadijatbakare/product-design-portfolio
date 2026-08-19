@@ -1,50 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import content from './data/content.json'
 import { useRoute } from './hooks/useRoute'
+import { projectSummaries, caseStudies } from './data/projects'
+import { artRegistry } from './components/artRegistry'
+import { ProjectCard } from './components/ProjectCard'
+import { CaseStudyBody } from './components/CaseStudyBody'
+import { BookshelfWidget } from './components/BookshelfWidget'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
-
-const projectArt = { atlas: <AtlasArt />, northstar: <NorthstarArt /> }
-const projects = content.projects.map(project => ({
-  ...project,
-  meta: [project.role, project.timeline, project.scope],
-  className: project.theme,
-  art: projectArt[project.id],
-}))
-
-function AtlasArt() {
-  return (
-    <div className="atlas-art" aria-hidden="true">
-      <div className="atlas-window atlas-window-back">
-        <div className="window-top"><i /><i /><i /></div>
-        <div className="tokens"><b /><b /><b /><b /><b /></div>
-        <div className="token-lines"><span /><span /><span /></div>
-      </div>
-      <div className="atlas-window atlas-window-front">
-        <div className="window-top"><i /><i /><i /></div>
-        <div className="window-layout">
-          <div className="side-lines"><span /><span /><span /><span /></div>
-          <div className="dashboard">
-            <small>Overview</small><strong>Good morning, Ada.</strong>
-            <div className="chart"><i /><i /><i /><i /><i /><i /></div>
-            <div className="mini-cards"><b /><b /><b /></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function NorthstarArt() {
-  return (
-    <div className="northstar-art" aria-hidden="true">
-      <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-      <div className="phone phone-left"><div className="notch" /><span>Balance</span><strong>$24,860</strong><div className="wave" /><div className="phone-row" /><div className="phone-row short" /></div>
-      <div className="phone phone-center"><div className="notch" /><span>Send money</span><div className="avatar">AO</div><strong>Almost there</strong><div className="field" /><div className="field" /><button>Continue</button></div>
-      <div className="phone phone-right"><div className="notch" /><span>Activity</span><div className="activity-row" /><div className="activity-row" /><div className="activity-row" /></div>
-    </div>
-  )
-}
 
 function Header({ page, navigate }) {
   const [open, setOpen] = useState(false)
@@ -78,13 +41,7 @@ function Home({ navigate }) {
       <section className="work-section section-wrap" id="work">
         <div className="section-heading"><div><span>01 / SELECTED WORK</span><h2>A closer look<br />at how I work.</h2></div><p>Projects spanning foundational product decisions, complex user flows, and systems designed to scale.</p></div>
         <div className="project-list">
-          {projects.map(project => <article className="project" key={project.id}>
-            <button className={`project-visual ${project.className}`} onClick={() => navigate(project.id)} aria-label={`Read ${project.title}`}>{project.art}<span className="view-project">View case study <Arrow diagonal /></span></button>
-            <div className="project-copy">
-              <div className="project-number">{project.number}</div>
-              <div><p className="project-type">{project.type}</p><h3>{project.title}</h3><p className="project-summary">{project.summary}</p><button className="text-link" onClick={() => navigate(project.id)}>Read the case study <Arrow /></button></div>
-            </div>
-          </article>)}
+          {projectSummaries.map(project => <ProjectCard project={project} onOpen={navigate} key={project.slug} />)}
         </div>
       </section>
 
@@ -127,23 +84,21 @@ function About() {
     </section>
     <section className="off-clock section-wrap">
       <div className="off-heading"><span className="kicker">OFF THE CLOCK</span><h2>Away from work,<br />life looks <em>like this.</em></h2></div>
-      <div className="personal-grid">{personal.map(([cls,label,title,caption]) => <article className={`personal-card ${cls}`} key={cls}><div className="personal-image"><span>ADD {cls.toUpperCase()} PHOTO</span></div><div className="personal-caption"><span>{label}</span><h3>{title}</h3><p>{caption}</p></div></article>)}</div>
+      <div className="personal-grid">{personal.map(([cls,label,title,caption]) => <article className={`personal-card ${cls}`} key={cls}><div className="personal-image">{cls === 'books' ? <BookshelfWidget books={[{ title: 'The Design of Everyday Things', spineColor: '#e9b949' }, { title: 'Ways of Seeing', spineColor: '#cf6848' }, { title: 'The Creative Act', spineColor: '#ddd4bd' }, { title: 'Thinking in Systems', spineColor: '#677d6a' }, { title: 'Tomorrow, and Tomorrow, and Tomorrow', spineColor: '#8296b8' }]} /> : <span>ADD {cls.toUpperCase()} PHOTO</span>}</div><div className="personal-caption"><span>{label}</span><h3>{title}</h3><p>{caption}</p></div></article>)}</div>
     </section>
   </main><Footer /></>
 }
 
 function CaseStudy({ project, navigate }) {
   useEffect(() => window.scrollTo(0, 0), [])
+  const CoverArt = artRegistry[project.coverArtKey]
+  const currentIndex = caseStudies.findIndex(item => item.slug === project.slug)
+  const nextProject = caseStudies[(currentIndex + 1) % caseStudies.length]
   return <><main className="case-study">
-    <section className="case-hero section-wrap"><button className="back-link" onClick={() => navigate('home')}>← Back to work</button><p className="project-type">{project.type}</p><h1>{project.title}</h1><p className="case-deck">{project.summary}</p><div className="case-meta">{project.meta.map((item,i) => <div key={item}><span>{['ROLE','TIMELINE','SCOPE'][i]}</span><strong>{item}</strong></div>)}</div></section>
-    <div className={`case-cover ${project.className}`}>{project.art}</div>
-    <section className="case-section section-wrap narrow"><div className="case-label">01 / THE SITUATION</div><div><h2>Growth had created more decisions than the product could hold.</h2><p>The product had expanded quickly across multiple teams. Each team solved immediate needs independently, leaving users to relearn familiar interactions and engineers maintaining several versions of the same patterns.</p><p>The inconsistency was visible, but the deeper problem was structural: there was no shared model for how the product should behave.</p></div></section>
-    <section className="case-quote section-wrap"><span>THE REAL PROBLEM</span><blockquote>We didn’t just need consistent screens. We needed a shared understanding of the product underneath them.</blockquote></section>
-    <section className="case-section section-wrap narrow"><div className="case-label">02 / MAKING SENSE OF IT</div><div><h2>Finding the patterns beneath the interface.</h2><p>I mapped the core journeys, audited recurring patterns, and compared how different teams had solved similar user needs. This turned a broad redesign request into a set of concrete product decisions.</p><div className="insight-cards"><article><span>WE STARTED WITH</span><strong>A request to standardise the interface.</strong></article><article><span>WE LEARNED</span><strong>Similar workflows used different logic and language.</strong></article><article><span>SO THE PROBLEM BECAME</span><strong>Align product behaviour, not just components.</strong></article></div></div></section>
-    <section className="decision section-wrap"><span className="kicker">03 / A KEY DECISION</span><h2>One shared model,<br /><em>with room for variation.</em></h2><div className="decision-grid"><div><span>WHAT MADE IT DIFFICULT</span><p>Teams served different user groups and worried that standardisation would remove necessary flexibility.</p></div><div><span>WHAT I PROPOSED</span><p>A common interaction model with defined extension points for genuine product-specific needs.</p></div><div><span>WHAT CHANGED</span><p>Teams could reuse the same foundation without forcing every workflow into an identical shape.</p></div></div></section>
-    <section className="outcome section-wrap"><span className="kicker">04 / OUTCOME</span><h2>A clearer experience.<br />A stronger foundation.</h2><p>The work gave product and engineering teams a shared language for making decisions. It established reusable patterns, clarified ownership, and created a foundation the product could continue to grow from.</p><small>Replace this section with verified metrics and specific team outcomes before publishing.</small></section>
-    <section className="reflection section-wrap"><div><span className="kicker">REFLECTION</span><h2>What I’d do differently.</h2></div><p>Governance conversations should start alongside the initial audit—not after the first components ship. Beginning earlier would make ownership clearer and reduce avoidable revision.</p></section>
-    <div className="next-project section-wrap"><span>NEXT PROJECT</span><button onClick={() => navigate(project.id === 'atlas' ? 'northstar' : 'atlas')}>{project.id === 'atlas' ? projects[1].title : projects[0].title} <Arrow /></button></div>
+    <section className="case-hero section-wrap"><button className="back-link" onClick={() => navigate('home')}>← Back to work</button><p className="project-type">{project.type}</p><h1>{project.title}</h1><p className="case-deck">{project.deck}</p><div className="case-meta">{Object.entries(project.meta).map(([label,item]) => <div key={label}><span>{label.toUpperCase()}</span><strong>{item}</strong></div>)}</div></section>
+    <div className={`case-cover project-${project.coverArtKey}`}><CoverArt /></div>
+    <CaseStudyBody blocks={project.body} />
+    <div className="next-project section-wrap"><span>NEXT PROJECT</span><button onClick={() => navigate(nextProject.slug)}>{nextProject.title} <Arrow /></button></div>
   </main><Footer /></>
 }
 
@@ -153,6 +108,6 @@ function Footer() {
 
 export default function App() {
   const { route: page, navigate } = useRoute()
-  const project = projects.find(p => p.id === page)
+  const project = caseStudies.find(project => project.slug === page)
   return <div className="app"><Header page={page} navigate={navigate} />{project ? <CaseStudy project={project} navigate={navigate} /> : page === 'about' ? <About /> : <Home navigate={navigate} />}</div>
 }
