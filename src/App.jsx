@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import content from './data/content.json'
+import { useRoute } from './hooks/useRoute'
 
 const Arrow = ({ diagonal = false }) => <span aria-hidden="true">{diagonal ? '↗' : '→'}</span>
 
@@ -151,9 +152,7 @@ function Footer() {
 }
 
 export default function App() {
-  const [page, setPage] = useState(() => window.location.hash.slice(1) || 'home')
-  const navigate = target => { window.location.hash = target === 'home' ? '' : target; setPage(target); window.scrollTo(0,0) }
-  useEffect(() => { const onHash = () => setPage(window.location.hash.slice(1) || 'home'); window.addEventListener('hashchange', onHash); return () => window.removeEventListener('hashchange', onHash) }, [])
+  const { route: page, navigate } = useRoute()
   const project = projects.find(p => p.id === page)
   return <div className="app"><Header page={page} navigate={navigate} />{project ? <CaseStudy project={project} navigate={navigate} /> : page === 'about' ? <About /> : <Home navigate={navigate} />}</div>
 }
