@@ -1,4 +1,4 @@
-import type { ProjectSummary } from '../data/projects'
+import type { ProjectSummary } from '../types/content'
 import { artRegistry } from './artRegistry'
 
 type ProjectCardProps = {
@@ -13,7 +13,7 @@ export function ProjectVisual({ project, onOpen }: Omit<ProjectCardProps, 'varia
 }
 
 export function ProjectMeta({ project, onOpen }: Omit<ProjectCardProps, 'variant'>) {
-  return <div className="project-copy"><div className="project-number">{project.number}</div><div><p className="project-type">{project.type}</p><h3>{project.title}</h3><p className="project-summary">{project.outcome}</p><button className="text-link" onClick={() => onOpen(project.slug)}>Read the case study →</button></div></div>
+  return <div className="project-copy"><div className="project-number">{String(project.order).padStart(2, '0')}</div><div><p className="project-type">{project.disciplines.join(' · ').replace(/-/g, ' ').toUpperCase()}</p><h3>{project.title}</h3><p className="project-summary">{project.outcome}</p><button className="text-link" onClick={() => onOpen(project.slug)}>Read the case study →</button></div></div>
 }
 
 export function ProjectCard({ project, onOpen, variant = 'feature' }: ProjectCardProps) {

@@ -2,11 +2,12 @@ import content from '../data/content.json'
 import { projectSummaries } from '../data/projects'
 import { ProjectCard } from '../components/ProjectCard'
 import { Container, SectionHeading, TextLink } from '../primitives'
+import { bio, siteConfig } from '../data/site'
 
 type Navigate = (route: string) => void
 
 function HeroSection() {
-  return <Container className="hero"><div className="eyebrow"><span className="status-dot" /> {content.site.availability}</div><h1>I design clear,<br />coherent products<br />from <em>complex ideas.</em></h1><div className="hero-bottom"><p>{content.hero.intro}</p><button className="circle-link" onClick={() => document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })} aria-label="View selected work">→</button></div></Container>
+  return <Container className="hero"><div className="eyebrow"><span className="status-dot" /> {siteConfig.availability?.label.toUpperCase()}</div><h1>I design clear,<br />coherent products<br />from <em>complex ideas.</em></h1><div className="hero-bottom"><p>{bio.short}</p><button className="circle-link" onClick={() => document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })} aria-label="View selected work">→</button></div></Container>
 }
 
 function SelectedWork({ navigate }: { navigate: Navigate }) {

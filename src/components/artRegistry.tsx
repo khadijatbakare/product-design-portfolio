@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react'
-import type { ArtKey } from '../data/projects'
+import type { ArtKey } from '../types/content'
 
 function AtlasArt() {
   return <div className="atlas-art" aria-hidden="true"><div className="atlas-window atlas-window-back"><div className="window-top"><i /><i /><i /></div><div className="tokens"><b /><b /><b /><b /><b /></div><div className="token-lines"><span /><span /><span /></div></div><div className="atlas-window atlas-window-front"><div className="window-top"><i /><i /><i /></div><div className="window-layout"><div className="side-lines"><span /><span /><span /><span /></div><div className="dashboard"><small>Overview</small><strong>Good morning, Ada.</strong><div className="chart"><i /><i /><i /><i /><i /><i /></div><div className="mini-cards"><b /><b /><b /></div></div></div></div></div>
