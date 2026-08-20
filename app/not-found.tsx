@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ThemeToggle } from "@/components/chrome/ThemeToggle";
 
 type AudioWindow = Window &
   typeof globalThis & {
@@ -48,7 +49,10 @@ export default function NotFound() {
   };
 
   return (
-    <main className="flex min-h-screen select-none flex-col items-center justify-center bg-[#FAF8F5] p-6 text-[#2D2A26]">
+    <main className="theme-shell paper-texture relative flex min-h-screen select-none flex-col items-center justify-center p-6">
+      <div className="absolute right-6 top-6 md:right-12 md:top-10">
+        <ThemeToggle />
+      </div>
       <div className="flex w-full max-w-md flex-col items-center text-center">
         <button
           type="button"
@@ -63,23 +67,23 @@ export default function NotFound() {
         >
           <svg
             viewBox="0 0 160 140"
-            className="h-full w-full fill-none stroke-[#2D2A26] stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]"
+            className="h-full w-full fill-none stroke-current stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]"
             aria-hidden="true"
           >
             <path
               d="M30 115 L45 65 L115 65 L130 115 Z"
-              className="fill-[#FAF8F5]"
+              className="fill-[var(--room)]"
             />
             <line x1="25" y1="115" x2="135" y2="115" />
-            <circle cx="80" cy="92" r="16" className="stroke-[#2D2A26]/80" />
-            <circle cx="80" cy="92" r="6" className="fill-[#2D2A26]" />
+            <circle cx="80" cy="92" r="16" className="opacity-80" />
+            <circle cx="80" cy="92" r="6" className="fill-current" />
             {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
               <circle
                 key={angle}
                 cx={80 + 11 * Math.cos((angle * Math.PI) / 180)}
                 cy={92 + 11 * Math.sin((angle * Math.PI) / 180)}
                 r="1.5"
-                className="fill-[#2D2A26]/40 stroke-none"
+                className="fill-current stroke-none opacity-40"
               />
             ))}
             <path d="M52 65 L52 56 M62 56 L42 56" />
@@ -92,21 +96,21 @@ export default function NotFound() {
             >
               <path
                 d="M10 40 C10 32, 22 30, 26 38 L30 46 C32 50, 24 55, 18 52 Z"
-                className="fill-[#FAF8F5]"
+                className="fill-[var(--room)]"
               />
               <path
                 d="M48 68 C44 62, 54 52, 60 55 L68 62 C72 66, 64 74, 58 72 Z"
-                className="fill-[#FAF8F5]"
+                className="fill-[var(--room)]"
               />
               <path d="M22 40 C34 46, 42 52, 56 64" strokeWidth="3" />
             </motion.g>
             <path
               d="M32 50 C24 65, 30 75, 20 85 C14 92, 25 100, 35 105"
-              className="stroke-[#2D2A26]/40 stroke-[1]"
+              className="stroke-current stroke-[1] opacity-40"
             />
           </svg>
           <span
-            className="mt-1 block font-mono text-[9px] uppercase tracking-widest text-[#8F877B]"
+            className="theme-muted mt-1 block font-mono text-[9px] uppercase tracking-widest"
             aria-live="polite"
           >
             {isPlaying
@@ -115,19 +119,19 @@ export default function NotFound() {
           </span>
         </button>
 
-        <span className="mb-2 font-mono text-xs uppercase tracking-widest text-[#8F877B]">
+        <span className="theme-muted mb-2 font-mono text-xs uppercase tracking-widest">
           404 — Line disconnected
         </span>
         <h1 className="mb-3 font-serif text-3xl">
           This extension does not exist.
         </h1>
-        <p className="mb-8 max-w-sm font-serif text-sm leading-relaxed text-[#666056]">
+        <p className="theme-muted mb-8 max-w-sm font-serif text-sm leading-relaxed">
           The volume or page you were trying to reach has been misplaced, moved
           to another shelf, or borrowed indefinitely.
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded bg-[#2D2A26] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[#FAF8F5] shadow-sm transition-colors hover:bg-[#433E38]"
+          className="inline-flex items-center gap-2 rounded bg-[var(--room-ink)] px-5 py-2.5 font-mono text-xs uppercase tracking-wider text-[var(--room)] shadow-sm transition-opacity hover:opacity-80"
         >
           ← Return to the bookshelf
         </Link>
