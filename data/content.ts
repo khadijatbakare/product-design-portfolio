@@ -173,7 +173,7 @@ export const checkoutSlip: CheckoutSlip = {
   ledger: [
     { id: 'email', label: 'Email', href: `mailto:${siteIdentity.email}`, kind: 'mail', stamp: 'ANY TIME' },
     { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/khadijatbakare/', kind: 'external', stamp: 'WEEKDAYS' },
-    { id: 'medium', label: 'Medium', href: '#medium', kind: 'external', stamp: 'WEEKENDS' },
+    { id: 'medium', label: 'Medium', href: 'https://khadijatbakare.medium.com/', kind: 'external', stamp: 'WEEKENDS' },
     { id: 'github', label: 'GitHub', href: 'https://github.com/khadijatbakare', kind: 'external', stamp: 'OPEN LATE' },
   ],
   notice: 'This volume may be borrowed indefinitely. Please return with notes.',
