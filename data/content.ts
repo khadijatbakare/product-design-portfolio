@@ -172,7 +172,7 @@ export const checkoutSlip: CheckoutSlip = {
   availability: { status: 'open', stamp: 'AUGUST 2026 — AVAILABLE FOR WORK', label: 'Open to select opportunities — full-time or a small number of projects.' },
   ledger: [
     { id: 'email', label: 'Email', href: `mailto:${siteIdentity.email}`, kind: 'mail', stamp: 'ANY TIME' },
-    { id: 'linkedin', label: 'LinkedIn', href: '#linkedin', kind: 'external', stamp: 'WEEKDAYS' },
+    { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/khadijatbakare/', kind: 'external', stamp: 'WEEKDAYS' },
     { id: 'medium', label: 'Medium', href: '#medium', kind: 'external', stamp: 'WEEKENDS' },
     { id: 'github', label: 'GitHub', href: 'https://github.com/khadijatbakare', kind: 'external', stamp: 'OPEN LATE' },
   ],
