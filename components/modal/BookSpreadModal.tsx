@@ -1,19 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Download, Mail, X } from "lucide-react";
 import {
   aboutMe,
   checkoutSlip,
-  getProjectsByVolume,
   libraryCopy,
+  playground,
   projects,
   resume,
   siteIdentity,
   volumes,
   type Hobby,
   type ModalView,
+  type PlaygroundPiece,
   type Project,
 } from "@/data/content";
 
@@ -21,7 +22,7 @@ interface Props {
   readonly activeModal: ModalView;
   readonly selectedProject: string | null;
   readonly onClose: () => void;
-  readonly onSelectProject: (slug: string) => void;
+  readonly onSelectProject: (slug: string | null) => void;
 }
 
 function Label({ children }: { readonly children: React.ReactNode }) {
@@ -37,6 +38,90 @@ const hobbySpan: Record<Hobby["span"], string> = {
   tall: "min-h-96 md:row-span-2",
   wide: "min-h-64 sm:col-span-2",
 };
+
+const playgroundSpan: Record<PlaygroundPiece["span"], string> = {
+  square: "aspect-square",
+  tall: "min-h-96 md:row-span-2",
+  wide: "min-h-64 sm:col-span-2",
+};
+
+function WorkIndex({
+  onSelectProject,
+}: {
+  readonly onSelectProject: (slug: string) => void;
+}) {
+  return (
+    <div className="grid min-h-[620px] md:grid-cols-2">
+      <section className="relative overflow-hidden p-10 pt-24 md:p-16 md:pt-28">
+        <Label>Vol. 01 / Project index</Label>
+        <h2
+          id="modal-title"
+          className="mt-8 font-serif text-6xl leading-[.88] md:text-7xl"
+        >
+          Selected work,
+          <br />
+          <em>filed loosely.</em>
+        </h2>
+        <p className="mt-8 max-w-md text-lg leading-8 text-black/60">
+          Design systems, product architecture, and zero-to-one work. Pull an
+          entry to turn the page.
+        </p>
+        <div className="absolute bottom-12 left-12 hidden -rotate-3 border border-black/15 bg-[#f0e2bd] px-5 py-4 shadow-sm md:block">
+          <p className="font-mono text-[9px] uppercase tracking-widest">
+            Filed by outcome, not discipline
+          </p>
+        </div>
+      </section>
+      <section className="grid content-center gap-7 bg-white/35 p-8 pt-24 md:p-12 md:pt-24">
+        {projects.map((project, index) => {
+          const visual = project.visualAssets[0];
+          return (
+            <motion.button
+              key={project.slug}
+              type="button"
+              onClick={() => onSelectProject(project.slug)}
+              whileHover={{ rotate: 0, y: -5 }}
+              whileFocus={{ rotate: 0, y: -5 }}
+              className={`${index % 2 ? "rotate-1" : "-rotate-1"} group grid grid-cols-[112px_1fr] gap-5 border border-black/15 bg-[#fffdf8] p-3 text-left shadow-[0_10px_28px_rgba(45,36,25,.12)] outline-none focus-visible:ring-2 focus-visible:ring-black`}
+            >
+              <span
+                className="relative block min-h-28 overflow-hidden"
+                style={{ background: visual?.media.placeholder }}
+              >
+                {visual && (
+                  <Image
+                    src={visual.media.src}
+                    alt=""
+                    fill
+                    sizes="112px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
+                <span className="absolute left-2 top-2 bg-[#fff6d8] px-2 py-1 font-mono text-[8px] uppercase tracking-widest shadow">
+                  0{index + 1}
+                </span>
+              </span>
+              <span className="py-2 pr-2">
+                <span className="font-mono text-[8px] uppercase tracking-widest text-black/50">
+                  {project.category} · {project.timeline}
+                </span>
+                <span className="mt-3 block font-serif text-2xl leading-7">
+                  {project.title}
+                </span>
+                <span className="mt-3 block text-xs leading-5 text-black/55">
+                  {project.summary}
+                </span>
+                <span className="mt-4 block font-mono text-[8px] uppercase tracking-widest">
+                  Open entry →
+                </span>
+              </span>
+            </motion.button>
+          );
+        })}
+      </section>
+    </div>
+  );
+}
 
 function WorkArgument({ project }: { readonly project: Project }) {
   return (
@@ -106,7 +191,10 @@ function WorkArgument({ project }: { readonly project: Project }) {
                 <article key={metric.label}>
                   <p className="font-serif text-5xl">{metric.value}</p>
                   <p className="mt-1 text-sm">{metric.label}</p>
-                  <p className="mt-2 font-mono text-[8px] uppercase tracking-widest text-black/45">Source: {metric.source} · {metric.verified ? "verified" : "pending verification"}</p>
+                  <p className="mt-2 font-mono text-[8px] uppercase tracking-widest text-black/45">
+                    Source: {metric.source} ·{" "}
+                    {metric.verified ? "verified" : "pending verification"}
+                  </p>
                 </article>
               ))}
             </div>
@@ -124,7 +212,7 @@ function WorkEvidence({
   readonly project: Project;
   readonly onSelectProject: (slug: string) => void;
 }) {
-  const volumeProjects = getProjectsByVolume(project.volumeId);
+  const volumeProjects = projects;
   const index = Math.max(
     0,
     volumeProjects.findIndex((item) => item.slug === project.slug),
@@ -185,7 +273,14 @@ function WorkEvidence({
           </button>
         </div>
       )}
-      <a href="/resume.pdf" download="Khadijat-Bakare-Resume.pdf" className="sticky bottom-4 mt-10 ml-auto flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-paper shadow-lg"><Download size={15}/>{resume.downloadLabel}</a>
+      <a
+        href="/resume.pdf"
+        download="Khadijat-Bakare-Resume.pdf"
+        className="sticky bottom-4 mt-10 ml-auto flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-paper shadow-lg"
+      >
+        <Download size={15} />
+        {resume.downloadLabel}
+      </a>
     </div>
   );
 }
@@ -196,11 +291,10 @@ export function BookSpreadModal({
   onClose,
   onSelectProject,
 }: Props) {
-  const project =
-    projects.find((item) => item.slug === selectedProject) ?? projects[0];
+  const project = projects.find((item) => item.slug === selectedProject);
   const volume =
     activeModal === "work"
-      ? volumes.find((item) => item.id === project.volumeId)
+      ? volumes.find((item) => item.contents === "work")
       : volumes.find((item) => item.contents === activeModal);
   return (
     <motion.div
@@ -219,15 +313,70 @@ export function BookSpreadModal({
         exit={{ scale: 0.95, y: 20 }}
         transition={{ type: "spring", stiffness: 260, damping: 28 }}
       >
-        <nav className="absolute inset-x-0 top-0 z-20 flex items-center justify-between border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3 backdrop-blur" aria-label="Book controls">
-          <button autoFocus onClick={onClose} className="font-mono text-[9px] uppercase tracking-widest">← {libraryCopy.back}</button>
-          <button onClick={onClose} className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest" aria-label="Close book"><X size={14}/> Close</button>
+        <nav
+          className="absolute inset-x-0 top-0 z-20 flex items-center justify-between border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3 backdrop-blur"
+          aria-label="Book controls"
+        >
+          <button
+            autoFocus
+            onClick={() =>
+              activeModal === "work" && selectedProject
+                ? onSelectProject(null)
+                : onClose()
+            }
+            className="font-mono text-[9px] uppercase tracking-widest"
+          >
+            ←{" "}
+            {activeModal === "work" && selectedProject
+              ? "Project index"
+              : libraryCopy.back}
+          </button>
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+            aria-label="Close book"
+          >
+            <X size={14} /> Close
+          </button>
         </nav>
         {activeModal === "work" ? (
-          <>
-            <WorkArgument project={project} />
-            <WorkEvidence project={project} onSelectProject={onSelectProject} />
-          </>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={project?.slug ?? "work-index"}
+              className="col-span-2 grid md:grid-cols-2"
+              initial={{
+                opacity: 0,
+                rotateY: -18,
+                x: 70,
+                transformOrigin: "left center",
+              }}
+              animate={{ opacity: 1, rotateY: 0, x: 0 }}
+              exit={{
+                opacity: 0,
+                rotateY: 14,
+                x: -45,
+                transformOrigin: "right center",
+              }}
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              style={{ perspective: 1400 }}
+            >
+              {project ? (
+                <>
+                  <WorkArgument project={project} />
+                  <WorkEvidence
+                    project={project}
+                    onSelectProject={(slug) => onSelectProject(slug)}
+                  />
+                </>
+              ) : (
+                <div className="col-span-2">
+                  <WorkIndex
+                    onSelectProject={(slug) => onSelectProject(slug)}
+                  />
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         ) : (
           <>
             <div className="p-10 pt-20 md:p-16 md:pt-24">
@@ -319,6 +468,52 @@ export function BookSpreadModal({
                   ))}
                 </div>
               )}
+              {activeModal === "playground" && (
+                <div className="grid auto-rows-min gap-5 sm:grid-cols-2">
+                  {playground.length ? (
+                    playground.map((piece, index) => (
+                      <figure
+                        key={piece.id}
+                        className={`${playgroundSpan[piece.span]} ${index % 2 ? "rotate-1" : "-rotate-1"} relative overflow-hidden border border-black/15 bg-white p-3 shadow-md`}
+                      >
+                        <div
+                          className="relative h-full min-h-56 overflow-hidden"
+                          style={{ background: piece.media.placeholder }}
+                        >
+                          <Image
+                            src={piece.media.src}
+                            alt={piece.media.alt}
+                            fill
+                            sizes="(min-width: 768px) 35vw, 80vw"
+                            className="object-cover"
+                          />
+                        </div>
+                        <figcaption className="p-3 pb-1">
+                          <Label>0{index + 1} / Visual study</Label>
+                          <h3 className="mt-2 font-serif text-2xl">
+                            {piece.title}
+                          </h3>
+                          <p className="mt-2 text-sm leading-6 text-black/55">
+                            {piece.note}
+                          </p>
+                        </figcaption>
+                      </figure>
+                    ))
+                  ) : (
+                    <div className="col-span-2 rotate-1 border border-dashed border-black/25 bg-[#fffdf8] p-10 shadow-sm">
+                      <Label>Drawer open / awaiting first study</Label>
+                      <p className="mt-5 font-serif text-4xl leading-tight">
+                        Loose screens belong here, without being forced into a
+                        case study.
+                      </p>
+                      <p className="mt-5 max-w-md leading-7 text-black/55">
+                        Add a title, a short note, and an image to the
+                        playground collection when a visual is ready to keep.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
               {activeModal === "resume" && (
                 <>
                   <div>
@@ -405,7 +600,7 @@ export function BookSpreadModal({
                         <dt>
                           <Label>{entry.label}</Label>
                         </dt>
-                          <dd>{entry.stamp}</dd>
+                        <dd>{entry.stamp}</dd>
                       </div>
                     ))}
                   </dl>

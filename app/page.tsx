@@ -26,10 +26,7 @@ export default function Home() {
   const openModal = useCallback((view: ModalView, volumeId?: string) => {
     setActiveModal(view);
     if (view === "work") {
-      const volumeProjects = volumeId
-        ? getProjectsByVolume(volumeId)
-        : projects;
-      setSelectedProject(volumeProjects[0]?.slug ?? null);
+      setSelectedProject(null);
     }
   }, []);
 
@@ -37,6 +34,7 @@ export default function Home() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeModal();
       if (activeModal !== "work") return;
+      if (!selectedProject) return;
       const current = projects.find(
         (project) => project.slug === selectedProject,
       );
