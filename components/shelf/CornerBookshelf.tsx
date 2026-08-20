@@ -618,20 +618,12 @@ export function CornerBookshelf({
           transition={{ type: "spring", stiffness: 340, damping: 24 }}
           className="cursor-pointer outline-none"
         >
-          <ellipse
-            cx="245"
-            cy="448"
-            rx="66"
-            ry="8"
-            fill="#0e0f11"
-            opacity={gamepadActive ? ".3" : ".18"}
-          />
           <image
             href="/assets/gamepad-controller.svg"
-            x="184"
-            y="392"
-            width="122"
-            height="65"
+            x="194"
+            y="363"
+            width="108"
+            height="91"
             preserveAspectRatio="xMidYMid meet"
           />
         </motion.g>
