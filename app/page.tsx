@@ -83,29 +83,13 @@ export default function Home() {
         </p>
       </header>
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <CornerBookshelf onOpen={openModal} />
-      </div>
-      <div className="mx-auto flex max-w-7xl justify-end gap-5 px-6 pb-10 md:px-12">
-        <button
-          type="button"
-          onClick={() => {
+        <CornerBookshelf
+          onOpen={openModal}
+          onOpenGame={() => {
             setGameMode("solo");
             setIsGameOpen(true);
           }}
-          className="font-mono text-[9px] uppercase tracking-[.18em] text-black/45 transition-colors hover:text-black"
-        >
-          Play UNO Flip Match ↗
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setGameMode("versus");
-            setIsGameOpen(true);
-          }}
-          className="font-mono text-[9px] uppercase tracking-[.18em] text-black/45 transition-colors hover:text-black"
-        >
-          Challenge The Librarian ↗
-        </button>
+        />
       </div>
       <LibraryCheckoutFooter onOpen={openModal} />
       <AnimatePresence>
