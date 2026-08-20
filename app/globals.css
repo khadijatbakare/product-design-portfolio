@@ -113,3 +113,8 @@ html[data-theme="dark"] .theme-checkout {
     transition-duration: 0.01ms !important;
   }
 }
+@media (min-width: 768px) and (max-height: 800px) {
+  .uno-mapping {
+    display: none;
+  }
+}

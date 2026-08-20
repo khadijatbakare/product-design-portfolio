@@ -36,7 +36,9 @@ export function ThemeToggle() {
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
     >
       {theme === "light" ? <Moon size={13} /> : <Sun size={13} />}
-      {theme === "light" ? "After hours" : "Daylight"}
+      <span className="hidden md:inline">
+        {theme === "light" ? "After hours" : "Daylight"}
+      </span>
     </button>
   );
 }

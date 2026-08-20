@@ -132,7 +132,7 @@ export function FlipCardControl({
 }
 export function MappingTable() {
   return (
-    <section className="mt-7">
+    <section className="uno-mapping mt-5">
       <p className="font-mono text-[8px] uppercase tracking-widest">
         Light ↔ Dark
       </p>
@@ -185,11 +185,11 @@ export function SpreadRight({
   }) => void;
 }) {
   return (
-    <aside className="flex flex-col bg-black/[.035] p-8 pt-20 md:p-10 md:pt-24">
+    <aside className="flex min-h-0 flex-col overflow-y-auto bg-black/[.035] p-8 pt-20 md:p-7 md:pt-16">
       <p className="font-mono text-[9px] uppercase tracking-[.2em]">
         Game index / seeded {state.grid.seed}
       </p>
-      <h2 id="uno-title" className="mt-5 font-serif text-5xl leading-none">
+      <h2 id="uno-title" className="mt-3 font-serif text-4xl leading-none">
         UNO Flip
         <br />
         <em>Match.</em>
@@ -203,7 +203,7 @@ export function SpreadRight({
           }
         />
       )}
-      <dl className="mt-6 grid grid-cols-3 gap-3 border-y border-black/15 py-5">
+      <dl className="mt-4 grid grid-cols-3 gap-3 border-y border-black/15 py-3">
         <div>
           <dt className="font-mono text-[8px] uppercase">Moves</dt>
           <dd className="font-serif text-3xl">{state.moves}</dd>

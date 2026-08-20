@@ -126,11 +126,7 @@ export function CornerBookshelf({
                 {active.readTime} · {libraryCopy.open}
               </p>
             </motion.div>
-          ) : (
-            <p className="font-mono text-[10px] uppercase tracking-[.18em] text-stone-500">
-              {libraryCopy.instruction}
-            </p>
-          )}
+          ) : null}
         </AnimatePresence>
       </div>
       <svg

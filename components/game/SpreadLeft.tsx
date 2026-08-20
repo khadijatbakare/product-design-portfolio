@@ -11,7 +11,7 @@ export function SpreadLeft({
   const disabled =
     cpuTurn || (state.status !== "idle" && state.status !== "oneFlipped");
   return (
-    <main className="flex flex-col justify-center p-6 pt-20 md:p-10 md:pt-24">
+    <main className="flex min-h-0 flex-col justify-center p-6 pt-20 md:p-8 md:pt-20">
       <CardGrid
         grid={state.grid}
         disabled={disabled}

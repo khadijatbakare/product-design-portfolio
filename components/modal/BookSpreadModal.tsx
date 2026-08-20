@@ -127,7 +127,7 @@ function WorkIndex({
 
 function WorkArgument({ project }: { readonly project: Project }) {
   return (
-    <div className="p-8 pt-20 md:p-12 md:pt-24">
+    <div className="p-8 pt-20 md:py-24 md:pl-12 md:pr-16">
       <Label>
         {project.category} · {project.role} · {project.timeline}
       </Label>
@@ -223,13 +223,13 @@ function WorkEvidence({
     volumeProjects[(index - 1 + volumeProjects.length) % volumeProjects.length];
   const next = volumeProjects[(index + 1) % volumeProjects.length];
   return (
-    <div className="relative bg-white/35 p-8 pb-24 pt-20 md:p-12 md:pb-24 md:pt-24">
+    <div className="relative bg-white/35 p-8 pb-24 pt-20 md:pb-24 md:pl-16 md:pr-12 md:pt-24">
       <Label>Evidence / annotated plates</Label>
       <div className="mt-6 space-y-8">
         {project.visualAssets.map((asset) => (
           <figure key={asset.id}>
             <div
-              className="overflow-hidden border border-black/15"
+              className="overflow-hidden border border-neutral-200/80 shadow-[0_8px_24px_rgba(62,50,36,.08)]"
               style={{ background: asset.media.placeholder }}
             >
               <Image
@@ -296,10 +296,13 @@ export function BookSpreadModal({
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(dialogRef, onClose);
   const project = projects.find((item) => item.slug === selectedProject);
+  const isAbout = activeModal === "about";
   const volume =
     activeModal === "work"
       ? volumes.find((item) => item.contents === "work")
-      : volumes.find((item) => item.contents === activeModal);
+      : volumes.find(
+          (item) => item.contents === (isAbout ? "resume" : activeModal),
+        );
   return (
     <motion.div
       className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-0 backdrop-blur-md sm:p-4"
@@ -387,7 +390,7 @@ export function BookSpreadModal({
           <>
             <div className="p-10 pt-20 md:p-16 md:pt-24">
               <Label>
-                {activeModal === "resume"
+                {activeModal === "resume" || isAbout
                   ? aboutMe.kicker
                   : `${activeModal} / Library volume`}
               </Label>
@@ -395,7 +398,7 @@ export function BookSpreadModal({
                 id="modal-title"
                 className="mt-10 font-serif text-5xl leading-none md:text-7xl"
               >
-                {activeModal === "resume"
+                {activeModal === "resume" || isAbout
                   ? aboutMe.headline.map((line) => (
                       <span
                         key={line}
@@ -409,12 +412,12 @@ export function BookSpreadModal({
               </h2>
               {volume && (
                 <p className="mt-8 max-w-md text-lg leading-8 text-black/65">
-                  {activeModal === "resume"
+                  {activeModal === "resume" || isAbout
                     ? aboutMe.intro
                     : volume.description}
                 </p>
               )}
-              {activeModal === "resume" && (
+              {isAbout && (
                 <div className="mt-10 space-y-5 text-base leading-7">
                   {aboutMe.story.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
@@ -509,6 +512,30 @@ export function BookSpreadModal({
                       </p>
                     </div>
                   )}
+                </div>
+              )}
+              {isAbout && (
+                <div className="space-y-8">
+                  <div>
+                    <Label>Working principles</Label>
+                    <h3 className="mt-3 font-serif text-4xl">
+                      How I approach the work.
+                    </h3>
+                  </div>
+                  {aboutMe.principles.map((principle, index) => (
+                    <article
+                      key={principle.id}
+                      className={`${index % 2 ? "rotate-1" : "-rotate-1"} border border-black/15 bg-[#fffdf8] p-6 shadow-sm`}
+                    >
+                      <Label>0{index + 1}</Label>
+                      <h3 className="mt-3 font-serif text-3xl">
+                        {principle.title}
+                      </h3>
+                      <p className="mt-3 leading-7 text-black/60">
+                        {principle.body}
+                      </p>
+                    </article>
+                  ))}
                 </div>
               )}
               {activeModal === "resume" && (

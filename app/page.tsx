@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { BookPreloader } from "@/components/preloader/BookPreloader";
-import { ThemeToggle } from "@/components/chrome/ThemeToggle";
+import { SiteHeader } from "@/components/chrome/SiteHeader";
 import { CornerBookshelf } from "@/components/shelf/CornerBookshelf";
 import { ShelfCurioModal } from "@/components/shelf/ShelfCurioModal";
 import { BookSpreadModal } from "@/components/modal/BookSpreadModal";
@@ -79,13 +79,11 @@ export default function Home() {
           <BookPreloader key="preloader" onFinish={finishLoading} />
         )}
       </AnimatePresence>
+      <SiteHeader onOpen={openModal} />
       <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12">
-        <div className="flex items-center justify-between gap-5">
-          <span className="font-mono text-[10px] uppercase tracking-[.18em]">
-            {libraryCopy.eyebrow}
-          </span>
-          <ThemeToggle />
-        </div>
+        <span className="font-mono text-[10px] uppercase tracking-[.18em]">
+          {libraryCopy.eyebrow}
+        </span>
         <h1 className="hero-title mt-8 max-w-5xl font-serif leading-[.9] tracking-tight">
           {aboutMe.intro}
         </h1>
