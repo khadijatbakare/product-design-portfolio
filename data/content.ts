@@ -130,7 +130,7 @@ export const projects: readonly Project[] = [
   },
 ]
 
-export const siteIdentity: SiteIdentity = { name: 'Khadijat', email: 'hello@example.com' }
+export const siteIdentity: SiteIdentity = { name: 'Khadijat', email: 'Bakarek008@gmail.com' }
 export const aboutMe: AboutMe = {
   kicker: 'About', headline: ['Engineer by training.', 'Designer by practice.'], emphasis: 'Designer by practice.', intro: 'I design clear, coherent products from complex ideas.',
   story: [
