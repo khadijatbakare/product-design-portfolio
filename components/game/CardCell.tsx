@@ -9,15 +9,15 @@ export interface CardCellProps {
   readonly onFlip: (index: number) => void;
 }
 export const GridColumnsContext = createContext(1);
-const palette: Record<CardColor, string> = {
-  blue: "#2f63d7",
-  red: "#d7463f",
-  green: "#3c8f62",
-  yellow: "#e2b93f",
-  teal: "#00a7a0",
-  pink: "#f20f74",
-  orange: "#ff711a",
-  purple: "#9b31cf",
+const colorMap: Record<CardColor, string> = {
+  red: "bg-[#e53935] text-white",
+  blue: "bg-[#1e88e5] text-white",
+  green: "bg-[#43a047] text-white",
+  yellow: "bg-[#fdd835] text-neutral-900",
+  pink: "bg-[#d81b60] text-white",
+  teal: "bg-[#00897b] text-white",
+  orange: "bg-[#fb8c00] text-white",
+  purple: "bg-[#8e24aa] text-white",
 };
 
 export function CardCell({ cell, disabled, onFlip }: CardCellProps) {
@@ -32,7 +32,7 @@ export function CardCell({ cell, disabled, onFlip }: CardCellProps) {
       type="button"
       disabled={disabled || cell.status === "matched"}
       onClick={() => onFlip(cell.index)}
-      className="relative aspect-[2/3] rounded-xl disabled:cursor-default focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="relative aspect-[2/3] cursor-pointer rounded-md [perspective:1000px] disabled:cursor-default focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
       animate={
         reduced
           ? { opacity: faceUp ? 1 : 0.9 }
@@ -47,20 +47,30 @@ export function CardCell({ cell, disabled, onFlip }: CardCellProps) {
         faceUp ? card.value : `Face-down card, row ${row} column ${column}`
       }
     >
-      <span className="absolute inset-0 grid place-items-center rounded-xl border-4 border-white bg-[#202126] font-mono text-2xl text-white shadow-md [backface-visibility:hidden]">
-        UNO
+      <span className="absolute inset-0 flex items-center justify-center rounded-md border-2 border-white/80 bg-[#1a1a1e] shadow-md [backface-visibility:hidden]">
+        <span className="grid h-[72%] w-[72%] -rotate-12 place-items-center rounded border border-neutral-600/50">
+          <span className="font-mono text-[clamp(.45rem,1.2vw,.7rem)] font-bold uppercase tracking-widest text-neutral-300">
+            UNO
+          </span>
+        </span>
       </span>
       <span
-        className={`absolute inset-0 grid place-items-center rounded-xl border-4 border-white p-2 text-center font-mono text-2xl font-bold text-white shadow-md ${reduced && !faceUp ? "opacity-0" : ""} [backface-visibility:hidden]`}
+        className={`absolute inset-0 flex flex-col justify-between rounded-md border-2 border-white/80 p-[clamp(.25rem,.8vw,.45rem)] shadow-md ${colorMap[card.color]} ${reduced && !faceUp ? "opacity-0" : ""} [backface-visibility:hidden]`}
         style={{
-          backgroundColor: palette[card.color],
           transform: reduced ? undefined : "rotateY(180deg)",
         }}
       >
-        {card.icon}
-        <small className="absolute inset-x-1 bottom-2 font-mono text-[7px] uppercase">
-          {card.value}
-        </small>
+        <span className="font-mono text-[clamp(.55rem,1.3vw,.8rem)] font-bold leading-none">
+          {card.icon}
+        </span>
+        <span className="my-auto grid h-[58%] w-[70%] -rotate-12 place-items-center self-center rounded-[50%] bg-white/15">
+          <span className="font-serif text-[clamp(.8rem,2.4vw,1.45rem)] font-black tracking-tight">
+            {card.icon}
+          </span>
+        </span>
+        <span className="self-end rotate-180 font-mono text-[clamp(.55rem,1.3vw,.8rem)] font-bold leading-none">
+          {card.icon}
+        </span>
       </span>
     </motion.button>
   );
