@@ -105,7 +105,7 @@ export default function Home() {
         />
       </div>
       <LibraryCheckoutFooter onOpen={openModal} />
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {activeModal && (
           <BookSpreadModal
             key={activeModal}

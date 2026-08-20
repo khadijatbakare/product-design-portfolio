@@ -308,8 +308,12 @@ export function BookSpreadModal({
       className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-0 backdrop-blur-md sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25, ease: "easeInOut" }}
+      exit={{
+        opacity: 0,
+        scale: 0.98,
+        transition: { duration: 0.2, ease: "easeOut" },
+      }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -319,8 +323,13 @@ export function BookSpreadModal({
         className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
         initial={{ scale: 0.92, y: 28 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.95, y: 20 }}
-        transition={{ duration: 0.25, ease: "easeInOut" }}
+        exit={{
+          opacity: 0,
+          scale: 0.98,
+          y: 8,
+          transition: { duration: 0.2, ease: "easeOut" },
+        }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
       >
         <nav
           className="absolute inset-x-0 top-0 z-20 flex items-center justify-between border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3 backdrop-blur"
