@@ -181,6 +181,13 @@ export interface ShelfCurios {
     readonly count: number;
     readonly goal?: number;
     readonly titles: readonly string[];
+    readonly current?: {
+      readonly title: string;
+      readonly author: string;
+      readonly progressPercent?: number;
+      readonly note?: string;
+      readonly cover?: MediaAsset;
+    };
   };
 }
 
@@ -463,7 +470,7 @@ export const aboutMe: AboutMe = {
       label: "BOOKS",
       headline: "I buy books faster than I read them.",
       caption:
-        "Physical only — I’ve tried e-readers and it never sticks. Currently halfway through [title], and three others I’ve temporarily abandoned.",
+        "Physical only — I’ve tried e-readers and it never sticks. Usually halfway through one, with three others temporarily abandoned.",
       span: "tall",
       media: {
         src: "/assets/books.jpg",

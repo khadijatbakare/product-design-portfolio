@@ -19,6 +19,7 @@ import {
   type Project,
 } from "@/data/content";
 import { useDialogFocus } from "@/components/hooks/useDialogFocus";
+import { StudyDesk } from "@/components/modal/StudyDesk";
 
 interface Props {
   readonly activeModal: ModalView;
@@ -49,7 +50,11 @@ function FolioNext({
       onClick={() => onOpen(nextView)}
       className="mt-12 ml-auto block border-b border-black/35 pb-1 text-right font-mono text-[9px] uppercase tracking-widest hover:border-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
     >
-      Next: {nextVolume.volume} — {nextVolume.spine} →
+      <span className="block text-black/45">
+        Series progression — book{" "}
+        {index + 2 > folioOrder.length ? 1 : index + 2} of {folioOrder.length}
+      </span>
+      <span className="mt-1 block text-[11px]">{nextVolume.spine} ↗</span>
     </button>
   );
 }
@@ -490,28 +495,31 @@ export function BookSpreadModal({
             </div>
             <div className="flex flex-col justify-center bg-white/35 p-10 pt-20 md:p-16 md:pt-24">
               {activeModal === "notes" && (
-                <div className="grid auto-rows-min gap-5 sm:grid-cols-2">
-                  {aboutMe.hobbies.map((hobby, index) => (
-                    <article
-                      key={hobby.id}
-                      className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} scrapbook-tile relative flex flex-col justify-end overflow-hidden border border-black/15 p-5`}
-                      style={{ backgroundColor: hobby.media.placeholder }}
-                      aria-label={hobby.media.alt}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/10" />
-                      <div className="relative text-white">
-                        <Label>
-                          0{index + 1} / {hobby.label}
-                        </Label>
-                        <h3 className="mt-4 font-serif text-3xl">
-                          {hobby.headline}
-                        </h3>
-                        <p className="mt-3 text-sm leading-6 text-white/85">
-                          {hobby.caption}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
+                <div>
+                  <StudyDesk />
+                  <div className="mt-10 grid auto-rows-min gap-5 sm:grid-cols-2">
+                    {aboutMe.hobbies.map((hobby, index) => (
+                      <article
+                        key={hobby.id}
+                        className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} scrapbook-tile relative flex flex-col justify-end overflow-hidden border border-black/15 p-5`}
+                        style={{ backgroundColor: hobby.media.placeholder }}
+                        aria-label={hobby.media.alt}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/10" />
+                        <div className="relative text-white">
+                          <Label>
+                            0{index + 1} / {hobby.label}
+                          </Label>
+                          <h3 className="mt-4 font-serif text-3xl">
+                            {hobby.headline}
+                          </h3>
+                          <p className="mt-3 text-sm leading-6 text-white/85">
+                            {hobby.caption}
+                          </p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
                 </div>
               )}
               {activeModal === "playground" && (
