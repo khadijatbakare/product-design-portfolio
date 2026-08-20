@@ -2,7 +2,7 @@
 
 A narrative-driven portfolio for Khadijat Bakare, a product and founding designer specialising in design systems, product architecture, and end-to-end product flows.
 
-The site is designed as a personal library. Four illustrated volumes open into selected work, field notes, an about story with an on-site résumé, and a playground for visual studies and fragments. An illustrated gamepad hidden on the shelf opens a deterministic UNO Flip memory game.
+The site is designed as a personal library. Four illustrated volumes open into selected work, field notes, an about story with an on-site résumé, and “Sketchbooks & Loose Leaves” for visual studies and experiments. An illustrated gamepad hidden on the shelf opens a deterministic UNO Flip memory game.
 
 ## Built with
 

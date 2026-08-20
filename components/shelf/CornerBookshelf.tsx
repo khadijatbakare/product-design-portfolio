@@ -247,7 +247,13 @@ export function CornerBookshelf({ onOpen, onOpenGame }: CornerBookshelfProps) {
                 x={x + width / 2}
                 y={y + height / 2}
                 fill={volume.textColor}
-                fontSize={volume.typography === "sans" ? 9 : 10}
+                fontSize={
+                  volume.spine.length > 22
+                    ? 7.5
+                    : volume.typography === "sans"
+                      ? 9
+                      : 10
+                }
                 fontFamily={fontFamily}
                 fontStyle={volume.typography === "italic" ? "italic" : "normal"}
                 textAnchor="middle"

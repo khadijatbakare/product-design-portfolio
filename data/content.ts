@@ -236,13 +236,13 @@ export const volumes: readonly Volume[] = [
   {
     id: "vol-04",
     volume: "VOL. 04",
-    spine: "STUDIES & FRAGMENTS",
+    spine: "SKETCHBOOKS & LOOSE LEAVES",
     subtitle: "Screens, visual studies, and unfinished ideas",
     readTime: "Browse freely",
     contents: "playground",
-    heading: "Studies, fragments, and things worth keeping.",
+    heading: "Screens, studies, and ideas worth keeping.",
     description:
-      "A visual drawer for interface studies, isolated screens, and experiments that do not need a case study to justify their place here.",
+      "A visual drawer for interface studies, isolated screens, experiments, and work that does not need a full case study.",
     width: 54,
     height: 282,
     color: "#314A55",
