@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { BookPreloader } from "@/components/preloader/BookPreloader";
+import { ThemeToggle } from "@/components/chrome/ThemeToggle";
 import { CornerBookshelf } from "@/components/shelf/CornerBookshelf";
 import { ShelfCurioModal } from "@/components/shelf/ShelfCurioModal";
 import { BookSpreadModal } from "@/components/modal/BookSpreadModal";
@@ -69,20 +70,23 @@ export default function Home() {
   }, [activeModal, selectedProject, closeModal]);
 
   return (
-    <main className="paper-texture min-h-screen bg-paper">
+    <main className="theme-shell paper-texture min-h-screen">
       <AnimatePresence>
         {isLoading && (
           <BookPreloader key="preloader" onFinish={finishLoading} />
         )}
       </AnimatePresence>
       <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12">
-        <span className="font-mono text-[10px] uppercase tracking-[.18em]">
-          {libraryCopy.eyebrow}
-        </span>
+        <div className="flex items-center justify-between gap-5">
+          <span className="font-mono text-[10px] uppercase tracking-[.18em]">
+            {libraryCopy.eyebrow}
+          </span>
+          <ThemeToggle />
+        </div>
         <h1 className="mt-8 max-w-5xl font-serif text-6xl leading-[.9] tracking-tight md:text-8xl">
           {aboutMe.intro}
         </h1>
-        <p className="mt-8 max-w-lg leading-7 text-black/60">
+        <p className="theme-muted mt-8 max-w-lg leading-7">
           {libraryCopy.instruction}
         </p>
       </header>

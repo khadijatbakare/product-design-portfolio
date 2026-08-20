@@ -1,5 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-*{box-sizing:border-box}html{background:#f3f1e9;color:#171712}body{margin:0;min-height:100vh}.paper-texture{background-image:radial-gradient(#17171212 1px,transparent 1px);background-size:7px 7px}.book-shadow{box-shadow:inset -8px 0 18px #0003,8px 14px 25px #211f1933}.open-book{background:#faf8f4}.open-book::after{content:"";position:absolute;inset:0 auto 0 50%;width:28px;pointer-events:none;transform:translateX(-50%);background:linear-gradient(90deg,transparent,rgba(55,45,35,.12),rgba(255,255,255,.38),rgba(55,45,35,.1),transparent)}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+* {
+  box-sizing: border-box;
+}
+:root {
+  --room: #f3f1e9;
+  --room-ink: #171712;
+  --room-muted: rgba(23, 23, 18, 0.6);
+  --room-dot: #17171212;
+  color-scheme: light;
+}
+html[data-theme="dark"] {
+  --room: #17191c;
+  --room-ink: #eee9df;
+  --room-muted: rgba(238, 233, 223, 0.62);
+  --room-dot: #ffffff12;
+  color-scheme: dark;
+}
+html {
+  background: var(--room);
+  color: var(--room-ink);
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+.theme-shell {
+  background-color: var(--room);
+  color: var(--room-ink);
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
+}
+.theme-muted {
+  color: var(--room-muted);
+}
+.theme-toggle {
+  border-color: color-mix(in srgb, var(--room-ink) 24%, transparent);
+  background: color-mix(in srgb, var(--room) 84%, transparent);
+}
+.paper-texture {
+  background-image: radial-gradient(var(--room-dot) 1px, transparent 1px);
+  background-size: 7px 7px;
+}
+.library-shelf {
+  transition: filter 0.4s ease;
+}
+html[data-theme="dark"] .library-shelf {
+  filter: brightness(0.68) saturate(0.82);
+}
+html[data-theme="dark"] .theme-checkout {
+  filter: brightness(0.72) saturate(0.8);
+}
+.book-shadow {
+  box-shadow:
+    inset -8px 0 18px #0003,
+    8px 14px 25px #211f1933;
+}
+.open-book {
+  background: #faf8f4;
+  color: #171712;
+}
+.open-book::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 50%;
+  width: 28px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(55, 45, 35, 0.12),
+    rgba(255, 255, 255, 0.38),
+    rgba(55, 45, 35, 0.1),
+    transparent
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

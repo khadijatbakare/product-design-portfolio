@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   libraryCopy,
@@ -41,10 +41,31 @@ export function CornerBookshelf({
   onOpenCurio,
 }: CornerBookshelfProps) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [now, setNow] = useState<Date | null>(null);
   const active = volumes.find((volume) => volume.id === hovered);
   const gamepadActive = hovered === "gamepad";
   const curio =
     hovered && hovered in curioCopy ? curioCopy[hovered as ShelfCurioId] : null;
+  useEffect(() => {
+    setNow(new Date());
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  const lagos = now ? new Date(now.getTime() + 60 * 60 * 1000) : null;
+  const hour = lagos ? lagos.getUTCHours() % 12 : 0;
+  const minute = lagos?.getUTCMinutes() ?? 0;
+  const second = lagos?.getUTCSeconds() ?? 0;
+  const hourAngle = hour * 30 + minute * 0.5;
+  const minuteAngle = minute * 6;
+  const secondAngle = second * 6;
+  const lagosLabel = now
+    ? new Intl.DateTimeFormat("en-NG", {
+        timeZone: "Africa/Lagos",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }).format(now)
+    : "--:--:--";
 
   return (
     <section
@@ -53,7 +74,20 @@ export function CornerBookshelf({
     >
       <div className="absolute top-4 z-20 flex h-14 items-center justify-center">
         <AnimatePresence mode="wait">
-          {curio ? (
+          {hovered === "clock" ? (
+            <motion.div
+              key="clock"
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, scale: 0.96 }}
+              className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
+            >
+              <p className="text-xs font-medium">{lagosLabel}</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+                Lagos · West Africa Time
+              </p>
+            </motion.div>
+          ) : curio ? (
             <motion.div
               key={hovered}
               initial={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -101,7 +135,7 @@ export function CornerBookshelf({
       </div>
       <svg
         viewBox="0 0 680 520"
-        className="h-auto w-full overflow-visible drop-shadow-2xl"
+        className="library-shelf h-auto w-full overflow-visible drop-shadow-2xl"
         role="img"
         aria-label="L-shaped corner bookshelf with four interactive volumes"
       >
@@ -191,6 +225,72 @@ export function CornerBookshelf({
           fill="#111318"
           opacity=".45"
         />
+        <motion.g
+          tabIndex={0}
+          role="timer"
+          aria-label={`Lagos time ${lagosLabel}`}
+          onMouseEnter={() => setHovered("clock")}
+          onMouseLeave={() => setHovered(null)}
+          onFocus={() => setHovered("clock")}
+          onBlur={() => setHovered(null)}
+          animate={{ y: hovered === "clock" ? -5 : 0 }}
+          className="outline-none"
+        >
+          <path d="M518 142h54l-6 10h-42z" fill="#4b3524" stroke="#24180f" />
+          <circle
+            cx="545"
+            cy="113"
+            r="31"
+            fill="#755438"
+            stroke="#281b11"
+            strokeWidth="3"
+          />
+          <circle cx="545" cy="113" r="24" fill="#e7dcc6" stroke="#b99c70" />
+          {[0, 3, 6, 9].map((mark) => {
+            const angle = (mark * 30 * Math.PI) / 180;
+            return (
+              <line
+                key={mark}
+                x1={545 + Math.sin(angle) * 18}
+                y1={113 - Math.cos(angle) * 18}
+                x2={545 + Math.sin(angle) * 21}
+                y2={113 - Math.cos(angle) * 21}
+                stroke="#4a392a"
+                strokeWidth="1.5"
+              />
+            );
+          })}
+          <line
+            x1="545"
+            y1="113"
+            x2="545"
+            y2="99"
+            stroke="#33261c"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            transform={`rotate(${hourAngle} 545 113)`}
+          />
+          <line
+            x1="545"
+            y1="113"
+            x2="545"
+            y2="94"
+            stroke="#33261c"
+            strokeWidth="1.7"
+            strokeLinecap="round"
+            transform={`rotate(${minuteAngle} 545 113)`}
+          />
+          <line
+            x1="545"
+            y1="115"
+            x2="545"
+            y2="93"
+            stroke="#9b2d22"
+            strokeWidth=".8"
+            transform={`rotate(${secondAngle} 545 113)`}
+          />
+          <circle cx="545" cy="113" r="2" fill="#33261c" />
+        </motion.g>
         {volumes.map((volume, index) => {
           const width = volume.width;
           const height = volume.height;
