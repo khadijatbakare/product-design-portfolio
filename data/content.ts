@@ -535,8 +535,8 @@ export const resume: Resume = {
   experience: [
     {
       id: "founding-product-designer",
-      company: "Company / Product",
-      role: "Founding Product Designer",
+      company: "Kredete",
+      role: "Product Designer & Founding Designer",
       period: "2023 — Present",
       location: "Lagos, Nigeria",
       summary: "Led product design from early definition through launch.",
