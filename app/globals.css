@@ -94,17 +94,42 @@ html[data-theme="dark"] .theme-checkout {
   content: "";
   position: absolute;
   inset: 0 auto 0 50%;
-  width: 28px;
+  width: 32px;
   pointer-events: none;
   transform: translateX(-50%);
   background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(55, 45, 35, 0.12),
-    rgba(255, 255, 255, 0.38),
-    rgba(55, 45, 35, 0.1),
-    transparent
+    to right,
+    rgba(0, 0, 0, 0.06),
+    transparent 38%,
+    rgba(255, 255, 255, 0.24) 50%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.06)
   );
+}
+.stamp-ink {
+  transform: rotate(-1.35deg);
+  opacity: 0.91;
+  background-image: radial-gradient(
+    rgba(140, 45, 25, 0.2) 0.7px,
+    transparent 0.9px
+  );
+  background-size: 4px 4px;
+  text-shadow: 0.4px 0 rgba(140, 45, 25, 0.45);
+}
+.scrapbook-tile {
+  box-shadow: 0 10px 22px rgba(48, 37, 25, 0.16);
+}
+.scrapbook-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.75) 0.65px,
+    transparent 0.8px
+  );
+  background-size: 5px 5px;
 }
 @media (prefers-reduced-motion: reduce) {
   * {

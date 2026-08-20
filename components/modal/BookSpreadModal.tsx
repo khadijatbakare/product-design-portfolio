@@ -25,6 +25,33 @@ interface Props {
   readonly selectedProject: string | null;
   readonly onClose: () => void;
   readonly onSelectProject: (slug: string | null) => void;
+  readonly onOpenVolume: (view: ModalView) => void;
+}
+
+const folioOrder = ["work", "notes", "resume", "playground"] as const;
+
+function FolioNext({
+  current,
+  onOpen,
+}: {
+  readonly current: ModalView;
+  readonly onOpen: (view: ModalView) => void;
+}) {
+  const normalized =
+    current === "about" || current === "contact" ? "resume" : current;
+  const index = folioOrder.indexOf(normalized);
+  const nextView = folioOrder[(index + 1) % folioOrder.length];
+  const nextVolume = volumes.find((item) => item.contents === nextView);
+  if (!nextVolume) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(nextView)}
+      className="mt-12 ml-auto block border-b border-black/35 pb-1 text-right font-mono text-[9px] uppercase tracking-widest hover:border-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+    >
+      Next: {nextVolume.volume} — {nextVolume.spine} →
+    </button>
+  );
 }
 
 function Label({ children }: { readonly children: React.ReactNode }) {
@@ -49,8 +76,10 @@ const playgroundSpan: Record<PlaygroundPiece["span"], string> = {
 
 function WorkIndex({
   onSelectProject,
+  onOpenVolume,
 }: {
   readonly onSelectProject: (slug: string) => void;
+  readonly onOpenVolume: (view: ModalView) => void;
 }) {
   return (
     <div className="grid min-h-[620px] md:grid-cols-2">
@@ -120,6 +149,7 @@ function WorkIndex({
             </motion.button>
           );
         })}
+        <FolioNext current="work" onOpen={onOpenVolume} />
       </section>
     </div>
   );
@@ -210,9 +240,11 @@ function WorkArgument({ project }: { readonly project: Project }) {
 function WorkEvidence({
   project,
   onSelectProject,
+  onOpenVolume,
 }: {
   readonly project: Project;
   readonly onSelectProject: (slug: string) => void;
+  readonly onOpenVolume: (view: ModalView) => void;
 }) {
   const volumeProjects = projects;
   const index = Math.max(
@@ -275,14 +307,7 @@ function WorkEvidence({
           </button>
         </div>
       )}
-      <a
-        href="/resume.pdf"
-        download="Khadijat-Bakare-Resume.pdf"
-        className="sticky bottom-4 mt-10 ml-auto flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 font-mono text-[10px] uppercase tracking-widest text-paper shadow-lg"
-      >
-        <Download size={15} />
-        {resume.downloadLabel}
-      </a>
+      <FolioNext current="work" onOpen={onOpenVolume} />
     </div>
   );
 }
@@ -292,6 +317,7 @@ export function BookSpreadModal({
   selectedProject,
   onClose,
   onSelectProject,
+  onOpenVolume,
 }: Props) {
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(dialogRef, onClose);
@@ -320,7 +346,7 @@ export function BookSpreadModal({
     >
       <motion.article
         ref={dialogRef}
-        className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
+        className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto overscroll-contain shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
         initial={{ scale: 0.92, y: 28 }}
         animate={{ scale: 1, y: 0 }}
         exit={{
@@ -349,13 +375,22 @@ export function BookSpreadModal({
               ? "Project index"
               : libraryCopy.back}
           </button>
-          <button
-            onClick={onClose}
-            className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
-            aria-label="Close book"
-          >
-            <X size={14} /> Close
-          </button>
+          <div className="flex items-center gap-4">
+            <a
+              href="/resume.pdf"
+              download="Khadijat-Bakare-Resume.pdf"
+              className="hidden items-center gap-1.5 font-mono text-[8px] uppercase tracking-widest sm:flex"
+            >
+              <Download size={13} /> Download résumé
+            </a>
+            <button
+              onClick={onClose}
+              className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+              aria-label="Close book"
+            >
+              <X size={14} /> Close
+            </button>
+          </div>
         </nav>
         {activeModal === "work" ? (
           <AnimatePresence mode="wait" initial={false}>
@@ -384,12 +419,14 @@ export function BookSpreadModal({
                   <WorkEvidence
                     project={project}
                     onSelectProject={(slug) => onSelectProject(slug)}
+                    onOpenVolume={onOpenVolume}
                   />
                 </>
               ) : (
                 <div className="col-span-2">
                   <WorkIndex
                     onSelectProject={(slug) => onSelectProject(slug)}
+                    onOpenVolume={onOpenVolume}
                   />
                 </div>
               )}
@@ -457,7 +494,7 @@ export function BookSpreadModal({
                   {aboutMe.hobbies.map((hobby, index) => (
                     <article
                       key={hobby.id}
-                      className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} relative flex flex-col justify-end overflow-hidden border border-black/15 p-5 shadow-sm`}
+                      className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} scrapbook-tile relative flex flex-col justify-end overflow-hidden border border-black/15 p-5`}
                       style={{ backgroundColor: hobby.media.placeholder }}
                       aria-label={hobby.media.alt}
                     >
@@ -639,6 +676,7 @@ export function BookSpreadModal({
                   </dl>
                 </>
               )}
+              <FolioNext current={activeModal} onOpen={onOpenVolume} />
             </div>
           </>
         )}

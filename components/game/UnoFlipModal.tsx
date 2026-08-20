@@ -182,7 +182,7 @@ export function UnoFlipModal({
         >
           <motion.section
             ref={modalRef}
-            className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto bg-[#FAF8F4] shadow-2xl sm:rounded-md md:h-[85vh] md:max-h-[85vh] md:grid-cols-[1.25fr_.75fr] md:overflow-hidden"
+            className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto overscroll-contain bg-[#FAF8F4] shadow-2xl sm:rounded-md md:h-[75vh] md:max-h-[75vh] md:grid-cols-[1.25fr_.75fr] md:overflow-hidden"
             initial={{ scale: 0.9, y: 24 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.94, y: 20 }}
@@ -206,6 +206,7 @@ export function UnoFlipModal({
               onTriggerFlip={() => dispatch({ type: "TRIGGER_SIDE_FLIP" })}
               onReset={() => dispatch({ type: "RESET" })}
               onSetupChange={(next) => dispatch({ type: "RESET", ...next })}
+              onGiveUp={onClose}
             />
             <p className="sr-only" aria-live="polite">
               {announcement}

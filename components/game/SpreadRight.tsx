@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { RotateCcw } from "lucide-react";
+import { LogOut, RotateCcw } from "lucide-react";
 import {
   MAPPING_TABLE,
   isFlipAvailable,
@@ -175,6 +175,7 @@ export function SpreadRight({
   onTriggerFlip,
   onReset,
   onSetupChange,
+  onGiveUp,
 }: {
   readonly state: GameState;
   readonly onTriggerFlip: () => void;
@@ -183,9 +184,10 @@ export function SpreadRight({
     mode: GameMode;
     difficulty: DifficultyPreset;
   }) => void;
+  readonly onGiveUp: () => void;
 }) {
   return (
-    <aside className="flex min-h-0 flex-col overflow-y-auto bg-black/[.035] p-8 pt-20 md:p-7 md:pt-16">
+    <aside className="flex min-h-0 flex-col overflow-y-auto overscroll-contain bg-black/[.035] p-8 pt-20 md:p-6 md:pt-16">
       <p className="font-mono text-[9px] uppercase tracking-[.2em]">
         Game index / seeded {state.grid.seed}
       </p>
@@ -239,12 +241,20 @@ export function SpreadRight({
       />
       <MappingTable />
       <WinPanel state={state} />
-      <button
-        onClick={onReset}
-        className="mt-auto flex w-fit items-center gap-2 pt-8 font-mono text-[9px] uppercase tracking-widest"
-      >
-        <RotateCcw size={14} /> New seeded game
-      </button>
+      <div className="mt-auto flex flex-wrap items-center gap-5 pt-6">
+        <button
+          onClick={onReset}
+          className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+        >
+          <RotateCcw size={14} /> New game
+        </button>
+        <button
+          onClick={onGiveUp}
+          className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest text-black/55"
+        >
+          <LogOut size={14} /> Give up
+        </button>
+      </div>
     </aside>
   );
 }

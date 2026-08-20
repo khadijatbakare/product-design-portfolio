@@ -113,6 +113,7 @@ export default function Home() {
             selectedProject={selectedProject}
             onClose={closeModal}
             onSelectProject={setSelectedProject}
+            onOpenVolume={openModal}
           />
         )}
       </AnimatePresence>

@@ -21,9 +21,11 @@ export function CardGrid({
         <motion.div
           key={grid.side}
           aria-busy={busy}
-          className="grid gap-3"
+          className="mx-auto grid max-h-full gap-2.5 md:h-full md:w-auto md:max-w-full"
           style={{
             gridTemplateColumns: `repeat(${grid.columns}, minmax(0, 1fr))`,
+            gridTemplateRows: `repeat(${grid.rows}, minmax(0, 1fr))`,
+            aspectRatio: `${grid.columns} / ${grid.rows * 1.5}`,
             perspective: 1000,
           }}
           initial={

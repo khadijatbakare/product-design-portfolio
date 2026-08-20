@@ -57,7 +57,7 @@ export function LibraryCheckoutFooter({
               ))}
             </div>
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="rotate-[-2deg] border-[3px] border-[#8c2d19] px-4 py-3 font-mono text-[11px] font-bold uppercase leading-5 tracking-[.12em] text-[#8c2d19]">
+              <div className="stamp-ink border-[3px] border-[#8c2d19] px-4 py-3 font-mono text-[11px] font-bold uppercase leading-5 tracking-[.12em] text-[#8c2d19]">
                 {checkoutSlip.availability.stamp}
               </div>
               <p className="mt-4 text-xs leading-5">
