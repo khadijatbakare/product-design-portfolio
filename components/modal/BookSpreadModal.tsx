@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Download, Mail, X } from "lucide-react";
 import {
@@ -17,6 +18,7 @@ import {
   type PlaygroundPiece,
   type Project,
 } from "@/data/content";
+import { useDialogFocus } from "@/components/hooks/useDialogFocus";
 
 interface Props {
   readonly activeModal: ModalView;
@@ -56,7 +58,7 @@ function WorkIndex({
         <Label>Vol. 01 / Project index</Label>
         <h2
           id="modal-title"
-          className="mt-8 font-serif text-6xl leading-[.88] md:text-7xl"
+          className="mt-8 font-serif text-[clamp(2.8rem,8vw,4.5rem)] leading-[.9]"
         >
           Selected work,
           <br />
@@ -291,6 +293,8 @@ export function BookSpreadModal({
   onClose,
   onSelectProject,
 }: Props) {
+  const dialogRef = useRef<HTMLElement>(null);
+  useDialogFocus(dialogRef, onClose);
   const project = projects.find((item) => item.slug === selectedProject);
   const volume =
     activeModal === "work"
@@ -298,7 +302,7 @@ export function BookSpreadModal({
       : volumes.find((item) => item.contents === activeModal);
   return (
     <motion.div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-0 backdrop-blur-md sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -307,7 +311,8 @@ export function BookSpreadModal({
       aria-labelledby="modal-title"
     >
       <motion.article
-        className="open-book relative grid max-h-[92vh] min-h-[620px] w-full max-w-6xl grid-cols-1 overflow-y-auto rounded-md shadow-2xl md:grid-cols-2"
+        ref={dialogRef}
+        className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
         initial={{ scale: 0.92, y: 28 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}

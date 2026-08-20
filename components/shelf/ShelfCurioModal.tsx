@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
 import { shelfCurios, type ShelfCurioId } from "@/data/content";
+import { useDialogFocus } from "@/components/hooks/useDialogFocus";
 
 export interface ShelfCurioModalProps {
   readonly active: ShelfCurioId | null;
@@ -11,6 +13,8 @@ export interface ShelfCurioModalProps {
 }
 
 export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
+  const dialogRef = useRef<HTMLElement>(null);
+  useDialogFocus(dialogRef, onClose, Boolean(active));
   return (
     <AnimatePresence>
       {active && (
@@ -25,6 +29,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
           onClick={onClose}
         >
           <motion.article
+            ref={dialogRef}
             className="relative w-full max-w-md border border-black/15 bg-[#f8f1e5] p-8 shadow-2xl"
             initial={{ y: 28, rotate: -2, scale: 0.94 }}
             animate={{ y: 0, rotate: active === "portrait" ? 1 : -1, scale: 1 }}

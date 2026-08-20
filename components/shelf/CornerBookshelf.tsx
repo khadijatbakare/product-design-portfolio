@@ -136,8 +136,8 @@ export function CornerBookshelf({
       <svg
         viewBox="0 0 680 520"
         className="library-shelf h-auto w-full overflow-visible drop-shadow-2xl"
-        role="img"
-        aria-label="L-shaped corner bookshelf with four interactive volumes"
+        aria-hidden="true"
+        focusable="false"
       >
         <defs>
           <linearGradient id="left-shelf">
@@ -226,7 +226,7 @@ export function CornerBookshelf({
           opacity=".45"
         />
         <motion.g
-          tabIndex={0}
+          tabIndex={-1}
           role="timer"
           aria-label={`Lagos time ${lagosLabel}`}
           onMouseEnter={() => setHovered("clock")}
@@ -308,7 +308,7 @@ export function CornerBookshelf({
           return (
             <motion.g
               key={volume.id}
-              tabIndex={0}
+              tabIndex={-1}
               role="button"
               aria-label={`Open ${volume.volume}: ${volume.spine}`}
               onClick={open}
@@ -451,7 +451,7 @@ export function CornerBookshelf({
           );
         })}
         <motion.g
-          tabIndex={0}
+          tabIndex={-1}
           role="button"
           aria-label="See what Khadijat is listening to"
           onClick={() => onOpenCurio("listening")}
@@ -503,7 +503,7 @@ export function CornerBookshelf({
           />
         </motion.g>
         <motion.g
-          tabIndex={0}
+          tabIndex={-1}
           role="button"
           aria-label="Open Khadijat's portrait"
           onClick={() => onOpenCurio("portrait")}
@@ -546,7 +546,7 @@ export function CornerBookshelf({
           <path d="M366 386l12-10 12 10" fill="#3b2a1c" opacity=".7" />
         </motion.g>
         <motion.g
-          tabIndex={0}
+          tabIndex={-1}
           role="button"
           aria-label="Open the books read this year counter"
           onClick={() => onOpenCurio("reading")}
@@ -597,7 +597,7 @@ export function CornerBookshelf({
           </text>
         </motion.g>
         <motion.g
-          tabIndex={0}
+          tabIndex={-1}
           role="button"
           aria-label="Play UNO Flip Memory Match"
           onClick={onOpenGame}
@@ -657,6 +657,38 @@ export function CornerBookshelf({
           {libraryCopy.volumeCount}
         </text>
       </svg>
+      <nav
+        aria-label="Bookshelf index"
+        className="-mt-5 flex max-w-3xl flex-wrap justify-center gap-2 px-4 pb-5"
+      >
+        {volumes.map((volume) => (
+          <button
+            key={volume.id}
+            type="button"
+            onClick={() => onOpen(volume.contents, volume.id)}
+            className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest transition-colors hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {volume.volume} · {volume.spine}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={onOpenGame}
+          className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          Play UNO Flip
+        </button>
+        {(Object.keys(curioCopy) as ShelfCurioId[]).map((id) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => onOpenCurio(id)}
+            className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            {curioCopy[id].title}
+          </button>
+        ))}
+      </nav>
     </section>
   );
 }

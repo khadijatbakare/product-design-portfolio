@@ -70,7 +70,10 @@ export default function Home() {
   }, [activeModal, selectedProject, closeModal]);
 
   return (
-    <main className="theme-shell paper-texture min-h-screen">
+    <main id="main-content" className="theme-shell paper-texture min-h-screen">
+      <a href="#portfolio-shelf" className="skip-link">
+        Skip to portfolio shelf
+      </a>
       <AnimatePresence>
         {isLoading && (
           <BookPreloader key="preloader" onFinish={finishLoading} />
@@ -83,14 +86,17 @@ export default function Home() {
           </span>
           <ThemeToggle />
         </div>
-        <h1 className="mt-8 max-w-5xl font-serif text-6xl leading-[.9] tracking-tight md:text-8xl">
+        <h1 className="hero-title mt-8 max-w-5xl font-serif leading-[.9] tracking-tight">
           {aboutMe.intro}
         </h1>
         <p className="theme-muted mt-8 max-w-lg leading-7">
           {libraryCopy.instruction}
         </p>
       </header>
-      <div className="mx-auto max-w-7xl px-6 md:px-12">
+      <div
+        id="portfolio-shelf"
+        className="mx-auto max-w-7xl scroll-mt-6 px-6 md:px-12"
+      >
         <CornerBookshelf
           onOpen={openModal}
           onOpenGame={() => {

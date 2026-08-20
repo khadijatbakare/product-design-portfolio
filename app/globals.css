@@ -43,6 +43,31 @@ body {
   border-color: color-mix(in srgb, var(--room-ink) 24%, transparent);
   background: color-mix(in srgb, var(--room) 84%, transparent);
 }
+.hero-title {
+  font-size: clamp(3.25rem, 10vw, 7rem);
+}
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  transform: translateY(-180%);
+  background: var(--room-ink);
+  color: var(--room);
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font: 700 0.75rem/1 monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+:where(a, button, select, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
 .paper-texture {
   background-image: radial-gradient(var(--room-dot) 1px, transparent 1px);
   background-size: 7px 7px;
