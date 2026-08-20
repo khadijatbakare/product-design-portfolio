@@ -2,20 +2,49 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { libraryCopy, volumes, type ModalView } from "@/data/content";
+import {
+  libraryCopy,
+  shelfCurios,
+  volumes,
+  type ModalView,
+  type ShelfCurioId,
+} from "@/data/content";
 
 export interface CornerBookshelfProps {
   readonly onOpen: (view: ModalView, volumeId?: string) => void;
   readonly onOpenGame: () => void;
+  readonly onOpenCurio: (curio: ShelfCurioId) => void;
 }
 
 const spineX = [136, 201, 414, 487];
 const spineAngle = [1, -1, -1, 1];
 
-export function CornerBookshelf({ onOpen, onOpenGame }: CornerBookshelfProps) {
+const curioCopy: Record<ShelfCurioId, { title: string; instruction: string }> =
+  {
+    listening: {
+      title: "Currently spinning",
+      instruction: "Wind the gramophone",
+    },
+    portrait: {
+      title: "A photograph of the author",
+      instruction: "Turn over the frame",
+    },
+    reading: {
+      title: "Books read this year",
+      instruction: "Open the reading ledger",
+    },
+  };
+
+export function CornerBookshelf({
+  onOpen,
+  onOpenGame,
+  onOpenCurio,
+}: CornerBookshelfProps) {
   const [hovered, setHovered] = useState<string | null>(null);
   const active = volumes.find((volume) => volume.id === hovered);
   const gamepadActive = hovered === "gamepad";
+  const curio =
+    hovered && hovered in curioCopy ? curioCopy[hovered as ShelfCurioId] : null;
 
   return (
     <section
@@ -24,7 +53,20 @@ export function CornerBookshelf({ onOpen, onOpenGame }: CornerBookshelfProps) {
     >
       <div className="absolute top-4 z-20 flex h-14 items-center justify-center">
         <AnimatePresence mode="wait">
-          {gamepadActive ? (
+          {curio ? (
+            <motion.div
+              key={hovered}
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, scale: 0.96 }}
+              className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
+            >
+              <p className="text-xs font-medium">{curio.title}</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+                {curio.instruction} · Explore
+              </p>
+            </motion.div>
+          ) : gamepadActive ? (
             <motion.div
               key="gamepad"
               initial={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -308,6 +350,152 @@ export function CornerBookshelf({ onOpen, onOpenGame }: CornerBookshelfProps) {
             </motion.g>
           );
         })}
+        <motion.g
+          tabIndex={0}
+          role="button"
+          aria-label="See what Khadijat is listening to"
+          onClick={() => onOpenCurio("listening")}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onOpenCurio("listening");
+            }
+          }}
+          onMouseEnter={() => setHovered("listening")}
+          onMouseLeave={() => setHovered(null)}
+          onFocus={() => setHovered("listening")}
+          onBlur={() => setHovered(null)}
+          animate={{
+            y: hovered === "listening" ? -9 : 0,
+            rotate: hovered === "listening" ? -3 : 0,
+          }}
+          className="cursor-pointer outline-none"
+        >
+          <ellipse
+            cx="298"
+            cy="383"
+            rx="31"
+            ry="5"
+            fill="#08090b"
+            opacity=".28"
+          />
+          <rect
+            x="274"
+            y="352"
+            width="45"
+            height="30"
+            rx="2"
+            fill="#6a3f25"
+            stroke="#25180f"
+          />
+          <circle cx="296" cy="366" r="10" fill="#bc914f" stroke="#3c2d1c" />
+          <circle cx="296" cy="366" r="3" fill="#33241a" />
+          <path
+            d="M302 356c7-12 8-25 4-37"
+            fill="none"
+            stroke="#b58a4c"
+            strokeWidth="3"
+          />
+          <path
+            d="M305 322c9-17 25-23 36-19-3 15-16 28-34 29z"
+            fill="#b88b4d"
+            stroke="#3d2d1b"
+          />
+        </motion.g>
+        <motion.g
+          tabIndex={0}
+          role="button"
+          aria-label="Open Khadijat's portrait"
+          onClick={() => onOpenCurio("portrait")}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onOpenCurio("portrait");
+            }
+          }}
+          onMouseEnter={() => setHovered("portrait")}
+          onMouseLeave={() => setHovered(null)}
+          onFocus={() => setHovered("portrait")}
+          onBlur={() => setHovered(null)}
+          animate={{
+            y: hovered === "portrait" ? -8 : 0,
+            rotate: hovered === "portrait" ? 2 : -1,
+          }}
+          className="cursor-pointer outline-none"
+        >
+          <rect
+            x="354"
+            y="326"
+            width="48"
+            height="60"
+            rx="1"
+            fill="#6d4b2e"
+            stroke="#271a10"
+            strokeWidth="2"
+          />
+          <rect
+            x="360"
+            y="332"
+            width="36"
+            height="46"
+            fill="#d6c7b2"
+            stroke="#ae8f65"
+          />
+          <circle cx="378" cy="347" r="7" fill="#8f8171" />
+          <path d="M366 371c2-13 22-13 24 0" fill="#8f8171" />
+          <path d="M366 386l12-10 12 10" fill="#3b2a1c" opacity=".7" />
+        </motion.g>
+        <motion.g
+          tabIndex={0}
+          role="button"
+          aria-label="Open the books read this year counter"
+          onClick={() => onOpenCurio("reading")}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onOpenCurio("reading");
+            }
+          }}
+          onMouseEnter={() => setHovered("reading")}
+          onMouseLeave={() => setHovered(null)}
+          onFocus={() => setHovered("reading")}
+          onBlur={() => setHovered(null)}
+          animate={{
+            y: hovered === "reading" ? -8 : 0,
+            rotate: hovered === "reading" ? -2 : 1,
+          }}
+          className="cursor-pointer outline-none"
+        >
+          <rect
+            x="520"
+            y="348"
+            width="38"
+            height="38"
+            rx="2"
+            fill="#d9c79f"
+            stroke="#493b29"
+          />
+          <text
+            x="539"
+            y="359"
+            textAnchor="middle"
+            fontFamily="monospace"
+            fontSize="5"
+            fill="#493b29"
+          >
+            READ / {String(shelfCurios.reading.year).slice(-2)}
+          </text>
+          <text
+            x="539"
+            y="377"
+            textAnchor="middle"
+            fontFamily="serif"
+            fontSize="18"
+            fill="#493b29"
+          >
+            {shelfCurios.reading.count}
+          </text>
+        </motion.g>
         <motion.g
           tabIndex={0}
           role="button"

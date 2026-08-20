@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { BookPreloader } from "@/components/preloader/BookPreloader";
 import { CornerBookshelf } from "@/components/shelf/CornerBookshelf";
+import { ShelfCurioModal } from "@/components/shelf/ShelfCurioModal";
 import { BookSpreadModal } from "@/components/modal/BookSpreadModal";
 import { LibraryCheckoutFooter } from "@/components/footer/LibraryCheckoutFooter";
 import { UnoFlipModal } from "@/components/game/UnoFlipModal";
@@ -12,6 +13,7 @@ import {
   libraryCopy,
   projects,
   type ModalView,
+  type ShelfCurioId,
 } from "@/data/content";
 import type { GameMode } from "@/games/uno-flip";
 
@@ -21,6 +23,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isGameOpen, setIsGameOpen] = useState(false);
   const [gameMode, setGameMode] = useState<GameMode>("solo");
+  const [activeCurio, setActiveCurio] = useState<ShelfCurioId | null>(null);
   const closeModal = useCallback(() => setActiveModal(null), []);
   const finishLoading = useCallback(() => setIsLoading(false), []);
   const openModal = useCallback((view: ModalView, volumeId?: string) => {
@@ -32,7 +35,10 @@ export default function Home() {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeModal();
+      if (event.key === "Escape") {
+        closeModal();
+        setActiveCurio(null);
+      }
       if (activeModal !== "work") return;
       if (!selectedProject) return;
       const current = projects.find(
@@ -87,6 +93,7 @@ export default function Home() {
             setGameMode("solo");
             setIsGameOpen(true);
           }}
+          onOpenCurio={setActiveCurio}
         />
       </div>
       <LibraryCheckoutFooter onOpen={openModal} />
@@ -107,6 +114,10 @@ export default function Home() {
         mode={gameMode}
         difficulty="even"
         onClose={() => setIsGameOpen(false)}
+      />
+      <ShelfCurioModal
+        active={activeCurio}
+        onClose={() => setActiveCurio(null)}
       />
     </main>
   );

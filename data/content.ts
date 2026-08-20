@@ -168,6 +168,21 @@ export interface LibraryCopy {
   readonly shelfPlate: string;
   readonly volumeCount: string;
 }
+export type ShelfCurioId = "listening" | "portrait" | "reading";
+export interface ShelfCurios {
+  readonly listening: {
+    readonly track?: string;
+    readonly artist?: string;
+    readonly spotifyUrl?: string;
+  };
+  readonly portrait?: MediaAsset;
+  readonly reading: {
+    readonly year: number;
+    readonly count: number;
+    readonly goal?: number;
+    readonly titles: readonly string[];
+  };
+}
 
 export const libraryCopy: LibraryCopy = {
   eyebrow: "PRODUCT DESIGNER · FOUNDING DESIGNER",
@@ -176,6 +191,10 @@ export const libraryCopy: LibraryCopy = {
   open: "Start reading",
   shelfPlate: "Khadijat — Folio Index",
   volumeCount: "4 Volumes",
+};
+export const shelfCurios: ShelfCurios = {
+  listening: {},
+  reading: { year: 2026, count: 0, titles: [] },
 };
 
 export const volumes: readonly Volume[] = [
