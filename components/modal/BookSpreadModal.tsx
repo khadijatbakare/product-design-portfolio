@@ -306,6 +306,7 @@ export function BookSpreadModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -316,7 +317,7 @@ export function BookSpreadModal({
         initial={{ scale: 0.92, y: 28 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        transition={{ type: "spring", stiffness: 260, damping: 28 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
       >
         <nav
           className="absolute inset-x-0 top-0 z-20 flex items-center justify-between border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3 backdrop-blur"
@@ -416,16 +417,7 @@ export function BookSpreadModal({
               {activeModal === "resume" && (
                 <div className="mt-10 space-y-5 text-base leading-7">
                   {aboutMe.story.map((paragraph) => (
-                    <p
-                      key={paragraph}
-                      className={
-                        paragraph.startsWith("[TODO")
-                          ? "border border-dashed border-black/30 bg-amber-50/60 p-4 font-mono text-xs leading-6"
-                          : ""
-                      }
-                    >
-                      {paragraph}
-                    </p>
+                    <p key={paragraph}>{paragraph}</p>
                   ))}
                   <section className="border-t border-black/15 pt-6">
                     <Label>Education</Label>
