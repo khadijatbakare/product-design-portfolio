@@ -33,7 +33,6 @@ export interface GameSetupProps {
     mode: GameMode;
     difficulty: DifficultyPreset;
   }) => void;
-  readonly locked: boolean;
 }
 export function TurnIndicator({ currentPlayer, thinking }: TurnIndicatorProps) {
   return (
@@ -70,17 +69,9 @@ export function Scoreboard({
     </div>
   );
 }
-export function GameSetup({
-  mode,
-  difficulty,
-  onChange,
-  locked,
-}: GameSetupProps) {
+export function GameSetup({ mode, difficulty, onChange }: GameSetupProps) {
   return (
-    <fieldset
-      disabled={locked}
-      className="mt-5 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase disabled:opacity-50"
-    >
+    <fieldset className="mt-5 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase">
       <label className="grid gap-1">
         Mode
         <select
@@ -112,6 +103,9 @@ export function GameSetup({
           <option value="eidetic">Eidetic</option>
         </select>
       </label>
+      <p className="col-span-2 normal-case tracking-normal text-black/50">
+        Changing either option starts a fresh deal.
+      </p>
     </fieldset>
   );
 }
@@ -236,7 +230,6 @@ export function SpreadRight({
       <GameSetup
         mode={state.mode}
         difficulty={state.difficulty}
-        locked={state.moves > 0 || state.selected.length > 0}
         onChange={onSetupChange}
       />
       <FlipCardControl

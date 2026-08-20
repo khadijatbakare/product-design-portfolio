@@ -131,7 +131,7 @@ export function UnoFlipModal({
       if (event.key !== "Tab" || !modal) return;
       const items = [
         ...modal.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])',
+          'button:not(:disabled), select:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])',
         ),
       ];
       if (!items.length) return;
