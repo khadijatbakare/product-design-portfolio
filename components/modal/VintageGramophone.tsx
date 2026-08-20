@@ -12,167 +12,129 @@ export function VintageGramophone({
   trackName = "Between records",
   artistName = "The next track has not been filed yet.",
 }: VintageGramophoneProps) {
-  const [playing, setPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const reducedMotion = useReducedMotion();
+
   return (
-    <div className="select-none text-center">
+    <div className="flex flex-col items-center justify-center bg-[#faf8f5]/55 p-3 text-[#2d2a26] select-none">
       <button
         type="button"
-        aria-pressed={playing}
-        aria-label={`${playing ? "Pause" : "Spin"} the decorative gramophone`}
-        onClick={() => setPlaying((value) => !value)}
-        className="mx-auto block h-44 w-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+        aria-pressed={isPlaying}
+        aria-label={`${isPlaying ? "Pause" : "Spin"} the decorative gramophone`}
+        className="group relative h-44 w-36 cursor-pointer rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+        onClick={() => setIsPlaying((playing) => !playing)}
       >
         <svg
-          viewBox="0 0 200 240"
-          className="h-full w-full overflow-visible"
-          fill="none"
+          viewBox="0 0 180 220"
+          className="h-full w-full fill-none stroke-[#2d2a26] stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]"
           aria-hidden="true"
         >
-          <defs>
-            <linearGradient id="horn-brass" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#F5D77F" />
-              <stop offset="45%" stopColor="#D4AF37" />
-              <stop offset="100%" stopColor="#7B5804" />
-            </linearGradient>
-            <radialGradient id="bell-shadow">
-              <stop offset="0%" stopColor="#2A1B0A" />
-              <stop offset="70%" stopColor="#5B3A11" />
-              <stop offset="100%" stopColor="#D4AF37" />
-            </radialGradient>
-            <radialGradient id="vinyl-grooves">
-              <stop offset="0%" stopColor="#D4AF37" />
-              <stop offset="15%" stopColor="#18181B" />
-              <stop offset="48%" stopColor="#27272A" />
-              <stop offset="78%" stopColor="#18181B" />
-              <stop offset="100%" stopColor="#27272A" />
-            </radialGradient>
-          </defs>
           <rect
-            x="35"
-            y="180"
+            x="25"
+            y="170"
             width="130"
-            height="40"
-            rx="3"
-            fill="#2E1A11"
-            stroke="#1C100A"
-            strokeWidth="1.5"
+            height="28"
+            rx="2"
+            className="fill-[#faf8f5]"
           />
-          <polygon
-            points="30,180 170,180 162,172 38,172"
-            fill="#4A2E1B"
-            stroke="#1C100A"
-          />
-          <rect
-            x="72"
-            y="195"
-            width="56"
-            height="12"
-            rx="1"
-            fill="#D4AF37"
-            opacity=".82"
-          />
-          <text
-            x="100"
-            y="204"
-            textAnchor="middle"
-            fill="#2E1A11"
-            fontSize="6"
-            fontFamily="serif"
-            letterSpacing=".6"
-          >
-            FOLIO RADIO
-          </text>
-          <g transform="translate(100 160)">
-            <ellipse rx="55" ry="16" fill="#09090B" stroke="#27272A" />
-            <motion.g
-              animate={{ rotate: playing && !reducedMotion ? 360 : 0 }}
-              transition={{
-                repeat: playing && !reducedMotion ? Infinity : 0,
-                duration: 8,
-                ease: "linear",
-              }}
-            >
-              <ellipse rx="52" ry="15" fill="url(#vinyl-grooves)" />
-              <ellipse rx="40" ry="11" stroke="rgba(255,255,255,.1)" />
-              <ellipse rx="28" ry="8" stroke="rgba(255,255,255,.1)" />
-              <ellipse rx="16" ry="5" fill="#8C2D19" />
-              <circle r="2" fill="#FAF7F2" />
-            </motion.g>
-          </g>
-          <path
-            d="M140 172C145 155 125 150 110 156"
-            stroke="#A8A29E"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          <circle cx="110" cy="156" r="4.5" fill="#78716C" stroke="#44403C" />
           <line
-            x1="110"
-            y1="156"
-            x2="106"
-            y2="162"
-            stroke="#E7E5E4"
-            strokeWidth="1.5"
+            x1="25"
+            y1="178"
+            x2="155"
+            y2="178"
+            className="stroke-[#2d2a26]/20 stroke-[1]"
           />
-          <path
-            d="M55 174C45 150 48 110 80 85"
-            stroke="url(#horn-brass)"
-            strokeWidth="6"
-            strokeLinecap="round"
-          />
-          <path
-            d="M80 85C105 65 120 40 135 25C145 15 165 15 175 35C185 55 170 85 145 95C120 105 95 95 80 85Z"
-            fill="url(#horn-brass)"
-            stroke="#7B5804"
-          />
+          <circle cx="90" cy="188" r="2" className="fill-[#2d2a26]" />
           <ellipse
-            cx="152"
-            cy="52"
-            rx="24"
-            ry="32"
-            transform="rotate(-25 152 52)"
-            fill="url(#bell-shadow)"
-            stroke="#B8860B"
-            strokeWidth="1.5"
+            cx="90"
+            cy="155"
+            rx="60"
+            ry="16"
+            className="fill-[#faf8f5]"
           />
-          {[
-            "M80 85Q115 60 135 26",
-            "M80 85Q125 70 158 35",
-            "M80 85Q130 80 170 56",
-            "M80 85Q120 90 156 80",
-          ].map((d) => (
-            <path
-              key={d}
-              d={d}
-              stroke="#F5D77F"
-              strokeWidth=".75"
-              opacity=".6"
+
+          <motion.g
+            animate={{ rotate: isPlaying && !reducedMotion ? 360 : 0 }}
+            transition={{
+              repeat: isPlaying && !reducedMotion ? Infinity : 0,
+              duration: 8,
+              ease: "linear",
+            }}
+            style={{ transformOrigin: "90px 155px" }}
+          >
+            <ellipse
+              cx="90"
+              cy="155"
+              rx="52"
+              ry="14"
+              className="stroke-[#2d2a26]/40"
             />
-          ))}
-          {playing && !reducedMotion && (
+            <ellipse
+              cx="90"
+              cy="155"
+              rx="38"
+              ry="10"
+              className="stroke-[#2d2a26]/20 stroke-[1]"
+            />
+            <ellipse
+              cx="90"
+              cy="155"
+              rx="16"
+              ry="4.5"
+              className="fill-[#c5a059] stroke-[#c5a059]"
+            />
+            <circle cx="90" cy="155" r="1.5" className="fill-[#faf8f5]" />
+          </motion.g>
+
+          <path d="M142 165C145 145 128 140 116 148" />
+          <circle cx="116" cy="148" r="2.5" className="fill-[#2d2a26]" />
+          <path
+            d="M48 165C40 135 42 105 75 80"
+            className="stroke-[#c5a059] stroke-[2]"
+          />
+          <g className="stroke-[#c5a059]">
+            <path d="M75 80C95 65 108 45 120 30C130 18 148 18 158 35C168 52 155 78 132 86C110 94 90 88 75 80Z" />
+            <ellipse
+              cx="140"
+              cy="48"
+              rx="20"
+              ry="26"
+              transform="rotate(-25 140 48)"
+            />
+            <path
+              d="M75 80Q105 58 122 30"
+              className="stroke-[#c5a059]/40 stroke-[1]"
+            />
+            <path
+              d="M75 80Q115 68 144 38"
+              className="stroke-[#c5a059]/40 stroke-[1]"
+            />
+            <path
+              d="M75 80Q118 78 152 56"
+              className="stroke-[#c5a059]/40 stroke-[1]"
+            />
+          </g>
+
+          {isPlaying && !reducedMotion && (
             <motion.path
-              d="M170 30C185 45 185 65 170 80"
-              stroke="#D4AF37"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              initial={{ opacity: 0, x: -4 }}
-              animate={{ opacity: [0, 0.8, 0], x: [0, 8] }}
-              transition={{ repeat: Infinity, duration: 1.6, ease: "easeOut" }}
+              d="M152 25C164 36 164 52 152 64"
+              className="stroke-[#c5a059]/60 stroke-[1.2]"
+              initial={{ opacity: 0, x: 0 }}
+              animate={{ opacity: [0, 1, 0], x: [0, 6] }}
+              transition={{ repeat: Infinity, duration: 1.8, ease: "easeOut" }}
             />
           )}
         </svg>
       </button>
-      <div className="mt-1 flex items-center justify-center gap-1.5">
-        <span
-          className={`h-1.5 w-1.5 rounded-full ${playing ? "animate-pulse bg-emerald-700" : "bg-stone-400"}`}
-        />
-        <span className="font-mono text-[8px] uppercase tracking-widest text-stone-500">
-          {playing ? "Record spinning" : "Turntable paused"}
+
+      <div className="mt-2 flex flex-col items-center gap-1 text-center">
+        <span className="font-mono text-[8px] uppercase tracking-widest text-[#8f877b]">
+          {isPlaying ? "Record spinning" : "Turntable paused"}
+        </span>
+        <span className="font-serif text-xs text-[#2d2a26]">
+          {trackName} — {artistName}
         </span>
       </div>
-      <p className="mt-2 font-serif text-sm font-medium">{trackName}</p>
-      <p className="font-mono text-[9px] text-black/50">{artistName}</p>
     </div>
   );
 }
