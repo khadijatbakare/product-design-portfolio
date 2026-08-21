@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ExternalLink, X } from "lucide-react";
 import { shelfCurios, type ShelfCurioId } from "@/data/content";
 import { useDialogFocus } from "@/components/hooks/useDialogFocus";
+import { useSpotifyNowPlaying } from "@/components/hooks/useSpotifyNowPlaying";
+import { VintageGramophone } from "@/components/modal/VintageGramophone";
 
 export interface ShelfCurioModalProps {
   readonly active: ShelfCurioId | null;
@@ -14,7 +16,16 @@ export interface ShelfCurioModalProps {
 
 export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
   const dialogRef = useRef<HTMLElement>(null);
+  const { nowPlaying, loading } = useSpotifyNowPlaying(active === "listening");
   useDialogFocus(dialogRef, onClose, Boolean(active));
+  const listening = nowPlaying?.track
+    ? {
+        track: nowPlaying.track,
+        artist: nowPlaying.artist,
+        albumArt: nowPlaying.albumArt,
+        spotifyUrl: nowPlaying.spotifyUrl,
+      }
+    : shelfCurios.listening;
   return (
     <AnimatePresence>
       {active && (
@@ -55,21 +66,35 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
             {active === "listening" && (
               <>
                 <p className="font-mono text-[9px] uppercase tracking-widest">
-                  Now spinning
+                  {loading
+                    ? "Checking the turntable"
+                    : nowPlaying?.isPlaying
+                      ? "Live on Spotify"
+                      : "Between records"}
                 </p>
+                <div className="mt-4">
+                  <VintageGramophone
+                    trackName={listening.track}
+                    artistName={listening.artist}
+                    albumArt={
+                      "albumArt" in listening ? listening.albumArt : undefined
+                    }
+                    liveOnSpotify={Boolean(nowPlaying?.isPlaying)}
+                  />
+                </div>
                 <h2
                   id="curio-title"
-                  className="mt-7 font-serif text-5xl leading-none"
+                  className="mt-4 font-serif text-4xl leading-none"
                 >
-                  {shelfCurios.listening.track ?? "Between records."}
+                  {listening.track ?? "Between records."}
                 </h2>
                 <p className="mt-4 text-black/55">
-                  {shelfCurios.listening.artist ??
+                  {listening.artist ??
                     "The next track has not been filed yet."}
                 </p>
-                {shelfCurios.listening.spotifyUrl && (
+                {listening.spotifyUrl && (
                   <a
-                    href={shelfCurios.listening.spotifyUrl}
+                    href={listening.spotifyUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="mt-8 flex w-fit items-center gap-2 border-b border-black pb-1 font-mono text-[9px] uppercase tracking-widest"

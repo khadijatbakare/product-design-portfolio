@@ -1,40 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { shelfCurios } from "@/data/content";
 import { VintageGramophone } from "@/components/modal/VintageGramophone";
+import { useSpotifyNowPlaying } from "@/components/hooks/useSpotifyNowPlaying";
 
 export function StudyDesk() {
   const current = shelfCurios.reading.current;
   const listening = shelfCurios.listening;
-  const [spotify, setSpotify] = useState<{
-    readonly isPlaying: boolean;
-    readonly track?: string;
-    readonly artist?: string;
-    readonly albumArt?: string;
-    readonly spotifyUrl?: string;
-  } | null>(null);
-  useEffect(() => {
-    let active = true;
-    const update = async () => {
-      try {
-        const response = await fetch("/api/spotify/now-playing", {
-          cache: "no-store",
-        });
-        if (response.ok && active) setSpotify(await response.json());
-      } catch {
-        // The content-file entry remains the intentional offline fallback.
-      }
-    };
-    void update();
-    const timer = window.setInterval(update, 60_000);
-    return () => {
-      active = false;
-      window.clearInterval(timer);
-    };
-  }, []);
+  const { nowPlaying: spotify } = useSpotifyNowPlaying();
   const liveListening = spotify?.track
     ? {
         track: spotify.track,
