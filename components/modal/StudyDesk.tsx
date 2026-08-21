@@ -134,7 +134,7 @@ export function StudyDesk() {
           )}
           {spotify?.isPlaying ? (
             <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-[#36795a]">
-              Live from Spotify · refreshes every minute
+              Live from Spotify · updates automatically
             </p>
           ) : listening.updatedAt ? (
             <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-black/65">

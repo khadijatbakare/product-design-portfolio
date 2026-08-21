@@ -17,7 +17,10 @@ export function useSpotifyNowPlaying(enabled = true) {
   useEffect(() => {
     if (!enabled) return;
     let active = true;
+    let requesting = false;
     const update = async () => {
+      if (requesting) return;
+      requesting = true;
       try {
         const response = await fetch("/api/spotify/now-playing", {
           cache: "no-store",
@@ -29,14 +32,22 @@ export function useSpotifyNowPlaying(enabled = true) {
       } catch {
         if (active) setNowPlaying({ isPlaying: false });
       } finally {
+        requesting = false;
         if (active) setLoading(false);
       }
     };
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") void update();
+    };
     void update();
-    const timer = window.setInterval(update, 60_000);
+    const timer = window.setInterval(update, 5_000);
+    window.addEventListener("focus", update);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
     return () => {
       active = false;
       window.clearInterval(timer);
+      window.removeEventListener("focus", update);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
     };
   }, [enabled]);
 
