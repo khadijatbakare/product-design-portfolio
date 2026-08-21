@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ThemeToggle } from "@/components/chrome/ThemeToggle";
 
 type AudioWindow = Window &
@@ -12,6 +12,19 @@ type AudioWindow = Window &
 
 export default function NotFound() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const audioRef = useRef<AudioContext | null>(null);
+  const cleanupTimer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (cleanupTimer.current !== null)
+        window.clearTimeout(cleanupTimer.current);
+      if (audioRef.current && audioRef.current.state !== "closed")
+        void audioRef.current.close();
+    },
+    [],
+  );
 
   const playDisconnectSound = () => {
     if (isPlaying) return;
@@ -22,6 +35,7 @@ export default function NotFound() {
 
     try {
       const audio = new AudioContextClass();
+      audioRef.current = audio;
       const gain = audio.createGain();
       const oscillators = [480, 620].map((frequency) => {
         const oscillator = audio.createOscillator();
@@ -37,10 +51,12 @@ export default function NotFound() {
       gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 1.2);
       gain.connect(audio.destination);
 
-      window.setTimeout(() => {
+      cleanupTimer.current = window.setTimeout(() => {
         oscillators.forEach((oscillator) => oscillator.disconnect());
         gain.disconnect();
         void audio.close();
+        audioRef.current = null;
+        cleanupTimer.current = null;
         setIsPlaying(false);
       }, 1300);
     } catch {
@@ -90,7 +106,9 @@ export default function NotFound() {
             <path d="M108 65 L108 56 M118 56 L98 56" />
             <motion.g
               animate={
-                isPlaying ? { rotate: [-2, 2, -2, 0], y: [-1, 1, 0] } : {}
+                isPlaying && !reducedMotion
+                  ? { rotate: [-2, 2, -2, 0], y: [-1, 1, 0] }
+                  : {}
               }
               transition={{ duration: 0.2, repeat: isPlaying ? 4 : 0 }}
             >
