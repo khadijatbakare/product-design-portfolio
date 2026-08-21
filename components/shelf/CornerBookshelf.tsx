@@ -648,25 +648,6 @@ export function CornerBookshelf({
         </motion.g>
         <polygon points="94,454 334,474 346,486 106,466" fill="#414650" />
         <polygon points="346,474 574,454 586,466 346,486" fill="#30343b" />
-        <text
-          x="112"
-          y="500"
-          fill="#80796e"
-          fontFamily="monospace"
-          fontSize="8"
-        >
-          {libraryCopy.shelfPlate}
-        </text>
-        <text
-          x="560"
-          y="500"
-          fill="#80796e"
-          fontFamily="monospace"
-          fontSize="8"
-          textAnchor="end"
-        >
-          {libraryCopy.volumeCount}
-        </text>
       </svg>
     </section>
   );
