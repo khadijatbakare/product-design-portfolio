@@ -1,141 +1,87 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export interface BookPreloaderProps {
-  readonly onFinish: () => void;
+  readonly onComplete: () => void;
 }
 
-const welcome = "Welcome to my little corner of the internet";
-const welcomeWords = welcome.split(" ").map((word, wordIndex, words) => ({
-  word,
-  start: words
-    .slice(0, wordIndex)
-    .reduce(
-      (characterCount, previous) => characterCount + previous.length + 1,
-      0,
-    ),
-}));
-
-export function BookPreloader({ onFinish }: BookPreloaderProps) {
-  const [complete, setComplete] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
+export function BookPreloader({ onComplete }: BookPreloaderProps) {
+  const [progress, setProgress] = useState(0);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const progress = window.setTimeout(
-      () => setComplete(true),
-      reducedMotion ? 80 : 800,
-    );
-    const reveal = window.setTimeout(
-      () => setShowWelcome(true),
-      reducedMotion ? 160 : 1080,
-    );
-    const finish = window.setTimeout(onFinish, reducedMotion ? 1450 : 3400);
-    return () => {
-      window.clearTimeout(progress);
-      window.clearTimeout(reveal);
-      window.clearTimeout(finish);
-    };
-  }, [onFinish, reducedMotion]);
+    if (reducedMotion) {
+      setProgress(100);
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setProgress((current) => {
+        if (current >= 80) {
+          window.clearInterval(timer);
+          return 100;
+        }
+        return current + 20;
+      });
+    }, 150);
+    return () => window.clearInterval(timer);
+  }, [reducedMotion]);
+
+  const complete = progress === 100;
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] grid place-items-center overflow-hidden bg-[#181a1e] px-6 text-[#faf8f5]"
-      exit={{ opacity: 0, scale: 1.015 }}
-      transition={{ duration: reducedMotion ? 0.01 : 0.45, ease: "easeInOut" }}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#121316] px-4 select-none"
+      initial={{ opacity: 1, scale: 1 }}
+      animate={
+        complete ? { opacity: 0, scale: 1.04 } : { opacity: 1, scale: 1 }
+      }
+      transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: "easeInOut" }}
+      onAnimationComplete={() => {
+        if (complete) onComplete();
+      }}
       role="status"
       aria-live="polite"
-      aria-label={showWelcome ? welcome : "Loading portfolio"}
+      aria-label={`Loading portfolio, ${progress}% complete. Welcome to my little corner of the internet.`}
     >
-      <AnimatePresence mode="wait">
-        {!showWelcome ? (
-          <motion.div
-            key="book-loader"
-            className="relative h-64 w-14 overflow-hidden rounded-t-[3px] border border-white/10 bg-[#24272d] shadow-2xl"
-            animate={
-              complete
-                ? { y: -30, opacity: 0, rotate: -5 }
-                : { y: 0, opacity: 1, rotate: 0 }
-            }
-            exit={{ opacity: 0 }}
-            transition={
-              complete
-                ? { duration: reducedMotion ? 0.01 : 0.3, ease: "easeIn" }
-                : undefined
-            }
-          >
-            <div className="absolute inset-[5px] overflow-hidden rounded-sm bg-[#111317]">
-              <motion.div
-                className="absolute inset-0 origin-bottom bg-[#d8ff55]"
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                transition={{
-                  duration: reducedMotion ? 0.01 : 0.8,
-                  ease: [0.65, 0, 0.35, 1],
-                }}
-              />
-            </div>
-            <span className="absolute inset-0 flex items-center justify-center rotate-180 font-mono text-[9px] uppercase tracking-[.2em] text-white/70 mix-blend-difference [writing-mode:vertical-rl]">
-              Portfolio index
-            </span>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="welcome"
-            className="relative max-w-3xl text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: reducedMotion ? 0.01 : 0.55,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <p
-              aria-hidden="true"
-              className="font-serif text-[clamp(2rem,6vw,4.8rem)] leading-[1.02] tracking-[-.025em]"
-            >
-              {welcomeWords.map(({ word, start }, wordIndex) => (
-                <span
-                  key={word}
-                  className={`inline-block whitespace-nowrap ${wordIndex < welcomeWords.length - 1 ? "mr-[.24em]" : ""}`}
-                >
-                  {word.split("").map((character, characterIndex) => (
-                    <motion.span
-                      key={`${character}-${characterIndex}`}
-                      className="inline-block"
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: reducedMotion ? 0.01 : 0.18,
-                        delay: reducedMotion
-                          ? 0
-                          : (start + characterIndex) * 0.026,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                    >
-                      {character}
-                    </motion.span>
-                  ))}
-                </span>
-              ))}
-            </p>
-            <motion.div
-              aria-hidden="true"
-              className="mx-auto mt-7 h-px max-w-40 origin-left bg-[#d8ff55]/70"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{
-                duration: reducedMotion ? 0.01 : 0.65,
-                delay: reducedMotion ? 0 : 1.25,
-                ease: "easeOut",
-              }}
-            />
-            <span className="sr-only">{welcome}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div className="relative mb-8 flex h-64 w-14 flex-col items-center justify-between overflow-hidden rounded-[2px] border border-neutral-700/60 bg-[#1e2024] py-4 shadow-2xl">
+        <motion.div
+          className="absolute inset-0 z-0 origin-bottom bg-[#d4af37]/90"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: progress / 100 }}
+          transition={{
+            duration: reducedMotion ? 0.01 : 0.15,
+            ease: "easeInOut",
+          }}
+          aria-hidden="true"
+        />
+        <span className="relative z-10 font-mono text-[8px] uppercase tracking-widest text-neutral-300 mix-blend-difference">
+          Folio / 26
+        </span>
+        <div className="relative z-10 flex rotate-180 items-center justify-center [writing-mode:vertical-rl]">
+          <span className="font-serif text-[11px] uppercase tracking-widest text-[#faf7f2] mix-blend-difference">
+            Portfolio Index
+          </span>
+        </div>
+        <span className="relative z-10 font-mono text-[8px] tracking-widest text-neutral-300 mix-blend-difference">
+          VOL. 00
+        </span>
+      </div>
+
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: "easeOut" }}
+        className="max-w-xs text-balance text-center font-serif text-lg leading-relaxed text-[#faf7f2] sm:max-w-md sm:text-xl"
+      >
+        Welcome to my little{" "}
+        <span className="whitespace-nowrap">corner of</span> the internet.
+      </motion.h2>
+
+      <span className="mt-3 font-mono text-[10px] uppercase tracking-widest text-neutral-500">
+        {progress}% loaded
+      </span>
     </motion.div>
   );
 }

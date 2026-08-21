@@ -76,7 +76,7 @@ export default function Home() {
       </a>
       <AnimatePresence>
         {isLoading && (
-          <BookPreloader key="preloader" onFinish={finishLoading} />
+          <BookPreloader key="preloader" onComplete={finishLoading} />
         )}
       </AnimatePresence>
       <SiteHeader onOpen={openModal} />
