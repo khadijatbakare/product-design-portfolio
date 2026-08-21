@@ -8,6 +8,15 @@ export interface BookPreloaderProps {
 }
 
 const welcome = "Welcome to my little corner of the internet";
+const welcomeWords = welcome.split(" ").map((word, wordIndex, words) => ({
+  word,
+  start: words
+    .slice(0, wordIndex)
+    .reduce(
+      (characterCount, previous) => characterCount + previous.length + 1,
+      0,
+    ),
+}));
 
 export function BookPreloader({ onFinish }: BookPreloaderProps) {
   const [complete, setComplete] = useState(false);
@@ -76,8 +85,8 @@ export function BookPreloader({ onFinish }: BookPreloaderProps) {
           <motion.div
             key="welcome"
             className="relative max-w-3xl text-center"
-            initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: reducedMotion ? 0.01 : 0.55,
               ease: [0.22, 1, 0.36, 1],
@@ -87,20 +96,29 @@ export function BookPreloader({ onFinish }: BookPreloaderProps) {
               aria-hidden="true"
               className="font-serif text-[clamp(2rem,6vw,4.8rem)] leading-[1.02] tracking-[-.025em]"
             >
-              {welcome.split("").map((character, index) => (
-                <motion.span
-                  key={`${character}-${index}`}
-                  className="inline-block"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: reducedMotion ? 0.01 : 0.24,
-                    delay: reducedMotion ? 0 : index * 0.032,
-                    ease: "easeOut",
-                  }}
+              {welcomeWords.map(({ word, start }, wordIndex) => (
+                <span
+                  key={word}
+                  className={`inline-block whitespace-nowrap ${wordIndex < welcomeWords.length - 1 ? "mr-[.24em]" : ""}`}
                 >
-                  {character === " " ? "\u00a0" : character}
-                </motion.span>
+                  {word.split("").map((character, characterIndex) => (
+                    <motion.span
+                      key={`${character}-${characterIndex}`}
+                      className="inline-block"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: reducedMotion ? 0.01 : 0.18,
+                        delay: reducedMotion
+                          ? 0
+                          : (start + characterIndex) * 0.026,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      {character}
+                    </motion.span>
+                  ))}
+                </span>
               ))}
             </p>
             <motion.div
@@ -110,7 +128,7 @@ export function BookPreloader({ onFinish }: BookPreloaderProps) {
               animate={{ scaleX: 1 }}
               transition={{
                 duration: reducedMotion ? 0.01 : 0.65,
-                delay: reducedMotion ? 0 : 1.45,
+                delay: reducedMotion ? 0 : 1.25,
                 ease: "easeOut",
               }}
             />
