@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { BookPreloader } from "@/components/preloader/BookPreloader";
 import { SiteHeader } from "@/components/chrome/SiteHeader";
 import { CornerBookshelf } from "@/components/shelf/CornerBookshelf";
@@ -71,63 +71,71 @@ export default function Home() {
 
   return (
     <main id="main-content" className="theme-shell paper-texture min-h-screen">
-      <a href="#portfolio-shelf" className="skip-link">
-        Skip to portfolio shelf
-      </a>
-      <AnimatePresence>
-        {isLoading && (
-          <BookPreloader key="preloader" onComplete={finishLoading} />
-        )}
-      </AnimatePresence>
-      <SiteHeader onOpen={openModal} />
-      <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12">
-        <span className="font-mono text-[10px] uppercase tracking-[.18em]">
-          {libraryCopy.eyebrow}
-        </span>
-        <h1 className="hero-title mt-8 max-w-5xl font-serif leading-[.9] tracking-tight">
-          {aboutMe.intro}
-        </h1>
-        <p className="theme-muted mt-8 max-w-lg leading-7">
-          {libraryCopy.instruction}
-        </p>
-      </header>
-      <div
-        id="portfolio-shelf"
-        className="mx-auto max-w-7xl scroll-mt-6 px-6 md:px-12"
-      >
-        <CornerBookshelf
-          onOpen={openModal}
-          onOpenGame={() => {
-            setGameMode("solo");
-            setIsGameOpen(true);
-          }}
-          onOpenCurio={setActiveCurio}
-        />
-      </div>
-      <LibraryCheckoutFooter onOpen={openModal} />
       <AnimatePresence mode="wait">
-        {activeModal && (
-          <BookSpreadModal
-            key={activeModal}
-            activeModal={activeModal}
-            selectedProject={selectedProject}
-            onClose={closeModal}
-            onSelectProject={setSelectedProject}
-            onOpenVolume={openModal}
-          />
+        {isLoading ? (
+          <BookPreloader key="preloader" onComplete={finishLoading} />
+        ) : (
+          <motion.div
+            key="portfolio-room"
+            initial={{ opacity: 0, scale: 0.98, filter: "blur(4px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <a href="#portfolio-shelf" className="skip-link">
+              Skip to portfolio shelf
+            </a>
+            <SiteHeader onOpen={openModal} />
+            <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12">
+              <span className="font-mono text-[10px] uppercase tracking-[.18em]">
+                {libraryCopy.eyebrow}
+              </span>
+              <h1 className="hero-title mt-8 max-w-5xl font-serif leading-[.9] tracking-tight">
+                {aboutMe.intro}
+              </h1>
+              <p className="theme-muted mt-8 max-w-lg leading-7">
+                {libraryCopy.instruction}
+              </p>
+            </header>
+            <div
+              id="portfolio-shelf"
+              className="mx-auto max-w-7xl scroll-mt-6 px-6 md:px-12"
+            >
+              <CornerBookshelf
+                onOpen={openModal}
+                onOpenGame={() => {
+                  setGameMode("solo");
+                  setIsGameOpen(true);
+                }}
+                onOpenCurio={setActiveCurio}
+              />
+            </div>
+            <LibraryCheckoutFooter onOpen={openModal} />
+            <AnimatePresence mode="wait">
+              {activeModal && (
+                <BookSpreadModal
+                  key={activeModal}
+                  activeModal={activeModal}
+                  selectedProject={selectedProject}
+                  onClose={closeModal}
+                  onSelectProject={setSelectedProject}
+                  onOpenVolume={openModal}
+                />
+              )}
+            </AnimatePresence>
+            <UnoFlipModal
+              key={gameMode}
+              open={isGameOpen}
+              mode={gameMode}
+              difficulty="even"
+              onClose={() => setIsGameOpen(false)}
+            />
+            <ShelfCurioModal
+              active={activeCurio}
+              onClose={() => setActiveCurio(null)}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
-      <UnoFlipModal
-        key={gameMode}
-        open={isGameOpen}
-        mode={gameMode}
-        difficulty="even"
-        onClose={() => setIsGameOpen(false)}
-      />
-      <ShelfCurioModal
-        active={activeCurio}
-        onClose={() => setActiveCurio(null)}
-      />
     </main>
   );
 }
