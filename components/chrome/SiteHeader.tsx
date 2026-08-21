@@ -27,7 +27,7 @@ export function SiteHeader({
       label: "Résumé",
       view: "resume",
       hover: "Experience and résumé",
-      meta: "Vol. 03",
+      meta: "Document / PDF",
     },
     {
       label: "Contact",

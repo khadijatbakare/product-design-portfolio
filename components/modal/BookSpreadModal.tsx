@@ -30,7 +30,7 @@ interface Props {
   readonly onOpenVolume: (view: ModalView) => void;
 }
 
-const folioOrder = ["work", "notes", "resume", "playground"] as const;
+const folioOrder = ["work", "notes", "about", "playground"] as const;
 
 function FolioNext({
   current,
@@ -40,7 +40,7 @@ function FolioNext({
   readonly onOpen: (view: ModalView) => void;
 }) {
   const normalized =
-    current === "about" || current === "contact" ? "resume" : current;
+    current === "resume" || current === "contact" ? "about" : current;
   const index = folioOrder.indexOf(normalized);
   const nextView = folioOrder[(index + 1) % folioOrder.length];
   const nextVolume = volumes.find((item) => item.contents === nextView);
@@ -331,12 +331,7 @@ export function BookSpreadModal({
   useDialogFocus(dialogRef, onClose);
   const project = projects.find((item) => item.slug === selectedProject);
   const isAbout = activeModal === "about";
-  const volume =
-    activeModal === "work"
-      ? volumes.find((item) => item.contents === "work")
-      : volumes.find(
-          (item) => item.contents === (isAbout ? "resume" : activeModal),
-        );
+  const volume = volumes.find((item) => item.contents === activeModal);
   return (
     <motion.div
       className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-0 backdrop-blur-md sm:p-4"
@@ -470,16 +465,20 @@ export function BookSpreadModal({
               <>
                 <div className="p-10 pt-20 md:p-16 md:pt-24">
                   <Label>
-                    {activeModal === "resume" || isAbout
-                      ? aboutMe.kicker
-                      : `${activeModal} / Library volume`}
+                    {activeModal === "resume"
+                      ? resume.label
+                      : isAbout
+                        ? aboutMe.kicker
+                        : `${activeModal} / Library volume`}
                   </Label>
                   <h2
                     id="modal-title"
                     className="mt-10 font-serif text-5xl leading-none md:text-7xl"
                   >
-                    {activeModal === "resume" || isAbout
-                      ? aboutMe.headline.map((line) => (
+                    {activeModal === "resume" ? (
+                      resume.headline
+                    ) : isAbout ? (
+                      aboutMe.headline.map((line) => (
                           <span
                             key={line}
                             className={`block ${line === aboutMe.emphasis ? "italic" : ""}`}
@@ -487,14 +486,19 @@ export function BookSpreadModal({
                             {line}
                           </span>
                         ))
-                      : (volume?.heading ??
-                        "Let’s make sense of something together.")}
+                    ) : (
+                      (volume?.heading ??
+                        "Let’s make sense of something together.")
+                    )}
                   </h2>
                   {volume && (
                     <p className="mt-8 max-w-md text-lg leading-8 text-black/65">
-                      {activeModal === "resume" || isAbout
-                        ? aboutMe.intro
-                        : volume.description}
+                      {isAbout ? aboutMe.intro : volume.description}
+                    </p>
+                  )}
+                  {activeModal === "resume" && (
+                    <p className="mt-8 max-w-md text-lg leading-8 text-black/65">
+                      {resume.summary}
                     </p>
                   )}
                   {isAbout && (
@@ -626,13 +630,10 @@ export function BookSpreadModal({
                   {activeModal === "resume" && (
                     <>
                       <div>
-                        <Label>{resume.label}</Label>
+                        <Label>Experience record</Label>
                         <h3 className="mt-3 font-serif text-4xl">
-                          {resume.headline}
+                          Roles, systems, and shipped work.
                         </h3>
-                        <p className="mt-4 leading-7 text-black/65">
-                          {resume.summary}
-                        </p>
                       </div>
                       <div className="mt-10 space-y-8">
                         {resume.experience.map((entry) => (
@@ -652,6 +653,21 @@ export function BookSpreadModal({
                             </ul>
                           </article>
                         ))}
+                      </div>
+                      <div className="mt-10 border-t border-black/15 pt-8">
+                        <Label>Education</Label>
+                        <div className="mt-4 space-y-4">
+                          {resume.education.map((entry) => (
+                            <article key={entry.id}>
+                              <p className="font-medium">
+                                {entry.qualification}
+                              </p>
+                              <p className="mt-1 text-sm text-black/65">
+                                {entry.school} · {entry.period}
+                              </p>
+                            </article>
+                          ))}
+                        </div>
                       </div>
                       <div className="mt-10 border-t border-black/15 pt-8">
                         <Label>Core skills</Label>

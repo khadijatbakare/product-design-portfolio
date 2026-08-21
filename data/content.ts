@@ -256,7 +256,7 @@ export const volumes: readonly Volume[] = [
     spine: "AUTHOR & COLOPHON",
     subtitle: "About, experience & résumé",
     readTime: "3 min read",
-    contents: "resume",
+    contents: "about",
     heading: "Engineer by training. Designer by practice.",
     description:
       "My path into product design, the principles I work by, and a practical record of my experience.",
