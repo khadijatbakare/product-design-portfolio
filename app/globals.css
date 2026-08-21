@@ -44,7 +44,7 @@ body {
   background: color-mix(in srgb, var(--room) 84%, transparent);
 }
 .hero-title {
-  font-size: clamp(3.25rem, 10vw, 7rem);
+  font-size: clamp(2.25rem, 10vw, 7rem);
 }
 .skip-link {
   position: fixed;

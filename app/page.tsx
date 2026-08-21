@@ -90,11 +90,11 @@ export default function Home() {
                 Skip to portfolio shelf
               </a>
               <SiteHeader onOpen={openModal} />
-              <header className="mx-auto max-w-7xl px-6 pt-12 md:px-12">
+              <header className="mx-auto max-w-7xl px-6 pb-4 pt-16 md:px-12 md:pt-16">
                 <span className="font-mono text-[10px] uppercase tracking-[.18em]">
                   {libraryCopy.eyebrow}
                 </span>
-                <h1 className="hero-title mt-8 max-w-5xl font-serif leading-[.9] tracking-tight">
+                <h1 className="hero-title mt-6 max-w-5xl font-serif leading-[1.15] tracking-tight md:mt-8 md:leading-[.9]">
                   {aboutMe.intro}
                 </h1>
                 <p className="theme-muted mt-8 max-w-lg leading-7">
@@ -103,7 +103,7 @@ export default function Home() {
               </header>
               <div
                 id="portfolio-shelf"
-                className="mx-auto max-w-7xl scroll-mt-6 px-6 md:px-12"
+                className="mx-auto w-full max-w-7xl scroll-mt-6 px-4 md:px-12"
               >
                 <CornerBookshelf
                   onOpen={openModal}

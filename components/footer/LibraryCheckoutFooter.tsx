@@ -1,121 +1,49 @@
 "use client";
 
-import { useId } from "react";
-import { ArrowUpRight, Download } from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, Check, Copy, Download } from "lucide-react";
 import {
   checkoutSlip,
   resume,
+  siteIdentity,
   type LedgerEntry,
   type ModalView,
 } from "@/data/content";
 import { useEditorialHover } from "@/components/hover/EditorialHoverProvider";
 
-function LedgerLink({ entry }: { readonly entry: LedgerEntry }) {
+const marginalia: Record<string, { title: string; folioTag: string }> = {
+  email: { title: "Draft Letter to Author", folioTag: "POSTAL" },
+  linkedin: { title: "Professional Folio & Network", folioTag: "EXT / LI" },
+  medium: { title: "Essays & Design Writing", folioTag: "VOL. 03" },
+  github: { title: "Code & Experiments", folioTag: "EXT / GH" },
+};
+
+function PostcardLink({ entry }: { readonly entry: LedgerEntry }) {
   const { setHoverState } = useEditorialHover();
-  const external = entry.kind === "external" && entry.href.startsWith("http");
+  const hover = marginalia[entry.id] ?? {
+    title: entry.label,
+    folioTag: entry.stamp,
+  };
+  const external = entry.kind === "external";
   return (
     <a
       href={entry.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
-      onMouseEnter={() => setHoverState(entry.label, entry.stamp)}
+      onMouseEnter={() => setHoverState(hover.title, hover.folioTag)}
       onMouseLeave={() => setHoverState(null)}
-      className="grid grid-cols-[1fr_auto] gap-5 border-b border-dashed border-[#6f5f4b]/40 py-2.5 transition-colors hover:text-[#8c2d19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+      onFocus={() => setHoverState(hover.title, hover.folioTag)}
+      onBlur={() => setHoverState(null)}
+      className="flex min-h-11 items-center justify-between gap-3 border-b border-dashed border-[#8c8477]/35 py-2 transition-colors hover:text-[#8c2d19]"
     >
-      <span className="flex items-center gap-1">
+      <span className="uppercase tracking-wider text-[#8c8477]">
         {entry.label}
-        <ArrowUpRight size={10} />
       </span>
-      <span>{entry.stamp}</span>
+      <span className="flex min-w-0 items-center gap-1 truncate normal-case tracking-normal text-[#3d3833]">
+        {entry.id === "email" ? siteIdentity.email : entry.label}
+        <ArrowUpRight size={11} aria-hidden="true" />
+      </span>
     </a>
-  );
-}
-
-function AvailabilityStamp({ stamp }: { readonly stamp: string }) {
-  const id = useId().replace(/:/g, "");
-  const noiseId = `stamp-noise-${id}`;
-  const maskId = `stamp-mask-${id}`;
-  const [date, status = "AVAILABLE FOR WORK"] = stamp.split(" — ");
-  return (
-    <svg
-      viewBox="0 0 240 76"
-      className="h-auto w-full max-w-60 -rotate-[1.35deg] text-[#8c2d19]"
-      role="img"
-      aria-label={stamp}
-    >
-      <defs>
-        <filter id={noiseId} x="-10%" y="-20%" width="120%" height="140%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.72"
-            numOctaves="3"
-            seed="17"
-          />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <mask
-          id={maskId}
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="240"
-          height="76"
-        >
-          <rect width="240" height="76" fill="white" />
-          <rect
-            width="240"
-            height="76"
-            fill="black"
-            opacity="0.2"
-            filter={`url(#${noiseId})`}
-          />
-        </mask>
-      </defs>
-      <g mask={`url(#${maskId})`} fill="currentColor" stroke="currentColor">
-        <rect
-          x="4"
-          y="4"
-          width="232"
-          height="68"
-          rx="2"
-          fill="none"
-          strokeWidth="4"
-        />
-        <rect
-          x="10"
-          y="10"
-          width="220"
-          height="56"
-          rx="1"
-          fill="none"
-          strokeWidth="1.2"
-        />
-        <text
-          x="120"
-          y="31"
-          textAnchor="middle"
-          stroke="none"
-          fontFamily="monospace"
-          fontSize="11"
-          fontWeight="700"
-          letterSpacing="1.8"
-        >
-          {date}
-        </text>
-        <text
-          x="120"
-          y="50"
-          textAnchor="middle"
-          stroke="none"
-          fontFamily="monospace"
-          fontSize="10"
-          fontWeight="700"
-          letterSpacing="1.2"
-        >
-          {status}
-        </text>
-      </g>
-    </svg>
   );
 }
 
@@ -124,70 +52,144 @@ export function LibraryCheckoutFooter({
 }: {
   readonly onOpen: (view: ModalView) => void;
 }) {
+  const [copied, setCopied] = useState(false);
   const { setHoverState } = useEditorialHover();
+  const email = checkoutSlip.ledger.find((entry) => entry.id === "email");
+
+  const copyEmail = async () => {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(siteIdentity.email);
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
-    <footer className="theme-checkout border-t border-black/15 bg-[#c8bda8] px-6 py-16 transition-[filter] duration-500 md:px-12">
-      <div className="mx-auto max-w-4xl rounded-t-[2rem] border border-[#786a55] bg-[#9c8a6c] px-4 pt-5 shadow-[0_18px_35px_rgba(50,40,25,.25)] md:px-10 md:pt-8">
-        <section
-          className="relative translate-y-3 rotate-[-.3deg] border border-[#8f8069] bg-[#eee5d4] p-6 text-[#493f32] shadow-[5px_8px_0_rgba(73,63,50,.14)] md:p-10"
-          aria-label="Borrower’s due date slip"
-        >
-          <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[.16em]">
-            <span>{checkoutSlip.cardNumber}</span>
-            <span>{checkoutSlip.classification}</span>
-          </div>
-          <h2 className="mt-5 border-y-2 border-[#6f5f4b]/55 py-3 font-mono text-sm uppercase tracking-[.08em] md:text-base">
-            Borrower’s Due Date Slip
-          </h2>
-          <p className="mt-3 font-serif text-xl">{checkoutSlip.title}</p>
-          <div className="mt-7 grid gap-8 md:grid-cols-[1fr_240px]">
-            <div className="font-mono text-[10px] uppercase tracking-[.12em]">
-              <div className="grid grid-cols-[1fr_auto] gap-5 border-b border-[#6f5f4b]/60 pb-2 font-bold">
-                <span>{checkoutSlip.columns[0]}</span>
-                <span>{checkoutSlip.columns[1]}</span>
-              </div>
+    <footer className="theme-checkout flex w-full justify-center bg-[#efebe4] px-4 py-16 transition-[filter] duration-500">
+      <section className="relative w-full max-w-4xl overflow-hidden rounded-sm border border-[#ddd6c8] bg-[#faf7f2] p-6 text-[#23201d] shadow-[0_10px_30px_-10px_rgba(0,0,0,.16)] sm:p-10">
+        <div className="pointer-events-none absolute inset-2 rounded-[1px] border border-[#ebe4d8]" />
+        <header className="relative mb-7 flex items-center justify-between border-b border-[#e8e1d3] pb-4 font-mono text-[9px] uppercase tracking-[.18em] text-[#8c8477]">
+          <span>Universal Postal Card — Folio Edition</span>
+          <span>{checkoutSlip.classification}</span>
+        </header>
+
+        <div className="relative grid gap-9 md:grid-cols-2">
+          <div className="pointer-events-none absolute bottom-0 left-1/2 top-0 hidden w-px bg-gradient-to-b from-transparent via-[#d6cebf] to-transparent md:block" />
+          <div className="md:pr-6">
+            <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#8c8477]">
+              Post card
+            </p>
+            <h2 className="mt-3 font-serif text-2xl">Khadijat Bakare</h2>
+            <p className="mt-1 text-sm text-[#666056]">
+              Product Designer &amp; Design Systems
+            </p>
+            <p className="mt-5 max-w-sm font-serif text-sm leading-6 text-[#666056]">
+              Currently open to product design roles. Drop a note or borrow the
+              résumé below.
+            </p>
+            <div className="mt-6 font-mono text-[10px]">
               {checkoutSlip.ledger.map((entry) => (
-                <LedgerLink key={entry.id} entry={entry} />
+                <div key={entry.id} className="relative">
+                  <PostcardLink entry={entry} />
+                  {entry.id === "email" && email && (
+                    <button
+                      type="button"
+                      onClick={copyEmail}
+                      aria-label={
+                        copied ? "Email copied" : "Copy email address"
+                      }
+                      className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#faf7f2] p-2 text-[#8c8477]"
+                    >
+                      {copied ? <Check size={13} /> : <Copy size={13} />}
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
-            <div className="flex flex-col items-center justify-center text-center">
-              <AvailabilityStamp stamp={checkoutSlip.availability.stamp} />
-              <p className="mt-4 text-xs leading-5">
-                {checkoutSlip.availability.label}
-              </p>
-            </div>
+            <span className="sr-only" aria-live="polite">
+              {copied ? "Email address copied" : ""}
+            </span>
           </div>
-          <div className="mt-8 flex flex-wrap items-center gap-5 font-mono text-[10px] uppercase tracking-widest">
+
+          <div className="border-t border-[#e8e1d3] pt-7 md:border-0 md:pl-6 md:pt-0">
+            <div className="flex items-start justify-end gap-3">
+              <div className="stamp-ink mt-2 rotate-[-4deg] text-center font-mono text-[7px] uppercase text-[#7a2e20]">
+                <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full border border-current leading-tight">
+                  <span>Posted</span>
+                  <b>Aug 2026</b>
+                  <span>Available</span>
+                </div>
+                <div className="mt-1 space-y-0.5">
+                  <i className="block h-px w-16 bg-current" />
+                  <i className="block h-px w-16 bg-current" />
+                  <i className="block h-px w-16 bg-current" />
+                </div>
+              </div>
+              <div className="flex h-24 w-20 rotate-1 flex-col items-center justify-between border-2 border-dashed border-[#c7beaf] bg-[#faf5ec] p-2 font-mono text-[7px] uppercase text-[#8c8477] shadow-inner">
+                <span className="flex w-full justify-between">
+                  <b>Air</b>
+                  <b>10¢</b>
+                </span>
+                <div
+                  className="flex h-11 w-11 items-center justify-center bg-[#23201d]"
+                  aria-label="Bambi postage stamp"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-7 w-7 fill-none stroke-[#faf5ec]"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 5c.7 0 1.4.1 2 .3 1.8-2 4.5-1.7 5.5-1.3.5 1.5.2 3.3-.4 4.3A8 8 0 0 1 21 13.5c0 4.1-3.6 7.5-8 7.5s-8-3.4-8-7.5c0-1.9.7-3.7 1.9-5.2-.6-1-.9-2.8-.4-4.3 1-.4 3.7-.7 5.5 1.3Z" />
+                    <circle cx="9" cy="13" r="1" fill="#faf5ec" />
+                    <circle cx="15" cy="13" r="1" fill="#faf5ec" />
+                  </svg>
+                </div>
+                <span>Bambi · 26</span>
+              </div>
+            </div>
+            <div className="mt-8 border-b border-[#e3dcce] pb-3 font-serif text-xs italic text-[#524d44]">
+              <span className="mr-2 font-mono text-[9px] not-italic text-[#a69e91]">
+                TO:
+              </span>
+              Hiring Teams, Design Leads &amp; Collaborators
+            </div>
             <button
               type="button"
               onClick={() => onOpen("resume")}
-              onMouseEnter={() =>
-                setHoverState("View résumé on site", "Vol. 03")
-              }
-              onMouseLeave={() => setHoverState(null)}
-              className="border-b border-[#493f32] pb-1"
+              className="mt-5 w-full border border-[#23201d]/20 px-4 py-2.5 font-mono text-[9px] uppercase tracking-wider"
             >
               View résumé on site →
             </button>
             <a
               href="/resume.pdf"
               download="Khadijat-Bakare-Resume.pdf"
-              onMouseEnter={() => setHoverState("Download résumé", "PDF")}
+              onMouseEnter={() =>
+                setHoverState("Archival Resume Document (PDF)", "DOC / 2026")
+              }
               onMouseLeave={() => setHoverState(null)}
-              className="flex items-center gap-2 border-b border-[#493f32] pb-1"
+              onFocus={() =>
+                setHoverState("Archival Resume Document (PDF)", "DOC / 2026")
+              }
+              onBlur={() => setHoverState(null)}
+              className="mt-2 flex min-h-11 w-full items-center justify-between rounded-[2px] bg-[#23201d] px-4 py-2.5 text-[#faf7f2]"
             >
-              <Download size={14} />
-              {resume.downloadLabel}
+              <span className="font-mono text-[9px] uppercase tracking-wider">
+                {resume.downloadLabel}
+              </span>
+              <Download
+                size={14}
+                className="text-[#d4af37]"
+                aria-hidden="true"
+              />
             </a>
           </div>
-          <p className="mt-7 max-w-xl border-t border-[#6f5f4b]/50 pt-4 font-serif text-lg leading-7">
-            {checkoutSlip.notice}
-          </p>
-          <p className="mt-5 font-mono text-[8px] uppercase tracking-[.14em] text-[#6f5f4b]">
-            {checkoutSlip.footnote}
-          </p>
-        </section>
-      </div>
+        </div>
+        <div className="relative mt-8 flex flex-col justify-between gap-2 border-t border-[#e8e1d3] pt-4 font-mono text-[8px] text-[#8c8477] sm:flex-row">
+          <span>Postmarked from the Study Desk © 2026 Khadijat.</span>
+          <span>Set in Manrope, Newsreader and DM Mono. Built by hand.</span>
+        </div>
+      </section>
     </footer>
   );
 }

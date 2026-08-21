@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Gamepad2, ImageIcon, Music2 } from "lucide-react";
 import {
   libraryCopy,
   shelfCurios,
@@ -16,8 +17,12 @@ export interface CornerBookshelfProps {
   readonly onOpenCurio: (curio: ShelfCurioId) => void;
 }
 
-const spineX = [136, 201, 414, 487];
-const spineAngle = [1, -1, -1, 1];
+const spinePositions = [
+  { x: 154, baseline: 218, scale: 0.46, angle: 1 },
+  { x: 421, baseline: 198, scale: 0.43, angle: -1 },
+  { x: 154, baseline: 303, scale: 0.46, angle: -1 },
+  { x: 421, baseline: 283, scale: 0.46, angle: 1 },
+] as const;
 
 const curioCopy: Record<ShelfCurioId, { title: string; instruction: string }> =
   {
@@ -78,7 +83,7 @@ export function CornerBookshelf({
 
   return (
     <section
-      className="relative mx-auto flex min-h-[590px] w-full max-w-5xl flex-col items-center justify-end select-none"
+      className="relative mx-auto flex min-h-[640px] w-full max-w-5xl flex-col items-center justify-end select-none"
       aria-label="Portfolio library"
     >
       <div className="absolute top-4 z-20 flex h-14 items-center justify-center">
@@ -139,10 +144,10 @@ export function CornerBookshelf({
         </AnimatePresence>
       </div>
       <svg
-        viewBox="0 0 680 520"
+        viewBox="0 0 680 650"
         className="library-shelf h-auto w-full overflow-visible drop-shadow-2xl"
-        aria-hidden="true"
-        focusable="false"
+        role="group"
+        aria-label="Interactive six-level portfolio bookshelf"
       >
         <defs>
           <linearGradient id="left-shelf">
@@ -184,9 +189,9 @@ export function CornerBookshelf({
             <circle cx="1.5" cy="1.5" r="1" fill="#1e0f0b" />
           </pattern>
         </defs>
-        <path d="M35 20L340 52V500H35Z" fill="url(#wall-left)" opacity=".7" />
+        <path d="M35 20L340 52V630H35Z" fill="url(#wall-left)" opacity=".7" />
         <path
-          d="M340 52L645 20V500H340Z"
+          d="M340 52L645 20V630H340Z"
           fill="url(#wall-right)"
           opacity=".7"
         />
@@ -194,21 +199,21 @@ export function CornerBookshelf({
           x1="340"
           y1="52"
           x2="340"
-          y2="500"
+          y2="630"
           stroke="#bdb6aa"
           strokeWidth="2"
         />
         <polygon
-          points="110,62 334,84 334,474 110,454"
+          points="110,62 334,84 334,604 110,584"
           fill="url(#left-shelf)"
         />
         <polygon
-          points="346,84 570,62 570,454 346,474"
+          points="346,84 570,62 570,584 346,604"
           fill="url(#right-shelf)"
         />
         <polygon points="98,50 334,74 346,84 110,62" fill="#414650" />
         <polygon points="346,84 582,50 570,62 346,94" fill="#343840" />
-        {[260, 390].map((y) => (
+        {[135, 220, 305, 390, 475, 560].map((y) => (
           <g key={y}>
             <polygon
               points={`110,${y} 334,${y + 20} 334,${y + 31} 110,${y + 11}`}
@@ -226,12 +231,12 @@ export function CornerBookshelf({
           x="330"
           y="75"
           width="22"
-          height="402"
+          height="532"
           fill="#111318"
           opacity=".45"
         />
         <motion.g
-          tabIndex={-1}
+          tabIndex={0}
           role="timer"
           aria-label={`Lagos time ${lagosLabel}`}
           onMouseEnter={() => setHovered("clock")}
@@ -297,11 +302,12 @@ export function CornerBookshelf({
           <circle cx="545" cy="113" r="2" fill="#33261c" />
         </motion.g>
         {volumes.map((volume, index) => {
-          const width = volume.width;
-          const height = volume.height;
-          const x = spineX[index];
-          const y = 390 - height;
-          const angle = spineAngle[index];
+          const position = spinePositions[index];
+          const width = Math.max(40, volume.width * 0.76);
+          const height = volume.height * position.scale;
+          const x = position.x;
+          const y = position.baseline - height;
+          const angle = position.angle;
           const isHovered = hovered === volume.id;
           const isOpening = openingVolume === volume.id;
           const open = () => {
@@ -323,7 +329,7 @@ export function CornerBookshelf({
           return (
             <motion.g
               key={volume.id}
-              tabIndex={-1}
+              tabIndex={0}
               role="button"
               aria-label={`Open ${volume.volume}: ${volume.spine}`}
               onClick={open}
@@ -346,6 +352,14 @@ export function CornerBookshelf({
               className={`cursor-pointer outline-none ${openingVolume && !isOpening ? "pointer-events-none" : ""}`}
             >
               <rect
+                x={x - Math.max(0, (88 - width) / 2)}
+                y={y - 6}
+                width={Math.max(88, width)}
+                height={height + 12}
+                fill="transparent"
+                pointerEvents="all"
+              />
+              <rect
                 x={x}
                 y={y}
                 width={width}
@@ -353,7 +367,7 @@ export function CornerBookshelf({
                 rx="2"
                 fill={volume.color}
                 stroke="#0e0f11"
-                transform={`rotate(${angle} ${x} 390)`}
+                transform={`rotate(${angle} ${x} ${position.baseline})`}
               />
               {volume.texture === "dots" && (
                 <rect
@@ -462,7 +476,7 @@ export function CornerBookshelf({
               )}
               {volume.accent === "ribbon" && (
                 <path
-                  d={`M${x + width / 2 - 4} 390h8v18l-4-4-4 4z`}
+                  d={`M${x + width / 2 - 4} ${position.baseline}h8v12l-4-4-4 4z`}
                   fill="#8C2D19"
                 />
               )}
@@ -470,7 +484,7 @@ export function CornerBookshelf({
           );
         })}
         <motion.g
-          tabIndex={-1}
+          tabIndex={0}
           role="button"
           aria-label="See what Khadijat is listening to"
           onClick={() => onOpenCurio("listening")}
@@ -491,7 +505,7 @@ export function CornerBookshelf({
           className="cursor-pointer outline-none"
         >
           <ellipse
-            cx="298"
+            cx="478"
             cy="383"
             rx="31"
             ry="5"
@@ -499,7 +513,7 @@ export function CornerBookshelf({
             opacity=".28"
           />
           <rect
-            x="274"
+            x="454"
             y="352"
             width="45"
             height="30"
@@ -507,22 +521,22 @@ export function CornerBookshelf({
             fill="#6a3f25"
             stroke="#25180f"
           />
-          <circle cx="296" cy="366" r="10" fill="#bc914f" stroke="#3c2d1c" />
-          <circle cx="296" cy="366" r="3" fill="#33241a" />
+          <circle cx="476" cy="366" r="10" fill="#bc914f" stroke="#3c2d1c" />
+          <circle cx="476" cy="366" r="3" fill="#33241a" />
           <path
-            d="M302 356c7-12 8-25 4-37"
+            d="M482 356c7-12 8-25 4-37"
             fill="none"
             stroke="#b58a4c"
             strokeWidth="3"
           />
           <path
-            d="M305 322c9-17 25-23 36-19-3 15-16 28-34 29z"
+            d="M485 322c9-17 25-23 36-19-3 15-16 28-34 29z"
             fill="#b88b4d"
             stroke="#3d2d1b"
           />
         </motion.g>
         <motion.g
-          tabIndex={-1}
+          tabIndex={0}
           role="button"
           aria-label="Open Khadijat's portrait"
           onClick={() => onOpenCurio("portrait")}
@@ -543,8 +557,8 @@ export function CornerBookshelf({
           className="cursor-pointer outline-none"
         >
           <rect
-            x="354"
-            y="326"
+            x="164"
+            y="73"
             width="48"
             height="60"
             rx="1"
@@ -553,19 +567,19 @@ export function CornerBookshelf({
             strokeWidth="2"
           />
           <rect
-            x="360"
-            y="332"
+            x="170"
+            y="79"
             width="36"
             height="46"
             fill="#d6c7b2"
             stroke="#ae8f65"
           />
-          <circle cx="378" cy="347" r="7" fill="#8f8171" />
-          <path d="M366 371c2-13 22-13 24 0" fill="#8f8171" />
-          <path d="M366 386l12-10 12 10" fill="#3b2a1c" opacity=".7" />
+          <circle cx="188" cy="94" r="7" fill="#8f8171" />
+          <path d="M176 118c2-13 22-13 24 0" fill="#8f8171" />
+          <path d="M176 133l12-10 12 10" fill="#3b2a1c" opacity=".7" />
         </motion.g>
         <motion.g
-          tabIndex={-1}
+          tabIndex={0}
           role="button"
           aria-label="Open the books read this year counter"
           onClick={() => onOpenCurio("reading")}
@@ -586,8 +600,8 @@ export function CornerBookshelf({
           className="cursor-pointer outline-none"
         >
           <rect
-            x="520"
-            y="348"
+            x="230"
+            y="433"
             width="38"
             height="38"
             rx="2"
@@ -595,8 +609,8 @@ export function CornerBookshelf({
             stroke="#493b29"
           />
           <text
-            x="539"
-            y="359"
+            x="249"
+            y="444"
             textAnchor="middle"
             fontFamily="monospace"
             fontSize="5"
@@ -605,8 +619,8 @@ export function CornerBookshelf({
             READ / {String(shelfCurios.reading.year).slice(-2)}
           </text>
           <text
-            x="539"
-            y="377"
+            x="249"
+            y="462"
             textAnchor="middle"
             fontFamily="serif"
             fontSize="18"
@@ -616,7 +630,7 @@ export function CornerBookshelf({
           </text>
         </motion.g>
         <motion.g
-          tabIndex={-1}
+          tabIndex={0}
           role="button"
           aria-label="Play UNO Flip Memory Match"
           onClick={onOpenGame}
@@ -639,16 +653,98 @@ export function CornerBookshelf({
         >
           <image
             href="/assets/gamepad-controller.svg"
-            x="194"
-            y="363"
-            width="108"
-            height="91"
+            x="174"
+            y="318"
+            width="104"
+            height="72"
             preserveAspectRatio="xMidYMid meet"
           />
         </motion.g>
-        <polygon points="94,454 334,474 346,486 106,466" fill="#414650" />
-        <polygon points="346,474 574,454 586,466 346,486" fill="#30343b" />
+        <image
+          href="/assets/potted-snake-plant.svg"
+          x="138"
+          y="398"
+          width="74"
+          height="76"
+          preserveAspectRatio="xMidYMax meet"
+        />
+        <g aria-hidden="true">
+          <rect
+            x="448"
+            y="448"
+            width="46"
+            height="16"
+            rx="5"
+            fill="#d6a500"
+            stroke="#6f5410"
+          />
+          <path d="M456 448l8-10h18l8 10" fill="#e4b51e" stroke="#6f5410" />
+          <circle cx="459" cy="465" r="6" fill="#191b1f" />
+          <circle cx="485" cy="465" r="6" fill="#191b1f" />
+          <circle cx="459" cy="465" r="2" fill="#a8a29a" />
+          <circle cx="485" cy="465" r="2" fill="#a8a29a" />
+        </g>
+        <g aria-hidden="true" transform="rotate(3 462 548)">
+          <rect
+            x="407"
+            y="535"
+            width="112"
+            height="20"
+            rx="2"
+            fill="#17191d"
+            stroke="#4a4e56"
+          />
+          <rect
+            x="411"
+            y="555"
+            width="108"
+            height="7"
+            fill="#ded6c8"
+            stroke="#867c6d"
+          />
+          <text
+            x="463"
+            y="549"
+            textAnchor="middle"
+            fill="#b7b0a5"
+            fontFamily="serif"
+            fontSize="8"
+          >
+            DREAM COUNT
+          </text>
+        </g>
+        <polygon points="94,584 334,604 346,616 106,596" fill="#414650" />
+        <polygon points="346,604 574,584 586,596 346,616" fill="#30343b" />
       </svg>
+      <nav
+        aria-label="Bookshelf Easter eggs"
+        className="-mt-2 flex w-full items-center justify-center gap-2 px-4 md:hidden"
+      >
+        <button
+          type="button"
+          onClick={onOpenGame}
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+        >
+          <Gamepad2 size={15} aria-hidden="true" />
+          Play
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpenCurio("listening")}
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+        >
+          <Music2 size={15} aria-hidden="true" />
+          Listen
+        </button>
+        <button
+          type="button"
+          onClick={() => onOpenCurio("portrait")}
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+        >
+          <ImageIcon size={15} aria-hidden="true" />
+          Portrait
+        </button>
+      </nav>
     </section>
   );
 }
