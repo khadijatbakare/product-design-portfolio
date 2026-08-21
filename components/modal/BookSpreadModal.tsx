@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Download, Mail, X } from "lucide-react";
 import {
@@ -327,6 +327,7 @@ export function BookSpreadModal({
 }: Props) {
   const { setHoverState } = useEditorialHover();
   const dialogRef = useRef<HTMLElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
   useDialogFocus(dialogRef, onClose);
   const project = projects.find((item) => item.slug === selectedProject);
   const isAbout = activeModal === "about";
@@ -353,7 +354,12 @@ export function BookSpreadModal({
     >
       <motion.article
         ref={dialogRef}
-        className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto overscroll-contain shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
+        onScroll={(event) => {
+          const node = event.currentTarget;
+          const available = node.scrollHeight - node.clientHeight;
+          setScrollProgress(available > 0 ? node.scrollTop / available : 0);
+        }}
+        className="folio-scroll open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto overscroll-contain shadow-2xl sm:h-auto sm:max-h-[92vh] sm:min-h-[620px] sm:rounded-md md:grid-cols-2"
         initial={{ scale: 0.92, y: 28 }}
         animate={{ scale: 1, y: 0 }}
         exit={{
@@ -721,6 +727,28 @@ export function BookSpreadModal({
           </motion.div>
         </AnimatePresence>
       </motion.article>
+      <div
+        className="pointer-events-none fixed right-1 top-1/2 z-30 flex -translate-y-1/2 items-center gap-2 sm:right-2 sm:gap-3"
+        aria-hidden="true"
+      >
+        <div className="flex flex-col gap-4">
+          {[0, 1, 2, 3, 4].map((tick) => {
+            const active = Math.round(scrollProgress * 4) === tick;
+            return (
+              <motion.span
+                key={tick}
+                className="block h-[3px] rounded-full bg-[#23201d] sm:bg-[#faf7f2]"
+                animate={{
+                  width: active ? 40 : 28,
+                  opacity: active ? 1 : 0.42,
+                }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+              />
+            );
+          })}
+        </div>
+        <span className="h-64 w-px bg-[#23201d]/20 sm:bg-[#faf7f2]/25" />
+      </div>
     </motion.div>
   );
 }

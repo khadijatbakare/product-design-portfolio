@@ -75,6 +75,13 @@ body {
 .library-shelf {
   transition: filter 0.4s ease;
 }
+.folio-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.folio-scroll::-webkit-scrollbar {
+  display: none;
+}
 html[data-theme="dark"] .library-shelf {
   filter: brightness(0.68) saturate(0.82);
 }
