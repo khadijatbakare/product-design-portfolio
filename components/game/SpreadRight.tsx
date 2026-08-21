@@ -73,7 +73,7 @@ export function Scoreboard({
 }
 export function GameSetup({ mode, difficulty, onChange }: GameSetupProps) {
   return (
-    <fieldset className="mt-5 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase">
+    <fieldset className="uno-setup mt-5 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase">
       <label className="grid gap-1">
         Mode
         <select
@@ -121,10 +121,10 @@ export function FlipCardControl({
       type="button"
       disabled={!available}
       onClick={onTrigger}
-      className="mt-7 rounded-xl border-2 border-[#7250ad] bg-[#7250ad] p-5 text-left text-white disabled:cursor-not-allowed disabled:opacity-45"
+      className="uno-flip-control mt-7 rounded-xl border-2 border-[#7250ad] bg-[#7250ad] p-5 text-left text-white disabled:cursor-not-allowed disabled:opacity-45"
     >
       <p className="font-mono text-xs font-bold">{card.icon} FLIP</p>
-      <p className="mt-3 text-sm leading-6">
+      <p className="uno-flip-copy mt-3 text-sm leading-6">
         {available
           ? "Available once. Use it before or after revealing the first card."
           : "Unavailable for this turn."}
@@ -223,11 +223,14 @@ export function SpreadRight({
   readonly onGiveUp: () => void;
 }) {
   return (
-    <aside className="flex min-h-0 flex-col overflow-y-auto overscroll-contain bg-black/[.035] p-8 pt-20 md:p-6 md:pt-16">
+    <aside className="uno-sidebar flex min-h-0 flex-col overflow-y-auto overscroll-contain bg-black/[.035] p-8 pt-20 md:p-6 md:pt-16">
       <p className="font-mono text-[9px] uppercase tracking-[.2em]">
         Game index / seeded {state.grid.seed}
       </p>
-      <h2 id="uno-title" className="mt-3 font-serif text-4xl leading-none">
+      <h2
+        id="uno-title"
+        className="uno-title mt-3 font-serif text-4xl leading-none"
+      >
         UNO Flip
         <br />
         <em>Match.</em>

@@ -424,7 +424,7 @@ export function BookSpreadModal({
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={project?.slug ?? "work-index"}
-                  className="col-span-2 grid md:grid-cols-2"
+                  className="col-span-full grid grid-cols-1 md:grid-cols-2"
                   initial={{
                     opacity: 0,
                     rotateY: -18,
@@ -451,7 +451,7 @@ export function BookSpreadModal({
                       />
                     </>
                   ) : (
-                    <div className="col-span-2">
+                    <div className="col-span-full">
                       <WorkIndex
                         onSelectProject={(slug) => onSelectProject(slug)}
                         onOpenVolume={onOpenVolume}
