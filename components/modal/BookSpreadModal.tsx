@@ -397,297 +397,321 @@ export function BookSpreadModal({
             </button>
           </div>
         </nav>
-        {activeModal === "work" ? (
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={project?.slug ?? "work-index"}
-              className="col-span-2 grid md:grid-cols-2"
-              initial={{
-                opacity: 0,
-                rotateY: -18,
-                x: 70,
-                transformOrigin: "left center",
-              }}
-              animate={{ opacity: 1, rotateY: 0, x: 0 }}
-              exit={{
-                opacity: 0,
-                rotateY: 14,
-                x: -45,
-                transformOrigin: "right center",
-              }}
-              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-              style={{ perspective: 1400 }}
-            >
-              {project ? (
-                <>
-                  <WorkArgument project={project} />
-                  <WorkEvidence
-                    project={project}
-                    onSelectProject={(slug) => onSelectProject(slug)}
-                    onOpenVolume={onOpenVolume}
-                  />
-                </>
-              ) : (
-                <div className="col-span-2">
-                  <WorkIndex
-                    onSelectProject={(slug) => onSelectProject(slug)}
-                    onOpenVolume={onOpenVolume}
-                  />
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        ) : (
-          <>
-            <div className="p-10 pt-20 md:p-16 md:pt-24">
-              <Label>
-                {activeModal === "resume" || isAbout
-                  ? aboutMe.kicker
-                  : `${activeModal} / Library volume`}
-              </Label>
-              <h2
-                id="modal-title"
-                className="mt-10 font-serif text-5xl leading-none md:text-7xl"
-              >
-                {activeModal === "resume" || isAbout
-                  ? aboutMe.headline.map((line) => (
-                      <span
-                        key={line}
-                        className={`block ${line === aboutMe.emphasis ? "italic" : ""}`}
-                      >
-                        {line}
-                      </span>
-                    ))
-                  : (volume?.heading ??
-                    "Let’s make sense of something together.")}
-              </h2>
-              {volume && (
-                <p className="mt-8 max-w-md text-lg leading-8 text-black/65">
-                  {activeModal === "resume" || isAbout
-                    ? aboutMe.intro
-                    : volume.description}
-                </p>
-              )}
-              {isAbout && (
-                <div className="mt-10 space-y-5 text-base leading-7">
-                  {aboutMe.story.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                  <section className="border-t border-black/15 pt-6">
-                    <Label>Education</Label>
-                    {resume.education.map((entry) => (
-                      <div key={entry.id} className="mt-3">
-                        <p className="font-medium">{entry.qualification}</p>
-                        <p className="text-sm text-black/55">
-                          {entry.school} · {entry.period}
-                        </p>
-                      </div>
-                    ))}
-                  </section>
-                </div>
-              )}
-              {activeModal === "contact" && (
-                <p className="mt-10 max-w-sm text-lg leading-8">
-                  {checkoutSlip.availability.label}. If there is a thoughtful
-                  product problem to untangle, I’d like to hear about it.
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col justify-center bg-white/35 p-10 pt-20 md:p-16 md:pt-24">
-              {activeModal === "notes" && (
-                <div>
-                  <StudyDesk />
-                  <div className="mt-10 grid auto-rows-min gap-5 sm:grid-cols-2">
-                    {aboutMe.hobbies.map((hobby, index) => (
-                      <article
-                        key={hobby.id}
-                        className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} scrapbook-tile relative flex flex-col justify-end overflow-hidden border border-black/15 p-5`}
-                        style={{ backgroundColor: hobby.media.placeholder }}
-                        aria-label={hobby.media.alt}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/10" />
-                        <div className="relative text-white">
-                          <Label>
-                            0{index + 1} / {hobby.label}
-                          </Label>
-                          <h3 className="mt-4 font-serif text-3xl">
-                            {hobby.headline}
-                          </h3>
-                          <p className="mt-3 text-sm leading-6 text-white/85">
-                            {hobby.caption}
-                          </p>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {activeModal === "playground" && (
-                <div className="grid auto-rows-min gap-5 sm:grid-cols-2">
-                  {playground.length ? (
-                    playground.map((piece, index) => (
-                      <figure
-                        key={piece.id}
-                        className={`${playgroundSpan[piece.span]} ${index % 2 ? "rotate-1" : "-rotate-1"} relative overflow-hidden border border-black/15 bg-white p-3 shadow-md`}
-                      >
-                        <div
-                          className="relative h-full min-h-56 overflow-hidden"
-                          style={{ background: piece.media.placeholder }}
-                        >
-                          <Image
-                            src={piece.media.src}
-                            alt={piece.media.alt}
-                            fill
-                            sizes="(min-width: 768px) 35vw, 80vw"
-                            className="object-cover"
-                          />
-                        </div>
-                        <figcaption className="p-3 pb-1">
-                          <Label>0{index + 1} / Visual study</Label>
-                          <h3 className="mt-2 font-serif text-2xl">
-                            {piece.title}
-                          </h3>
-                          <p className="mt-2 text-sm leading-6 text-black/55">
-                            {piece.note}
-                          </p>
-                        </figcaption>
-                      </figure>
-                    ))
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeModal}
+            className="col-span-full grid min-w-0 grid-cols-1 md:grid-cols-2"
+            initial={{
+              opacity: 0,
+              rotateY: -24,
+              x: 54,
+              transformOrigin: "left center",
+            }}
+            animate={{ opacity: 1, rotateY: 0, x: 0 }}
+            exit={{
+              opacity: 0,
+              rotateY: 28,
+              x: -54,
+              transformOrigin: "right center",
+            }}
+            transition={{ duration: 0.46, ease: [0.16, 1, 0.3, 1] }}
+            style={{ perspective: 1600, transformStyle: "preserve-3d" }}
+          >
+            {activeModal === "work" ? (
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={project?.slug ?? "work-index"}
+                  className="col-span-2 grid md:grid-cols-2"
+                  initial={{
+                    opacity: 0,
+                    rotateY: -18,
+                    x: 70,
+                    transformOrigin: "left center",
+                  }}
+                  animate={{ opacity: 1, rotateY: 0, x: 0 }}
+                  exit={{
+                    opacity: 0,
+                    rotateY: 14,
+                    x: -45,
+                    transformOrigin: "right center",
+                  }}
+                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ perspective: 1400 }}
+                >
+                  {project ? (
+                    <>
+                      <WorkArgument project={project} />
+                      <WorkEvidence
+                        project={project}
+                        onSelectProject={(slug) => onSelectProject(slug)}
+                        onOpenVolume={onOpenVolume}
+                      />
+                    </>
                   ) : (
-                    <div className="col-span-2 rotate-1 border border-dashed border-black/25 bg-[#fffdf8] p-10 shadow-sm">
-                      <Label>Drawer open / awaiting first study</Label>
-                      <p className="mt-5 font-serif text-4xl leading-tight">
-                        Loose screens belong here, without being forced into a
-                        case study.
-                      </p>
-                      <p className="mt-5 max-w-md leading-7 text-black/55">
-                        Add a title, a short note, and an image to the
-                        playground collection when a visual is ready to keep.
-                      </p>
+                    <div className="col-span-2">
+                      <WorkIndex
+                        onSelectProject={(slug) => onSelectProject(slug)}
+                        onOpenVolume={onOpenVolume}
+                      />
                     </div>
                   )}
-                </div>
-              )}
-              {isAbout && (
-                <div className="space-y-8">
-                  <div>
-                    <Label>Working principles</Label>
-                    <h3 className="mt-3 font-serif text-4xl">
-                      How I approach the work.
-                    </h3>
-                  </div>
-                  {aboutMe.principles.map((principle, index) => (
-                    <article
-                      key={principle.id}
-                      className={`${index % 2 ? "rotate-1" : "-rotate-1"} border border-black/15 bg-[#fffdf8] p-6 shadow-sm`}
-                    >
-                      <Label>0{index + 1}</Label>
-                      <h3 className="mt-3 font-serif text-3xl">
-                        {principle.title}
-                      </h3>
-                      <p className="mt-3 leading-7 text-black/60">
-                        {principle.body}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              )}
-              {activeModal === "resume" && (
-                <>
-                  <div>
-                    <Label>{resume.label}</Label>
-                    <h3 className="mt-3 font-serif text-4xl">
-                      {resume.headline}
-                    </h3>
-                    <p className="mt-4 leading-7 text-black/65">
-                      {resume.summary}
-                    </p>
-                  </div>
-                  <div className="mt-10 space-y-8">
-                    {resume.experience.map((entry) => (
-                      <article key={entry.id}>
-                        <Label>
-                          {entry.period} · {entry.location}
-                        </Label>
-                        <h3 className="mt-2 font-serif text-3xl">
-                          {entry.role}
-                        </h3>
-                        <p className="mt-1 text-sm">{entry.company}</p>
-                        <p className="mt-4 leading-7">{entry.summary}</p>
-                        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
-                          {entry.highlights.map((highlight) => (
-                            <li key={highlight}>{highlight}</li>
-                          ))}
-                        </ul>
-                      </article>
-                    ))}
-                  </div>
-                  <div className="mt-10 border-t border-black/15 pt-8">
-                    <Label>Core skills</Label>
-                    <p className="mt-3 text-sm leading-6">
-                      {resume.coreSkills.join(" · ")}
-                    </p>
-                  </div>
-                  <div className="mt-8">
-                    <Label>Design-system depth</Label>
-                    <div className="mt-4 space-y-4">
-                      {resume.designSystemSkills.map((skill) => (
-                        <article
-                          key={skill.id}
-                          className="grid grid-cols-[1fr_auto] gap-x-4"
-                        >
-                          <p className="font-medium">{skill.label}</p>
-                          <span className="font-mono text-[8px] uppercase tracking-widest">
-                            {skill.proficiency}
+                </motion.div>
+              </AnimatePresence>
+            ) : (
+              <>
+                <div className="p-10 pt-20 md:p-16 md:pt-24">
+                  <Label>
+                    {activeModal === "resume" || isAbout
+                      ? aboutMe.kicker
+                      : `${activeModal} / Library volume`}
+                  </Label>
+                  <h2
+                    id="modal-title"
+                    className="mt-10 font-serif text-5xl leading-none md:text-7xl"
+                  >
+                    {activeModal === "resume" || isAbout
+                      ? aboutMe.headline.map((line) => (
+                          <span
+                            key={line}
+                            className={`block ${line === aboutMe.emphasis ? "italic" : ""}`}
+                          >
+                            {line}
                           </span>
-                          <p className="col-span-2 mt-1 text-sm leading-6 text-black/55">
-                            {skill.note}
+                        ))
+                      : (volume?.heading ??
+                        "Let’s make sense of something together.")}
+                  </h2>
+                  {volume && (
+                    <p className="mt-8 max-w-md text-lg leading-8 text-black/65">
+                      {activeModal === "resume" || isAbout
+                        ? aboutMe.intro
+                        : volume.description}
+                    </p>
+                  )}
+                  {isAbout && (
+                    <div className="mt-10 space-y-5 text-base leading-7">
+                      {aboutMe.story.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                      <section className="border-t border-black/15 pt-6">
+                        <Label>Education</Label>
+                        {resume.education.map((entry) => (
+                          <div key={entry.id} className="mt-3">
+                            <p className="font-medium">{entry.qualification}</p>
+                            <p className="text-sm text-black/55">
+                              {entry.school} · {entry.period}
+                            </p>
+                          </div>
+                        ))}
+                      </section>
+                    </div>
+                  )}
+                  {activeModal === "contact" && (
+                    <p className="mt-10 max-w-sm text-lg leading-8">
+                      {checkoutSlip.availability.label}. If there is a
+                      thoughtful product problem to untangle, I’d like to hear
+                      about it.
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col justify-center bg-white/35 p-10 pt-20 md:p-16 md:pt-24">
+                  {activeModal === "notes" && (
+                    <div>
+                      <StudyDesk />
+                      <div className="mt-10 grid auto-rows-min gap-5 sm:grid-cols-2">
+                        {aboutMe.hobbies.map((hobby, index) => (
+                          <article
+                            key={hobby.id}
+                            className={`${hobbySpan[hobby.span]} ${index % 3 === 0 ? "-rotate-1" : "rotate-1"} scrapbook-tile relative flex flex-col justify-end overflow-hidden border border-black/15 p-5`}
+                            style={{ backgroundColor: hobby.media.placeholder }}
+                            aria-label={hobby.media.alt}
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-white/10" />
+                            <div className="relative text-white">
+                              <Label>
+                                0{index + 1} / {hobby.label}
+                              </Label>
+                              <h3 className="mt-4 font-serif text-3xl">
+                                {hobby.headline}
+                              </h3>
+                              <p className="mt-3 text-sm leading-6 text-white/85">
+                                {hobby.caption}
+                              </p>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {activeModal === "playground" && (
+                    <div className="grid auto-rows-min gap-5 sm:grid-cols-2">
+                      {playground.length ? (
+                        playground.map((piece, index) => (
+                          <figure
+                            key={piece.id}
+                            className={`${playgroundSpan[piece.span]} ${index % 2 ? "rotate-1" : "-rotate-1"} relative overflow-hidden border border-black/15 bg-white p-3 shadow-md`}
+                          >
+                            <div
+                              className="relative h-full min-h-56 overflow-hidden"
+                              style={{ background: piece.media.placeholder }}
+                            >
+                              <Image
+                                src={piece.media.src}
+                                alt={piece.media.alt}
+                                fill
+                                sizes="(min-width: 768px) 35vw, 80vw"
+                                className="object-cover"
+                              />
+                            </div>
+                            <figcaption className="p-3 pb-1">
+                              <Label>0{index + 1} / Visual study</Label>
+                              <h3 className="mt-2 font-serif text-2xl">
+                                {piece.title}
+                              </h3>
+                              <p className="mt-2 text-sm leading-6 text-black/55">
+                                {piece.note}
+                              </p>
+                            </figcaption>
+                          </figure>
+                        ))
+                      ) : (
+                        <div className="col-span-2 rotate-1 border border-dashed border-black/25 bg-[#fffdf8] p-10 shadow-sm">
+                          <Label>Drawer open / awaiting first study</Label>
+                          <p className="mt-5 font-serif text-4xl leading-tight">
+                            Loose screens belong here, without being forced into
+                            a case study.
+                          </p>
+                          <p className="mt-5 max-w-md leading-7 text-black/55">
+                            Add a title, a short note, and an image to the
+                            playground collection when a visual is ready to
+                            keep.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {isAbout && (
+                    <div className="space-y-8">
+                      <div>
+                        <Label>Working principles</Label>
+                        <h3 className="mt-3 font-serif text-4xl">
+                          How I approach the work.
+                        </h3>
+                      </div>
+                      {aboutMe.principles.map((principle, index) => (
+                        <article
+                          key={principle.id}
+                          className={`${index % 2 ? "rotate-1" : "-rotate-1"} border border-black/15 bg-[#fffdf8] p-6 shadow-sm`}
+                        >
+                          <Label>0{index + 1}</Label>
+                          <h3 className="mt-3 font-serif text-3xl">
+                            {principle.title}
+                          </h3>
+                          <p className="mt-3 leading-7 text-black/60">
+                            {principle.body}
                           </p>
                         </article>
                       ))}
                     </div>
-                  </div>
-                  <div className="mt-8">
-                    <Label>Tools</Label>
-                    <p className="mt-3 text-sm leading-6">
-                      {resume.tools.join(" · ")}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => window.print()}
-                    className="mt-10 flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm text-paper"
-                  >
-                    <Download size={16} /> {resume.downloadLabel}
-                  </button>
-                </>
-              )}
-              {activeModal === "contact" && (
-                <>
-                  <a
-                    href={`mailto:${siteIdentity.email}`}
-                    className="flex items-center gap-3 text-xl underline underline-offset-8"
-                  >
-                    <Mail /> {siteIdentity.email}
-                  </a>
-                  <dl className="mt-10 space-y-4">
-                    {checkoutSlip.ledger.map((entry) => (
-                      <div
-                        key={entry.label}
-                        className="flex justify-between gap-6 border-b border-dashed border-black/20 pb-2"
-                      >
-                        <dt>
-                          <Label>{entry.label}</Label>
-                        </dt>
-                        <dd>{entry.stamp}</dd>
+                  )}
+                  {activeModal === "resume" && (
+                    <>
+                      <div>
+                        <Label>{resume.label}</Label>
+                        <h3 className="mt-3 font-serif text-4xl">
+                          {resume.headline}
+                        </h3>
+                        <p className="mt-4 leading-7 text-black/65">
+                          {resume.summary}
+                        </p>
                       </div>
-                    ))}
-                  </dl>
-                </>
-              )}
-              <FolioNext current={activeModal} onOpen={onOpenVolume} />
-            </div>
-          </>
-        )}
+                      <div className="mt-10 space-y-8">
+                        {resume.experience.map((entry) => (
+                          <article key={entry.id}>
+                            <Label>
+                              {entry.period} · {entry.location}
+                            </Label>
+                            <h3 className="mt-2 font-serif text-3xl">
+                              {entry.role}
+                            </h3>
+                            <p className="mt-1 text-sm">{entry.company}</p>
+                            <p className="mt-4 leading-7">{entry.summary}</p>
+                            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
+                              {entry.highlights.map((highlight) => (
+                                <li key={highlight}>{highlight}</li>
+                              ))}
+                            </ul>
+                          </article>
+                        ))}
+                      </div>
+                      <div className="mt-10 border-t border-black/15 pt-8">
+                        <Label>Core skills</Label>
+                        <p className="mt-3 text-sm leading-6">
+                          {resume.coreSkills.join(" · ")}
+                        </p>
+                      </div>
+                      <div className="mt-8">
+                        <Label>Design-system depth</Label>
+                        <div className="mt-4 space-y-4">
+                          {resume.designSystemSkills.map((skill) => (
+                            <article
+                              key={skill.id}
+                              className="grid grid-cols-[1fr_auto] gap-x-4"
+                            >
+                              <p className="font-medium">{skill.label}</p>
+                              <span className="font-mono text-[8px] uppercase tracking-widest">
+                                {skill.proficiency}
+                              </span>
+                              <p className="col-span-2 mt-1 text-sm leading-6 text-black/55">
+                                {skill.note}
+                              </p>
+                            </article>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mt-8">
+                        <Label>Tools</Label>
+                        <p className="mt-3 text-sm leading-6">
+                          {resume.tools.join(" · ")}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => window.print()}
+                        className="mt-10 flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm text-paper"
+                      >
+                        <Download size={16} /> {resume.downloadLabel}
+                      </button>
+                    </>
+                  )}
+                  {activeModal === "contact" && (
+                    <>
+                      <a
+                        href={`mailto:${siteIdentity.email}`}
+                        className="flex items-center gap-3 text-xl underline underline-offset-8"
+                      >
+                        <Mail /> {siteIdentity.email}
+                      </a>
+                      <dl className="mt-10 space-y-4">
+                        {checkoutSlip.ledger.map((entry) => (
+                          <div
+                            key={entry.label}
+                            className="flex justify-between gap-6 border-b border-dashed border-black/20 pb-2"
+                          >
+                            <dt>
+                              <Label>{entry.label}</Label>
+                            </dt>
+                            <dd>{entry.stamp}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </>
+                  )}
+                  <FolioNext current={activeModal} onOpen={onOpenVolume} />
+                </div>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </motion.article>
     </motion.div>
   );

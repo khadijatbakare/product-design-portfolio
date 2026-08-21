@@ -118,7 +118,7 @@ export default function Home() {
           <AnimatePresence mode="wait">
             {activeModal && (
               <BookSpreadModal
-                key={activeModal}
+                key="book-spread"
                 activeModal={activeModal}
                 selectedProject={selectedProject}
                 onClose={closeModal}
