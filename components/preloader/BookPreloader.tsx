@@ -16,27 +16,16 @@ export interface BookPreloaderProps {
 }
 
 export function BookPreloader({ onComplete }: BookPreloaderProps) {
-  const [progress, setProgress] = useState(0);
+  const [complete, setComplete] = useState(false);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (reducedMotion) {
-      setProgress(100);
-      return;
-    }
-    const timer = window.setInterval(() => {
-      setProgress((current) => {
-        if (current >= 80) {
-          window.clearInterval(timer);
-          return 100;
-        }
-        return current + 20;
-      });
-    }, 150);
-    return () => window.clearInterval(timer);
+    const timer = window.setTimeout(
+      () => setComplete(true),
+      reducedMotion ? 100 : 1000,
+    );
+    return () => window.clearTimeout(timer);
   }, [reducedMotion]);
-
-  const complete = progress === 100;
 
   return (
     <motion.div
@@ -51,35 +40,42 @@ export function BookPreloader({ onComplete }: BookPreloaderProps) {
       }}
       role="status"
       aria-live="polite"
-      aria-label={`Loading portfolio, ${progress}% complete. Welcome to my little corner of the internet.`}
     >
-      <div className="relative mb-8 flex h-64 w-14 flex-col items-center justify-between overflow-hidden rounded-[2px] border border-neutral-700/60 bg-[#1e2024] py-4 shadow-2xl">
+      <span className="sr-only">
+        Loading portfolio. Welcome to my little corner of the internet.
+      </span>
+      <div
+        className="relative mb-8 flex h-64 w-20 flex-col items-center justify-between overflow-hidden rounded-[2px] border border-neutral-700/60 bg-[#1e2024] py-4 shadow-2xl"
+        aria-hidden="true"
+      >
         <motion.div
           className="absolute inset-0 z-0 origin-bottom bg-[#d8ff55]/90"
           initial={{ scaleY: 0 }}
-          animate={{ scaleY: progress / 100 }}
+          animate={{ scaleY: 1 }}
           transition={{
-            duration: reducedMotion ? 0.01 : 0.15,
-            ease: "easeInOut",
+            duration: reducedMotion ? 0.01 : 1,
+            ease: [0.65, 0, 0.35, 1],
           }}
           aria-hidden="true"
         />
-        <span className="relative z-10 font-mono text-[8px] uppercase tracking-widest text-neutral-300 mix-blend-difference">
+        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[8px] uppercase tracking-widest text-[#faf7f2]">
           Folio / 26
         </span>
         <div className="relative z-10 flex rotate-180 items-center justify-center [writing-mode:vertical-rl]">
-          <span className="font-serif text-[11px] uppercase tracking-widest text-[#faf7f2] mix-blend-difference">
+          <span className="whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-serif text-[11px] uppercase tracking-widest text-[#faf7f2]">
             Portfolio Index
           </span>
         </div>
-        <span className="relative z-10 font-mono text-[8px] tracking-widest text-neutral-300 mix-blend-difference">
+        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[8px] tracking-widest text-[#faf7f2]">
           VOL. 00
         </span>
       </div>
 
-      <h2 className="max-w-xs text-balance text-center font-serif text-lg leading-relaxed text-[#faf7f2] sm:max-w-md sm:text-xl">
-        <span className="sr-only">{welcome}</span>
-        <span aria-hidden="true">
+      <h2
+        aria-hidden="true"
+        className="max-w-xs text-balance text-center font-serif text-lg leading-relaxed text-[#faf7f2] sm:max-w-md sm:text-xl"
+      >
+        <span>
           {welcomeWords.map(({ word, start }, wordIndex) => (
             <span
               key={word}
