@@ -8,6 +8,11 @@ import { VintageGramophone } from "@/components/modal/VintageGramophone";
 export function StudyDesk() {
   const current = shelfCurios.reading.current;
   const listening = shelfCurios.listening;
+  const progress =
+    current?.progressPercent ??
+    (current?.currentPage && current.totalPages
+      ? Math.round((current.currentPage / current.totalPages) * 100)
+      : undefined);
 
   return (
     <section aria-labelledby="study-desk-title">
@@ -19,9 +24,21 @@ export function StudyDesk() {
       </h3>
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <article className="scrapbook-tile relative overflow-hidden border border-black/15 bg-[#f3ead8] p-5">
-          <p className="font-mono text-[8px] uppercase tracking-widest text-black/50">
-            Currently reading
-          </p>
+          <div className="flex items-center justify-between gap-3 font-mono text-[8px] uppercase tracking-widest text-black/50">
+            <p>Currently reading</p>
+            {current?.source ? (
+              <a
+                href={current.source.href}
+                target="_blank"
+                rel="noreferrer"
+                className="relative z-10 flex items-center gap-1 border-b border-black/25 pb-0.5"
+              >
+                {current.source.label} <ExternalLink size={9} />
+              </a>
+            ) : (
+              <span>Reading ledger</span>
+            )}
+          </div>
           <div className="mt-5 grid grid-cols-[72px_1fr] gap-4">
             <div className="relative aspect-[2/3] overflow-hidden border border-black/15 bg-[#9c4f35] shadow-md">
               {current?.cover ? (
@@ -40,24 +57,27 @@ export function StudyDesk() {
             </div>
             <div>
               <h4 className="font-serif text-xl leading-tight">
-                {current?.title ?? "Next entry not filed yet"}
+                {current?.title ?? "Reading update coming soon"}
               </h4>
               <p className="mt-1 text-xs text-black/50">
-                {current?.author ?? "Update in content.ts"}
+                {current?.author ?? "The next book has not been filed yet."}
               </p>
-              {typeof current?.progressPercent === "number" && (
+              {typeof progress === "number" && (
                 <>
                   <div
                     className="mt-4 h-1 overflow-hidden rounded bg-black/10"
-                    aria-label={`${current.progressPercent}% read`}
+                    aria-label={`${progress}% read`}
                   >
                     <div
                       className="h-full bg-[#6e3727]"
-                      style={{ width: `${current.progressPercent}%` }}
+                      style={{ width: `${progress}%` }}
                     />
                   </div>
                   <p className="mt-2 font-mono text-[8px] uppercase tracking-widest">
-                    {current.progressPercent}% complete
+                    {current?.currentPage && current?.totalPages
+                      ? `Page ${current.currentPage} / ${current.totalPages} · `
+                      : ""}
+                    {progress}% complete
                   </p>
                 </>
               )}
@@ -68,16 +88,25 @@ export function StudyDesk() {
               {current.note}
             </p>
           )}
+          {current?.updatedAt && (
+            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-black/35">
+              Updated {current.updatedAt}
+            </p>
+          )}
         </article>
 
         <article className="scrapbook-tile group relative overflow-hidden border border-black/15 bg-[#e6dcc8] p-5">
           <p className="font-mono text-[8px] uppercase tracking-widest text-black/50">
-            Now playing
+            {listening.trackNumber
+              ? `Track ${listening.trackNumber}`
+              : "Now playing"}
           </p>
           <div className="mt-2">
             <VintageGramophone
               trackName={listening.track}
               artistName={listening.artist}
+              trackNumber={listening.trackNumber}
+              liveOnSpotify={Boolean(listening.spotifyUrl)}
             />
           </div>
           {listening.spotifyUrl && (
@@ -89,6 +118,11 @@ export function StudyDesk() {
             >
               Open in Spotify <ExternalLink size={11} />
             </a>
+          )}
+          {listening.updatedAt && (
+            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-black/35">
+              Spotify update · {listening.updatedAt}
+            </p>
           )}
           <p className="mt-4 font-mono text-[7px] uppercase tracking-widest text-black/40">
             No autoplay. Playback starts only on Spotify.

@@ -174,6 +174,8 @@ export interface ShelfCurios {
     readonly track?: string;
     readonly artist?: string;
     readonly spotifyUrl?: string;
+    readonly trackNumber?: string;
+    readonly updatedAt?: string;
   };
   readonly portrait?: MediaAsset;
   readonly reading: {
@@ -185,8 +187,15 @@ export interface ShelfCurios {
       readonly title: string;
       readonly author: string;
       readonly progressPercent?: number;
+      readonly currentPage?: number;
+      readonly totalPages?: number;
       readonly note?: string;
       readonly cover?: MediaAsset;
+      readonly source?: {
+        readonly label: "Fable" | "Goodreads";
+        readonly href: string;
+      };
+      readonly updatedAt?: string;
     };
   };
 }

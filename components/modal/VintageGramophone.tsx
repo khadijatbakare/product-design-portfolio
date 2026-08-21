@@ -6,11 +6,15 @@ import { motion, useReducedMotion } from "framer-motion";
 interface VintageGramophoneProps {
   readonly trackName?: string;
   readonly artistName?: string;
+  readonly trackNumber?: string;
+  readonly liveOnSpotify?: boolean;
 }
 
 export function VintageGramophone({
   trackName = "Between records",
   artistName = "The next track has not been filed yet.",
+  trackNumber,
+  liveOnSpotify = false,
 }: VintageGramophoneProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const reducedMotion = useReducedMotion();
@@ -131,9 +135,15 @@ export function VintageGramophone({
         <span className="font-mono text-[8px] uppercase tracking-widest text-[#8f877b]">
           {isPlaying ? "Record spinning" : "Turntable paused"}
         </span>
-        <span className="font-serif text-xs text-[#2d2a26]">
-          {trackName} — {artistName}
+        <span className="font-mono text-[9px] leading-4 text-[#2d2a26]">
+          {trackNumber ? `TRACK ${trackNumber} — ` : ""}
+          {trackName} • {artistName}
         </span>
+        {liveOnSpotify && (
+          <span className="font-mono text-[8px] uppercase tracking-widest text-[#36795a]">
+            Live on Spotify
+          </span>
+        )}
       </div>
     </div>
   );
