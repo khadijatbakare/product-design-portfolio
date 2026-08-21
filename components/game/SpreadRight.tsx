@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { LogOut, RotateCcw } from "lucide-react";
+import { ArrowUpRight, LogOut, Mail, RotateCcw } from "lucide-react";
+import { siteIdentity } from "@/data/content";
 import {
   MAPPING_TABLE,
   isFlipAvailable,
@@ -161,12 +162,41 @@ export function WinPanel({ state }: { readonly state: GameState }) {
       : "Shelf cleared.";
   return (
     <motion.div
-      className="mt-7 border border-black/20 bg-white/70 p-5 text-center"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      className="mt-7 border border-black/20 bg-white/70 p-5 text-center shadow-[0_8px_22px_rgba(45,36,25,.08)]"
+      initial={{ opacity: 0, y: 12, rotate: -1 }}
+      animate={{ opacity: 1, y: 0, rotate: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
-      <p className="font-serif text-3xl">{winner}</p>
+      <motion.div
+        className="stamp-ink mx-auto w-fit border-[3px] border-[#8c2d19] px-4 py-2 font-mono text-[10px] font-bold uppercase leading-5 tracking-[.12em] text-[#8c2d19]"
+        initial={{ scale: 1.35, opacity: 0, rotate: -5 }}
+        animate={{ scale: 1, opacity: 0.91, rotate: -1.35 }}
+        transition={{ type: "spring", stiffness: 360, damping: 20, delay: 0.1 }}
+      >
+        Ex Libris: You found me!
+      </motion.div>
+      <p className="mt-5 font-serif text-3xl">{winner}</p>
       <p className="mt-2 text-sm">All pairs matched in {state.moves} moves.</p>
+      <p className="mt-4 text-sm leading-6 text-black/60">
+        You’ve proven you have attention to detail. You may as well see what I
+        do with mine.
+      </p>
+      <div className="mt-5 flex flex-wrap justify-center gap-4 font-mono text-[8px] uppercase tracking-widest">
+        <a
+          href="/resume.pdf"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-1 border-b border-black/40 pb-1"
+        >
+          View résumé <ArrowUpRight size={11} />
+        </a>
+        <a
+          href={`mailto:${siteIdentity.email}`}
+          className="flex items-center gap-1 border-b border-black/40 pb-1"
+        >
+          Say hello <Mail size={11} />
+        </a>
+      </div>
     </motion.div>
   );
 }
