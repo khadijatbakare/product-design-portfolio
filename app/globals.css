@@ -131,6 +131,14 @@ html[data-theme="dark"] .theme-checkout {
   );
   background-size: 5px 5px;
 }
+.editorial-hover-slip {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .editorial-hover-slip {
+    display: flex;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;

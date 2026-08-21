@@ -2,17 +2,39 @@
 
 import { ThemeToggle } from "./ThemeToggle";
 import type { ModalView } from "@/data/content";
+import { useEditorialHover } from "@/components/hover/EditorialHoverProvider";
 
 export function SiteHeader({
   onOpen,
 }: {
   readonly onOpen: (view: ModalView) => void;
 }) {
-  const links: readonly { label: string; view: ModalView }[] = [
-    { label: "Work", view: "work" },
-    { label: "About", view: "about" },
-    { label: "Résumé", view: "resume" },
-    { label: "Contact", view: "contact" },
+  const { setHoverState } = useEditorialHover();
+  const links: readonly {
+    label: string;
+    view: ModalView;
+    hover: string;
+    meta: string;
+  }[] = [
+    {
+      label: "Work",
+      view: "work",
+      hover: "Selected case studies",
+      meta: "Vol. 01",
+    },
+    { label: "About", view: "about", hover: "About Khadijat", meta: "Vol. 03" },
+    {
+      label: "Résumé",
+      view: "resume",
+      hover: "Experience and résumé",
+      meta: "Vol. 03",
+    },
+    {
+      label: "Contact",
+      view: "contact",
+      hover: "Start a conversation",
+      meta: "Checkout",
+    },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-current/10 bg-[color-mix(in_srgb,var(--room)_88%,transparent)] px-4 py-3 backdrop-blur-md sm:px-6 md:px-12">
@@ -31,6 +53,8 @@ export function SiteHeader({
                 key={link.view}
                 type="button"
                 onClick={() => onOpen(link.view)}
+                onMouseEnter={() => setHoverState(link.hover, link.meta)}
+                onMouseLeave={() => setHoverState(null)}
                 className="min-h-11 px-2 font-mono text-[8px] uppercase tracking-wider sm:px-3 sm:text-[9px]"
               >
                 {link.label}

@@ -7,14 +7,18 @@ import {
   type LedgerEntry,
   type ModalView,
 } from "@/data/content";
+import { useEditorialHover } from "@/components/hover/EditorialHoverProvider";
 
 function LedgerLink({ entry }: { readonly entry: LedgerEntry }) {
+  const { setHoverState } = useEditorialHover();
   const external = entry.kind === "external" && entry.href.startsWith("http");
   return (
     <a
       href={entry.href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
+      onMouseEnter={() => setHoverState(entry.label, entry.stamp)}
+      onMouseLeave={() => setHoverState(null)}
       className="grid grid-cols-[1fr_auto] gap-5 border-b border-dashed border-[#6f5f4b]/40 py-2.5 transition-colors hover:text-[#8c2d19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       <span className="flex items-center gap-1">
