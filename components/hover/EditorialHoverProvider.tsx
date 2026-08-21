@@ -55,7 +55,7 @@ export function EditorialHoverProvider({
             {activeLabel}
           </span>
           {activeMeta && (
-            <span className="border-l border-[#e3dcce] pl-2 font-mono text-[9px] uppercase tracking-widest text-[#8c8477]">
+            <span className="border-l border-[#e3dcce] pl-2 font-mono text-[10px] uppercase tracking-widest text-[#625b52]">
               {activeMeta}
             </span>
           )}

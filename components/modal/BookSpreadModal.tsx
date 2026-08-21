@@ -49,9 +49,9 @@ function FolioNext({
     <button
       type="button"
       onClick={() => onOpen(nextView)}
-      className="mt-12 ml-auto block border-b border-black/35 pb-1 text-right font-mono text-[9px] uppercase tracking-widest hover:border-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+      className="mt-12 ml-auto block border-b border-black/35 pb-1 text-right font-mono text-[10px] uppercase tracking-widest hover:border-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
     >
-      <span className="block text-black/45">
+      <span className="block text-black/65">
         Series progression — book{" "}
         {index + 2 > folioOrder.length ? 1 : index + 2} of {folioOrder.length}
       </span>
@@ -62,7 +62,7 @@ function FolioNext({
 
 function Label({ children }: { readonly children: React.ReactNode }) {
   return (
-    <p className="font-mono text-[9px] uppercase tracking-[.18em] text-black/55">
+    <p className="font-mono text-[10px] uppercase tracking-[.18em] text-black/65">
       {children}
     </p>
   );
@@ -104,7 +104,7 @@ function WorkIndex({
           entry to turn the page.
         </p>
         <div className="absolute bottom-12 left-12 hidden -rotate-3 border border-black/15 bg-[#f0e2bd] px-5 py-4 shadow-sm md:block">
-          <p className="font-mono text-[9px] uppercase tracking-widest">
+          <p className="font-mono text-[10px] uppercase tracking-widest">
             Filed by outcome, not discipline
           </p>
         </div>
@@ -134,21 +134,21 @@ function WorkIndex({
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 )}
-                <span className="absolute left-2 top-2 bg-[#fff6d8] px-2 py-1 font-mono text-[8px] uppercase tracking-widest shadow">
+                <span className="absolute left-2 top-2 bg-[#fff6d8] px-2 py-1 font-mono text-[10px] uppercase tracking-widest shadow">
                   0{index + 1}
                 </span>
               </span>
               <span className="py-2 pr-2">
-                <span className="font-mono text-[8px] uppercase tracking-widest text-black/50">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-black/65">
                   {project.category} · {project.timeline}
                 </span>
                 <span className="mt-3 block font-serif text-2xl leading-7">
                   {project.title}
                 </span>
-                <span className="mt-3 block text-xs leading-5 text-black/55">
+                <span className="mt-3 block text-xs leading-5 text-black/65">
                   {project.summary}
                 </span>
-                <span className="mt-4 block font-mono text-[8px] uppercase tracking-widest">
+                <span className="mt-4 block font-mono text-[10px] uppercase tracking-widest">
                   Open entry →
                 </span>
               </span>
@@ -173,7 +173,7 @@ function WorkArgument({ project }: { readonly project: Project }) {
       >
         {project.title}
       </h2>
-      <p className="mt-5 font-mono text-[9px] uppercase tracking-widest text-black/50">
+      <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-black/65">
         {project.team} · {project.platform}
       </p>
       <p className="mt-8 border-y border-black/15 py-6 text-lg leading-8">
@@ -229,7 +229,7 @@ function WorkArgument({ project }: { readonly project: Project }) {
                 <article key={metric.label}>
                   <p className="font-serif text-5xl">{metric.value}</p>
                   <p className="mt-1 text-sm">{metric.label}</p>
-                  <p className="mt-2 font-mono text-[8px] uppercase tracking-widest text-black/45">
+                  <p className="mt-2 font-mono text-[10px] uppercase tracking-widest text-black/65">
                     Source: {metric.source} ·{" "}
                     {metric.verified ? "verified" : "pending verification"}
                   </p>
@@ -281,7 +281,7 @@ function WorkEvidence({
             <figcaption className="mt-3 flex items-start justify-between gap-4 text-xs leading-5">
               <span>{asset.caption}</span>
               {asset.spec && (
-                <span className="max-w-[45%] text-right font-mono text-[8px] uppercase tracking-widest text-black/50">
+                <span className="max-w-[45%] text-right font-mono text-[10px] uppercase tracking-widest text-black/65">
                   {asset.spec}
                 </span>
               )}
@@ -380,7 +380,7 @@ export function BookSpreadModal({
                 ? onSelectProject(null)
                 : onClose()
             }
-            className="font-mono text-[9px] uppercase tracking-widest"
+            className="font-mono text-[10px] uppercase tracking-widest"
           >
             ←{" "}
             {activeModal === "work" && selectedProject
@@ -393,13 +393,13 @@ export function BookSpreadModal({
               download="Khadijat-Bakare-Resume.pdf"
               onMouseEnter={() => setHoverState("Download résumé", "PDF")}
               onMouseLeave={() => setHoverState(null)}
-              className="hidden items-center gap-1.5 font-mono text-[8px] uppercase tracking-widest sm:flex"
+              className="hidden items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest sm:flex"
             >
               <Download size={13} /> Download résumé
             </a>
             <button
               onClick={onClose}
-              className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+              className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest"
               aria-label="Close book"
             >
               <X size={14} /> Close
@@ -507,7 +507,7 @@ export function BookSpreadModal({
                         {resume.education.map((entry) => (
                           <div key={entry.id} className="mt-3">
                             <p className="font-medium">{entry.qualification}</p>
-                            <p className="text-sm text-black/55">
+                            <p className="text-sm text-black/65">
                               {entry.school} · {entry.period}
                             </p>
                           </div>
@@ -577,7 +577,7 @@ export function BookSpreadModal({
                               <h3 className="mt-2 font-serif text-2xl">
                                 {piece.title}
                               </h3>
-                              <p className="mt-2 text-sm leading-6 text-black/55">
+                              <p className="mt-2 text-sm leading-6 text-black/65">
                                 {piece.note}
                               </p>
                             </figcaption>
@@ -590,7 +590,7 @@ export function BookSpreadModal({
                             Loose screens belong here, without being forced into
                             a case study.
                           </p>
-                          <p className="mt-5 max-w-md leading-7 text-black/55">
+                          <p className="mt-5 max-w-md leading-7 text-black/65">
                             Add a title, a short note, and an image to the
                             playground collection when a visual is ready to
                             keep.
@@ -668,10 +668,10 @@ export function BookSpreadModal({
                               className="grid grid-cols-[1fr_auto] gap-x-4"
                             >
                               <p className="font-medium">{skill.label}</p>
-                              <span className="font-mono text-[8px] uppercase tracking-widest">
+                              <span className="font-mono text-[10px] uppercase tracking-widest">
                                 {skill.proficiency}
                               </span>
-                              <p className="col-span-2 mt-1 text-sm leading-6 text-black/55">
+                              <p className="col-span-2 mt-1 text-sm leading-6 text-black/65">
                                 {skill.note}
                               </p>
                             </article>

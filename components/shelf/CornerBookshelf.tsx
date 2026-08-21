@@ -97,7 +97,7 @@ export function CornerBookshelf({
               className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
             >
               <p className="text-xs font-medium">{lagosLabel}</p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Lagos · West Africa Time
               </p>
             </motion.div>
@@ -110,7 +110,7 @@ export function CornerBookshelf({
               className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
             >
               <p className="text-xs font-medium">{curio.title}</p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 {curio.instruction} · Explore
               </p>
             </motion.div>
@@ -123,7 +123,7 @@ export function CornerBookshelf({
               className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
             >
               <p className="text-xs font-medium">UNO Flip Memory Match</p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Pick up the controller · Play
               </p>
             </motion.div>
@@ -136,7 +136,7 @@ export function CornerBookshelf({
               className="rounded-md border border-white/10 bg-[#181A1E]/95 px-4 py-2 text-center text-stone-100 shadow-xl backdrop-blur"
             >
               <p className="text-xs font-medium">{active.subtitle}</p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-stone-400">
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 {active.readTime} · {libraryCopy.open}
               </p>
             </motion.div>
@@ -723,7 +723,7 @@ export function CornerBookshelf({
         <button
           type="button"
           onClick={onOpenGame}
-          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[10px] uppercase tracking-wider"
         >
           <Gamepad2 size={15} aria-hidden="true" />
           Play
@@ -731,7 +731,7 @@ export function CornerBookshelf({
         <button
           type="button"
           onClick={() => onOpenCurio("listening")}
-          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[10px] uppercase tracking-wider"
         >
           <Music2 size={15} aria-hidden="true" />
           Listen
@@ -739,7 +739,7 @@ export function CornerBookshelf({
         <button
           type="button"
           onClick={() => onOpenCurio("portrait")}
-          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[9px] uppercase tracking-wider"
+          className="theme-toggle flex min-h-11 items-center gap-2 rounded-full border px-3 font-mono text-[10px] uppercase tracking-wider"
         >
           <ImageIcon size={15} aria-hidden="true" />
           Portrait

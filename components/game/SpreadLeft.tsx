@@ -16,7 +16,7 @@ export function SpreadLeft({
       <AnimatePresence>
         {cpuTurn && (
           <motion.p
-            className="absolute top-14 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-black/15 bg-[#faf8f4]/95 px-3 py-1.5 font-mono text-[8px] uppercase tracking-widest shadow-sm"
+            className="absolute top-14 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-black/15 bg-[#faf8f4]/95 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest shadow-sm"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}

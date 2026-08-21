@@ -42,7 +42,7 @@ export function SiteHeader({
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="text-left font-mono text-[9px] uppercase tracking-widest sm:text-[10px]"
+          className="text-left font-mono text-[10px] uppercase tracking-widest sm:text-[10px]"
         >
           Khadijat — Product Designer
         </button>
@@ -55,7 +55,7 @@ export function SiteHeader({
                 onClick={() => onOpen(link.view)}
                 onMouseEnter={() => setHoverState(link.hover, link.meta)}
                 onMouseLeave={() => setHoverState(null)}
-                className="min-h-11 px-2 font-mono text-[8px] uppercase tracking-wider sm:px-3 sm:text-[9px]"
+                className="min-h-11 px-2 font-mono text-[10px] uppercase tracking-wider sm:px-3 sm:text-[10px]"
               >
                 {link.label}
               </button>

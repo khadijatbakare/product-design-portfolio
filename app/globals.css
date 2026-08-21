@@ -28,6 +28,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 .theme-shell {
   background-color: var(--room);
@@ -67,6 +69,14 @@ body {
 :where(a, button, select, input, textarea, [tabindex]):focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
+}
+@media (forced-colors: active) {
+  :where(a, button, select, input, textarea, [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+  }
+  .theme-muted {
+    color: CanvasText;
+  }
 }
 .paper-texture {
   background-image: radial-gradient(var(--room-dot) 1px, transparent 1px);

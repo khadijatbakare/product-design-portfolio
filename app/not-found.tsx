@@ -128,7 +128,7 @@ export default function NotFound() {
             />
           </svg>
           <span
-            className="theme-muted mt-1 block font-mono text-[9px] uppercase tracking-widest"
+            className="theme-muted mt-1 block font-mono text-[10px] uppercase tracking-widest"
             aria-live="polite"
           >
             {isPlaying

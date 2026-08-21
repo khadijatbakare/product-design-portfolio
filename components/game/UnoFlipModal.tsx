@@ -209,7 +209,7 @@ export function UnoFlipModal({
             <nav className="absolute inset-x-0 top-0 z-20 flex justify-end border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3">
               <button
                 onClick={onClose}
-                className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+                className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest"
               >
                 <X size={14} /> Close Easter Egg
               </button>

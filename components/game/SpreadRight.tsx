@@ -38,7 +38,7 @@ export interface GameSetupProps {
 }
 export function TurnIndicator({ currentPlayer, thinking }: TurnIndicatorProps) {
   return (
-    <p className="mt-4 font-mono text-[9px] uppercase tracking-widest">
+    <p className="mt-4 font-mono text-[10px] uppercase tracking-widest">
       {currentPlayer === "human"
         ? "Your turn"
         : `The Librarian${thinking ? " is thinking…" : " plays"}`}
@@ -59,13 +59,13 @@ export function Scoreboard({
           key={player}
           className={`border p-3 ${currentPlayer === player ? "border-black" : "border-black/15"}`}
         >
-          <p className="font-mono text-[8px] uppercase">
+          <p className="font-mono text-[10px] uppercase">
             {player === "human" ? "You" : "The Librarian"}
           </p>
           <p className="mt-2 font-serif text-2xl">
             {scores[player].matches}/{pairCount}
           </p>
-          <p className="text-[9px]">{scores[player].moves} moves</p>
+          <p className="text-[10px]">{scores[player].moves} moves</p>
         </div>
       ))}
     </div>
@@ -73,7 +73,7 @@ export function Scoreboard({
 }
 export function GameSetup({ mode, difficulty, onChange }: GameSetupProps) {
   return (
-    <fieldset className="uno-setup mt-5 grid grid-cols-2 gap-2 font-mono text-[8px] uppercase">
+    <fieldset className="uno-setup mt-5 grid grid-cols-2 gap-2 font-mono text-[10px] uppercase">
       <label className="grid gap-1">
         Mode
         <select
@@ -105,7 +105,7 @@ export function GameSetup({ mode, difficulty, onChange }: GameSetupProps) {
           <option value="eidetic">Eidetic</option>
         </select>
       </label>
-      <p className="col-span-2 normal-case tracking-normal text-black/50">
+      <p className="col-span-2 normal-case tracking-normal text-black/65">
         Changing either option starts a fresh deal.
       </p>
     </fieldset>
@@ -135,14 +135,14 @@ export function FlipCardControl({
 export function MappingTable() {
   return (
     <section className="uno-mapping mt-5">
-      <p className="font-mono text-[8px] uppercase tracking-widest">
+      <p className="font-mono text-[10px] uppercase tracking-widest">
         Light ↔ Dark
       </p>
       <div className="mt-3 max-h-36 space-y-2 overflow-y-auto overscroll-contain">
         {MAPPING_TABLE.map((row) => (
           <div
             key={row.light}
-            className="flex justify-between border-b border-dashed border-black/15 pb-1 font-mono text-[9px]"
+            className="flex justify-between border-b border-dashed border-black/15 pb-1 font-mono text-[10px]"
           >
             <span>{row.light}</span>
             <span>→</span>
@@ -183,7 +183,7 @@ export function WinPanel({ state }: { readonly state: GameState }) {
         You’ve proven you have attention to detail. You may as well see what I
         do with mine.
       </p>
-      <div className="mt-5 flex flex-wrap justify-center gap-4 font-mono text-[8px] uppercase tracking-widest">
+      <div className="mt-5 flex flex-wrap justify-center gap-4 font-mono text-[10px] uppercase tracking-widest">
         <a
           href="/resume.pdf"
           target="_blank"
@@ -224,7 +224,7 @@ export function SpreadRight({
 }) {
   return (
     <aside className="uno-sidebar flex min-h-0 flex-col overflow-y-auto overscroll-contain bg-black/[.035] p-8 pt-20 md:p-6 md:pt-16">
-      <p className="font-mono text-[9px] uppercase tracking-[.2em]">
+      <p className="font-mono text-[10px] uppercase tracking-[.2em]">
         Game index / seeded {state.grid.seed}
       </p>
       <h2
@@ -246,17 +246,17 @@ export function SpreadRight({
       )}
       <dl className="mt-4 grid grid-cols-3 gap-3 border-y border-black/15 py-3">
         <div>
-          <dt className="font-mono text-[8px] uppercase">Moves</dt>
+          <dt className="font-mono text-[10px] uppercase">Moves</dt>
           <dd className="font-serif text-3xl">{state.moves}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[8px] uppercase">Pairs</dt>
+          <dt className="font-mono text-[10px] uppercase">Pairs</dt>
           <dd className="font-serif text-3xl">
             {state.matches}/{state.grid.pairCount}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[8px] uppercase">Side</dt>
+          <dt className="font-mono text-[10px] uppercase">Side</dt>
           <dd className="mt-2 font-mono text-xs uppercase">
             {state.grid.side}
           </dd>
@@ -283,13 +283,13 @@ export function SpreadRight({
       <div className="mt-auto flex flex-wrap items-center gap-5 pt-6">
         <button
           onClick={onReset}
-          className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest"
+          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest"
         >
           <RotateCcw size={14} /> New game
         </button>
         <button
           onClick={onGiveUp}
-          className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-widest text-black/55"
+          className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-black/65"
         >
           <LogOut size={14} /> Give up
         </button>

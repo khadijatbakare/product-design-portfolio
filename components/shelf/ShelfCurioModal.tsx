@@ -65,7 +65,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
             </button>
             {active === "listening" && (
               <>
-                <p className="font-mono text-[9px] uppercase tracking-widest">
+                <p className="font-mono text-[10px] uppercase tracking-widest">
                   {loading
                     ? "Checking the turntable"
                     : nowPlaying?.isPlaying
@@ -85,19 +85,19 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
                 <h2
                   id="curio-title"
                   className="mt-4 font-serif text-4xl leading-none"
+                  aria-live="polite"
                 >
                   {listening.track ?? "Between records."}
                 </h2>
-                <p className="mt-4 text-black/55">
-                  {listening.artist ??
-                    "The next track has not been filed yet."}
+                <p className="mt-4 text-black/65">
+                  {listening.artist ?? "The next track has not been filed yet."}
                 </p>
                 {listening.spotifyUrl && (
                   <a
                     href={listening.spotifyUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-8 flex w-fit items-center gap-2 border-b border-black pb-1 font-mono text-[9px] uppercase tracking-widest"
+                    className="mt-8 flex w-fit items-center gap-2 border-b border-black pb-1 font-mono text-[10px] uppercase tracking-widest"
                   >
                     Listen on Spotify <ExternalLink size={13} />
                   </a>
@@ -106,7 +106,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
             )}
             {active === "portrait" && (
               <>
-                <p className="font-mono text-[9px] uppercase tracking-widest">
+                <p className="font-mono text-[10px] uppercase tracking-widest">
                   The author / undated
                 </p>
                 <div className="mt-6 border-[12px] border-[#60452d] bg-[#d9cbb8] p-2 shadow-inner">
@@ -119,7 +119,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
                       className="aspect-[4/5] w-full object-cover sepia-[.18]"
                     />
                   ) : (
-                    <div className="grid aspect-[4/5] place-items-center bg-[#c8baa7] font-serif text-7xl text-black/35">
+                    <div className="grid aspect-[4/5] place-items-center bg-[#c8baa7] font-serif text-7xl text-black/65">
                       KB
                     </div>
                   )}
@@ -134,7 +134,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
             )}
             {active === "reading" && (
               <>
-                <p className="font-mono text-[9px] uppercase tracking-widest">
+                <p className="font-mono text-[10px] uppercase tracking-widest">
                   Reading ledger / {shelfCurios.reading.year}
                 </p>
                 <div className="mt-7 border-y-4 border-double border-black/30 py-7 text-center">
@@ -149,7 +149,7 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
                   </h2>
                 </div>
                 {shelfCurios.reading.goal && (
-                  <p className="mt-5 text-center text-sm text-black/55">
+                  <p className="mt-5 text-center text-sm text-black/65">
                     {shelfCurios.reading.count} of {shelfCurios.reading.goal}{" "}
                     this year
                   </p>

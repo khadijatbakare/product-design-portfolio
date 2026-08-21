@@ -58,7 +58,7 @@ export function BookPreloader({ onComplete }: BookPreloaderProps) {
           }}
           aria-hidden="true"
         />
-        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[8px] uppercase tracking-widest text-[#faf7f2]">
+        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-[#faf7f2]">
           Folio / 26
         </span>
         <div className="relative z-10 flex rotate-180 items-center justify-center [writing-mode:vertical-rl]">
@@ -66,7 +66,7 @@ export function BookPreloader({ onComplete }: BookPreloaderProps) {
             Portfolio Index
           </span>
         </div>
-        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[8px] tracking-widest text-[#faf7f2]">
+        <span className="relative z-10 whitespace-nowrap rounded-sm bg-[#121316]/90 px-2 py-1 font-mono text-[10px] tracking-widest text-[#faf7f2]">
           VOL. 00
         </span>
       </div>

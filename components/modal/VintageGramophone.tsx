@@ -154,16 +154,19 @@ export function VintageGramophone({
         )}
       </button>
 
-      <div className="mt-2 flex flex-col items-center gap-1 text-center">
-        <span className="font-mono text-[8px] uppercase tracking-widest text-[#8f877b]">
+      <div
+        className="mt-2 flex flex-col items-center gap-1 text-center"
+        aria-live="polite"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-widest text-[#625b52]">
           {isSpinning ? "Record spinning" : "Turntable paused"}
         </span>
-        <span className="font-mono text-[9px] leading-4 text-[#2d2a26]">
+        <span className="font-mono text-[10px] leading-4 text-[#2d2a26]">
           {trackNumber ? `TRACK ${trackNumber} — ` : ""}
           {trackName} • {artistName}
         </span>
         {liveOnSpotify && (
-          <span className="font-mono text-[8px] uppercase tracking-widest text-[#36795a]">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[#36795a]">
             Live on Spotify
           </span>
         )}

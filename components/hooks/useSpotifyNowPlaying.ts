@@ -23,7 +23,9 @@ export function useSpotifyNowPlaying(enabled = true) {
           cache: "no-store",
         });
         if (!active) return;
-        setNowPlaying(response.ok ? await response.json() : { isPlaying: false });
+        setNowPlaying(
+          response.ok ? await response.json() : { isPlaying: false },
+        );
       } catch {
         if (active) setNowPlaying({ isPlaying: false });
       } finally {

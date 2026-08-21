@@ -26,7 +26,7 @@ export function StudyDesk() {
 
   return (
     <section aria-labelledby="study-desk-title">
-      <p className="font-mono text-[9px] uppercase tracking-[.18em] text-black/55">
+      <p className="font-mono text-[10px] uppercase tracking-[.18em] text-black/65">
         The study desk
       </p>
       <h3 id="study-desk-title" className="mt-3 font-serif text-4xl">
@@ -34,7 +34,7 @@ export function StudyDesk() {
       </h3>
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <article className="scrapbook-tile relative overflow-hidden border border-black/15 bg-[#f3ead8] p-5">
-          <div className="flex items-center justify-between gap-3 font-mono text-[8px] uppercase tracking-widest text-black/50">
+          <div className="flex items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-widest text-black/65">
             <p>Currently reading</p>
             {current?.source ? (
               <a
@@ -69,7 +69,7 @@ export function StudyDesk() {
               <h4 className="font-serif text-xl leading-tight">
                 {current?.title ?? "Reading update coming soon"}
               </h4>
-              <p className="mt-1 text-xs text-black/50">
+              <p className="mt-1 text-xs text-black/65">
                 {current?.author ?? "The next book has not been filed yet."}
               </p>
               {typeof progress === "number" && (
@@ -83,7 +83,7 @@ export function StudyDesk() {
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-                  <p className="mt-2 font-mono text-[8px] uppercase tracking-widest">
+                  <p className="mt-2 font-mono text-[10px] uppercase tracking-widest">
                     {current?.currentPage && current?.totalPages
                       ? `Page ${current.currentPage} / ${current.totalPages} · `
                       : ""}
@@ -99,14 +99,14 @@ export function StudyDesk() {
             </p>
           )}
           {current?.updatedAt && (
-            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-black/35">
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-black/65">
               Updated {current.updatedAt}
             </p>
           )}
         </article>
 
         <article className="scrapbook-tile group relative overflow-hidden border border-black/15 bg-[#e6dcc8] p-5">
-          <p className="font-mono text-[8px] uppercase tracking-widest text-black/50">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-black/65">
             {listening.trackNumber
               ? `Track ${listening.trackNumber}`
               : "Now playing"}
@@ -127,21 +127,21 @@ export function StudyDesk() {
               href={liveListening.spotifyUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-4 flex w-fit items-center gap-1 border-b border-black/40 pb-1 font-mono text-[8px] uppercase tracking-widest"
+              className="mt-4 flex w-fit items-center gap-1 border-b border-black/40 pb-1 font-mono text-[10px] uppercase tracking-widest"
             >
               Open in Spotify <ExternalLink size={11} />
             </a>
           )}
           {spotify?.isPlaying ? (
-            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-[#36795a]">
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-[#36795a]">
               Live from Spotify · refreshes every minute
             </p>
           ) : listening.updatedAt ? (
-            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-black/35">
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-black/65">
               Spotify update · {listening.updatedAt}
             </p>
           ) : null}
-          <p className="mt-4 font-mono text-[7px] uppercase tracking-widest text-black/40">
+          <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-black/65">
             No autoplay. Playback starts only on Spotify.
           </p>
         </article>
