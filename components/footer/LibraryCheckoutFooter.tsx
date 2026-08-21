@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { ArrowUpRight, Download } from "lucide-react";
 import {
   checkoutSlip,
@@ -27,6 +28,94 @@ function LedgerLink({ entry }: { readonly entry: LedgerEntry }) {
       </span>
       <span>{entry.stamp}</span>
     </a>
+  );
+}
+
+function AvailabilityStamp({ stamp }: { readonly stamp: string }) {
+  const id = useId().replace(/:/g, "");
+  const noiseId = `stamp-noise-${id}`;
+  const maskId = `stamp-mask-${id}`;
+  const [date, status = "AVAILABLE FOR WORK"] = stamp.split(" — ");
+  return (
+    <svg
+      viewBox="0 0 240 76"
+      className="h-auto w-full max-w-60 -rotate-[1.35deg] text-[#8c2d19]"
+      role="img"
+      aria-label={stamp}
+    >
+      <defs>
+        <filter id={noiseId} x="-10%" y="-20%" width="120%" height="140%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.72"
+            numOctaves="3"
+            seed="17"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <mask
+          id={maskId}
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="0"
+          width="240"
+          height="76"
+        >
+          <rect width="240" height="76" fill="white" />
+          <rect
+            width="240"
+            height="76"
+            fill="black"
+            opacity="0.2"
+            filter={`url(#${noiseId})`}
+          />
+        </mask>
+      </defs>
+      <g mask={`url(#${maskId})`} fill="currentColor" stroke="currentColor">
+        <rect
+          x="4"
+          y="4"
+          width="232"
+          height="68"
+          rx="2"
+          fill="none"
+          strokeWidth="4"
+        />
+        <rect
+          x="10"
+          y="10"
+          width="220"
+          height="56"
+          rx="1"
+          fill="none"
+          strokeWidth="1.2"
+        />
+        <text
+          x="120"
+          y="31"
+          textAnchor="middle"
+          stroke="none"
+          fontFamily="monospace"
+          fontSize="11"
+          fontWeight="700"
+          letterSpacing="1.8"
+        >
+          {date}
+        </text>
+        <text
+          x="120"
+          y="50"
+          textAnchor="middle"
+          stroke="none"
+          fontFamily="monospace"
+          fontSize="10"
+          fontWeight="700"
+          letterSpacing="1.2"
+        >
+          {status}
+        </text>
+      </g>
+    </svg>
   );
 }
 
@@ -62,9 +151,7 @@ export function LibraryCheckoutFooter({
               ))}
             </div>
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="stamp-ink border-[3px] border-[#8c2d19] px-4 py-3 font-mono text-[11px] font-bold uppercase leading-5 tracking-[.12em] text-[#8c2d19]">
-                {checkoutSlip.availability.stamp}
-              </div>
+              <AvailabilityStamp stamp={checkoutSlip.availability.stamp} />
               <p className="mt-4 text-xs leading-5">
                 {checkoutSlip.availability.label}
               </p>
