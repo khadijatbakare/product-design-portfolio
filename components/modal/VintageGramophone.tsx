@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface VintageGramophoneProps {
@@ -18,29 +18,30 @@ export function VintageGramophone({
   trackNumber,
   liveOnSpotify = false,
 }: VintageGramophoneProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [decorativePlaying, setDecorativePlaying] = useState(false);
   const reducedMotion = useReducedMotion();
-  const labelClipId = `record-label-${useId().replace(/:/g, "")}`;
+  const isSpinning = liveOnSpotify || decorativePlaying;
 
   return (
     <div className="flex flex-col items-center justify-center bg-[#faf8f5]/55 p-3 text-[#2d2a26] select-none">
       <button
         type="button"
-        aria-pressed={isPlaying}
-        aria-label={`${isPlaying ? "Pause" : "Spin"} the decorative gramophone`}
+        aria-pressed={isSpinning}
+        aria-label={
+          liveOnSpotify
+            ? "Record spinning with the current Spotify track"
+            : `${decorativePlaying ? "Pause" : "Spin"} the decorative gramophone`
+        }
         className="group relative h-44 w-36 cursor-pointer rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
-        onClick={() => setIsPlaying((playing) => !playing)}
+        onClick={() => {
+          if (!liveOnSpotify) setDecorativePlaying((playing) => !playing);
+        }}
       >
         <svg
           viewBox="0 0 180 220"
           className="h-full w-full fill-none stroke-[#2d2a26] stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]"
           aria-hidden="true"
         >
-          <defs>
-            <clipPath id={labelClipId}>
-              <ellipse cx="90" cy="155" rx="16" ry="4.5" />
-            </clipPath>
-          </defs>
           <rect
             x="25"
             y="170"
@@ -66,9 +67,9 @@ export function VintageGramophone({
           />
 
           <motion.g
-            animate={{ rotate: isPlaying && !reducedMotion ? 360 : 0 }}
+            animate={{ rotate: isSpinning && !reducedMotion ? 360 : 0 }}
             transition={{
-              repeat: isPlaying && !reducedMotion ? Infinity : 0,
+              repeat: isSpinning && !reducedMotion ? Infinity : 0,
               duration: 8,
               ease: "linear",
             }}
@@ -88,25 +89,13 @@ export function VintageGramophone({
               ry="10"
               className="stroke-[#2d2a26]/20 stroke-[1]"
             />
-            {albumArt ? (
-              <image
-                href={albumArt}
-                x="74"
-                y="139"
-                width="32"
-                height="32"
-                preserveAspectRatio="xMidYMid slice"
-                clipPath={`url(#${labelClipId})`}
-              />
-            ) : (
-              <ellipse
-                cx="90"
-                cy="155"
-                rx="16"
-                ry="4.5"
-                className="fill-[#c5a059] stroke-[#c5a059]"
-              />
-            )}
+            <ellipse
+              cx="90"
+              cy="155"
+              rx="16"
+              ry="4.5"
+              className="fill-[#c5a059] stroke-[#c5a059]"
+            />
             <circle cx="90" cy="155" r="1.5" className="fill-[#faf8f5]" />
           </motion.g>
 
@@ -139,7 +128,7 @@ export function VintageGramophone({
             />
           </g>
 
-          {isPlaying && !reducedMotion && (
+          {isSpinning && !reducedMotion && (
             <motion.path
               d="M152 25C164 36 164 52 152 64"
               className="stroke-[#c5a059]/60 stroke-[1.2]"
@@ -149,11 +138,25 @@ export function VintageGramophone({
             />
           )}
         </svg>
+        {albumArt && (
+          <span className="pointer-events-none absolute left-1/2 top-[70.45%] flex h-[9px] w-[27px] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-[50%] border border-black/20 bg-[#c5a059] shadow-inner">
+            <motion.span
+              className="block h-8 w-8 shrink-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${JSON.stringify(albumArt)})` }}
+              animate={{ rotate: isSpinning && !reducedMotion ? 360 : 0 }}
+              transition={{
+                repeat: isSpinning && !reducedMotion ? Infinity : 0,
+                duration: 8,
+                ease: "linear",
+              }}
+            />
+          </span>
+        )}
       </button>
 
       <div className="mt-2 flex flex-col items-center gap-1 text-center">
         <span className="font-mono text-[8px] uppercase tracking-widest text-[#8f877b]">
-          {isPlaying ? "Record spinning" : "Turntable paused"}
+          {isSpinning ? "Record spinning" : "Turntable paused"}
         </span>
         <span className="font-mono text-[9px] leading-4 text-[#2d2a26]">
           {trackNumber ? `TRACK ${trackNumber} — ` : ""}
