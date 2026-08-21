@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   libraryCopy,
@@ -41,6 +41,8 @@ export function CornerBookshelf({
   onOpenCurio,
 }: CornerBookshelfProps) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [openingVolume, setOpeningVolume] = useState<string | null>(null);
+  const openingTimer = useRef<number | null>(null);
   const [now, setNow] = useState<Date | null>(null);
   const active = volumes.find((volume) => volume.id === hovered);
   const gamepadActive = hovered === "gamepad";
@@ -51,6 +53,13 @@ export function CornerBookshelf({
     const timer = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(timer);
   }, []);
+  useEffect(
+    () => () => {
+      if (openingTimer.current !== null)
+        window.clearTimeout(openingTimer.current);
+    },
+    [],
+  );
   const lagos = now ? new Date(now.getTime() + 60 * 60 * 1000) : null;
   const hour = lagos ? lagos.getUTCHours() % 12 : 0;
   const minute = lagos?.getUTCMinutes() ?? 0;
@@ -294,7 +303,17 @@ export function CornerBookshelf({
           const y = 390 - height;
           const angle = spineAngle[index];
           const isHovered = hovered === volume.id;
-          const open = () => onOpen(volume.contents, volume.id);
+          const isOpening = openingVolume === volume.id;
+          const open = () => {
+            if (openingTimer.current !== null) return;
+            setHovered(null);
+            setOpeningVolume(volume.id);
+            openingTimer.current = window.setTimeout(() => {
+              onOpen(volume.contents, volume.id);
+              setOpeningVolume(null);
+              openingTimer.current = null;
+            }, 180);
+          };
           const fontFamily =
             volume.typography === "mono"
               ? "monospace"
@@ -318,9 +337,13 @@ export function CornerBookshelf({
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(volume.id)}
               onBlur={() => setHovered(null)}
-              animate={{ y: isHovered ? -16 : 0 }}
-              transition={{ type: "spring", stiffness: 340, damping: 25 }}
-              className="cursor-pointer outline-none"
+              animate={{ y: isOpening ? -28 : isHovered ? -14 : 0 }}
+              transition={
+                isOpening
+                  ? { duration: 0.18, ease: [0.22, 1, 0.36, 1] }
+                  : { type: "spring", stiffness: 340, damping: 28 }
+              }
+              className={`cursor-pointer outline-none ${openingVolume && !isOpening ? "pointer-events-none" : ""}`}
             >
               <rect
                 x={x}

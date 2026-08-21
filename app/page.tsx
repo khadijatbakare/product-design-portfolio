@@ -110,32 +110,36 @@ export default function Home() {
               />
             </div>
             <LibraryCheckoutFooter onOpen={openModal} />
-            <AnimatePresence mode="wait">
-              {activeModal && (
-                <BookSpreadModal
-                  key={activeModal}
-                  activeModal={activeModal}
-                  selectedProject={selectedProject}
-                  onClose={closeModal}
-                  onSelectProject={setSelectedProject}
-                  onOpenVolume={openModal}
-                />
-              )}
-            </AnimatePresence>
-            <UnoFlipModal
-              key={gameMode}
-              open={isGameOpen}
-              mode={gameMode}
-              difficulty="even"
-              onClose={() => setIsGameOpen(false)}
-            />
-            <ShelfCurioModal
-              active={activeCurio}
-              onClose={() => setActiveCurio(null)}
-            />
           </motion.div>
         )}
       </AnimatePresence>
+      {!isLoading && (
+        <>
+          <AnimatePresence mode="wait">
+            {activeModal && (
+              <BookSpreadModal
+                key={activeModal}
+                activeModal={activeModal}
+                selectedProject={selectedProject}
+                onClose={closeModal}
+                onSelectProject={setSelectedProject}
+                onOpenVolume={openModal}
+              />
+            )}
+          </AnimatePresence>
+          <UnoFlipModal
+            key={gameMode}
+            open={isGameOpen}
+            mode={gameMode}
+            difficulty="even"
+            onClose={() => setIsGameOpen(false)}
+          />
+          <ShelfCurioModal
+            active={activeCurio}
+            onClose={() => setActiveCurio(null)}
+          />
+        </>
+      )}
     </main>
   );
 }
