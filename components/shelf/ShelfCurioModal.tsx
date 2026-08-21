@@ -22,7 +22,11 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
           className="fixed inset-0 z-[70] grid place-items-center bg-[#111217]/75 p-5 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{
+            opacity: 0,
+            scale: 0.98,
+            transition: { duration: 0.2, ease: "easeOut" },
+          }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="curio-title"
@@ -33,7 +37,11 @@ export function ShelfCurioModal({ active, onClose }: ShelfCurioModalProps) {
             className="relative w-full max-w-md border border-black/15 bg-[#f8f1e5] p-8 shadow-2xl"
             initial={{ y: 28, rotate: -2, scale: 0.94 }}
             animate={{ y: 0, rotate: active === "portrait" ? 1 : -1, scale: 1 }}
-            exit={{ y: 18, opacity: 0 }}
+            exit={{
+              opacity: 0,
+              scale: 0.98,
+              transition: { duration: 0.2, ease: "easeOut" },
+            }}
             onClick={(event) => event.stopPropagation()}
           >
             <button

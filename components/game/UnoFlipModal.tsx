@@ -175,7 +175,11 @@ export function UnoFlipModal({
           className="fixed inset-0 z-[80] grid place-items-center bg-[#111217]/85 p-0 backdrop-blur-md sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={{
+            opacity: 0,
+            scale: 0.98,
+            transition: { duration: 0.2, ease: "easeOut" },
+          }}
           role="dialog"
           aria-modal="true"
           aria-labelledby="uno-title"
@@ -185,7 +189,11 @@ export function UnoFlipModal({
             className="open-book relative grid h-[100dvh] max-h-[100dvh] w-full max-w-6xl grid-cols-1 overflow-y-auto overscroll-contain bg-[#FAF8F4] shadow-2xl sm:rounded-md md:h-[75vh] md:max-h-[75vh] md:grid-cols-[1.25fr_.75fr] md:overflow-hidden"
             initial={{ scale: 0.9, y: 24 }}
             animate={{ scale: 1, y: 0 }}
-            exit={{ scale: 0.94, y: 20 }}
+            exit={{
+              opacity: 0,
+              scale: 0.98,
+              transition: { duration: 0.2, ease: "easeOut" },
+            }}
           >
             <nav className="absolute inset-x-0 top-0 z-20 flex justify-end border-b border-black/10 bg-[#FAF8F4]/95 px-5 py-3">
               <button
