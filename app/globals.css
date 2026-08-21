@@ -94,17 +94,21 @@ html[data-theme="dark"] .theme-checkout {
   content: "";
   position: absolute;
   inset: 0 auto 0 50%;
-  width: 32px;
+  display: none;
+  width: 16px;
   pointer-events: none;
   transform: translateX(-50%);
   background: linear-gradient(
     to right,
     rgba(0, 0, 0, 0.06),
-    transparent 38%,
-    rgba(255, 255, 255, 0.24) 50%,
-    transparent 62%,
+    transparent 50%,
     rgba(0, 0, 0, 0.06)
   );
+}
+@media (min-width: 768px) {
+  .open-book::after {
+    display: block;
+  }
 }
 .stamp-ink {
   transform: rotate(-1.35deg);
