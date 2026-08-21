@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { shelfCurios } from "@/data/content";
 import { VintageGramophone } from "@/components/modal/VintageGramophone";
@@ -8,6 +9,40 @@ import { VintageGramophone } from "@/components/modal/VintageGramophone";
 export function StudyDesk() {
   const current = shelfCurios.reading.current;
   const listening = shelfCurios.listening;
+  const [spotify, setSpotify] = useState<{
+    readonly isPlaying: boolean;
+    readonly track?: string;
+    readonly artist?: string;
+    readonly albumArt?: string;
+    readonly spotifyUrl?: string;
+  } | null>(null);
+  useEffect(() => {
+    let active = true;
+    const update = async () => {
+      try {
+        const response = await fetch("/api/spotify/now-playing", {
+          cache: "no-store",
+        });
+        if (response.ok && active) setSpotify(await response.json());
+      } catch {
+        // The content-file entry remains the intentional offline fallback.
+      }
+    };
+    void update();
+    const timer = window.setInterval(update, 60_000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, []);
+  const liveListening = spotify?.track
+    ? {
+        track: spotify.track,
+        artist: spotify.artist,
+        albumArt: spotify.albumArt,
+        spotifyUrl: spotify.spotifyUrl,
+      }
+    : listening;
   const progress =
     current?.progressPercent ??
     (current?.currentPage && current.totalPages
@@ -103,15 +138,18 @@ export function StudyDesk() {
           </p>
           <div className="mt-2">
             <VintageGramophone
-              trackName={listening.track}
-              artistName={listening.artist}
+              trackName={liveListening.track}
+              artistName={liveListening.artist}
+              albumArt={
+                "albumArt" in liveListening ? liveListening.albumArt : undefined
+              }
               trackNumber={listening.trackNumber}
-              liveOnSpotify={Boolean(listening.spotifyUrl)}
+              liveOnSpotify={Boolean(spotify?.isPlaying)}
             />
           </div>
-          {listening.spotifyUrl && (
+          {liveListening.spotifyUrl && (
             <a
-              href={listening.spotifyUrl}
+              href={liveListening.spotifyUrl}
               target="_blank"
               rel="noreferrer"
               className="mt-4 flex w-fit items-center gap-1 border-b border-black/40 pb-1 font-mono text-[8px] uppercase tracking-widest"
@@ -119,11 +157,15 @@ export function StudyDesk() {
               Open in Spotify <ExternalLink size={11} />
             </a>
           )}
-          {listening.updatedAt && (
+          {spotify?.isPlaying ? (
+            <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-[#36795a]">
+              Live from Spotify · refreshes every minute
+            </p>
+          ) : listening.updatedAt ? (
             <p className="mt-3 font-mono text-[7px] uppercase tracking-widest text-black/35">
               Spotify update · {listening.updatedAt}
             </p>
-          )}
+          ) : null}
           <p className="mt-4 font-mono text-[7px] uppercase tracking-widest text-black/40">
             No autoplay. Playback starts only on Spotify.
           </p>

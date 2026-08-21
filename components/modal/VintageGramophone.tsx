@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface VintageGramophoneProps {
   readonly trackName?: string;
   readonly artistName?: string;
+  readonly albumArt?: string;
   readonly trackNumber?: string;
   readonly liveOnSpotify?: boolean;
 }
@@ -13,11 +14,13 @@ interface VintageGramophoneProps {
 export function VintageGramophone({
   trackName = "Between records",
   artistName = "The next track has not been filed yet.",
+  albumArt,
   trackNumber,
   liveOnSpotify = false,
 }: VintageGramophoneProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const reducedMotion = useReducedMotion();
+  const labelClipId = `record-label-${useId().replace(/:/g, "")}`;
 
   return (
     <div className="flex flex-col items-center justify-center bg-[#faf8f5]/55 p-3 text-[#2d2a26] select-none">
@@ -33,6 +36,11 @@ export function VintageGramophone({
           className="h-full w-full fill-none stroke-[#2d2a26] stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]"
           aria-hidden="true"
         >
+          <defs>
+            <clipPath id={labelClipId}>
+              <ellipse cx="90" cy="155" rx="16" ry="4.5" />
+            </clipPath>
+          </defs>
           <rect
             x="25"
             y="170"
@@ -80,13 +88,25 @@ export function VintageGramophone({
               ry="10"
               className="stroke-[#2d2a26]/20 stroke-[1]"
             />
-            <ellipse
-              cx="90"
-              cy="155"
-              rx="16"
-              ry="4.5"
-              className="fill-[#c5a059] stroke-[#c5a059]"
-            />
+            {albumArt ? (
+              <image
+                href={albumArt}
+                x="74"
+                y="139"
+                width="32"
+                height="32"
+                preserveAspectRatio="xMidYMid slice"
+                clipPath={`url(#${labelClipId})`}
+              />
+            ) : (
+              <ellipse
+                cx="90"
+                cy="155"
+                rx="16"
+                ry="4.5"
+                className="fill-[#c5a059] stroke-[#c5a059]"
+              />
+            )}
             <circle cx="90" cy="155" r="1.5" className="fill-[#faf8f5]" />
           </motion.g>
 
