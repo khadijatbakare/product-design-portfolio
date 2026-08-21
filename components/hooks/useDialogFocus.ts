@@ -14,6 +14,10 @@ export function useDialogFocus(
     if (!enabled) return;
     const trigger = document.activeElement as HTMLElement | null;
     const dialog = ref.current;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyOverscroll = document.body.style.overscrollBehavior;
+    const previousRootOverscroll =
+      document.documentElement.style.overscrollBehavior;
     dialog?.querySelector<HTMLElement>(focusable)?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -35,9 +39,14 @@ export function useDialogFocus(
       }
     };
     document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+    document.documentElement.style.overscrollBehavior = "none";
     window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.overscrollBehavior = previousBodyOverscroll;
+      document.documentElement.style.overscrollBehavior =
+        previousRootOverscroll;
       window.removeEventListener("keydown", onKeyDown);
       trigger?.focus();
     };

@@ -20,6 +20,7 @@ import {
 } from "@/data/content";
 import { useDialogFocus } from "@/components/hooks/useDialogFocus";
 import { StudyDesk } from "@/components/modal/StudyDesk";
+import { useEditorialHover } from "@/components/hover/EditorialHoverProvider";
 
 interface Props {
   readonly activeModal: ModalView;
@@ -324,6 +325,7 @@ export function BookSpreadModal({
   onSelectProject,
   onOpenVolume,
 }: Props) {
+  const { setHoverState } = useEditorialHover();
   const dialogRef = useRef<HTMLElement>(null);
   useDialogFocus(dialogRef, onClose);
   const project = projects.find((item) => item.slug === selectedProject);
@@ -383,6 +385,8 @@ export function BookSpreadModal({
             <a
               href="/resume.pdf"
               download="Khadijat-Bakare-Resume.pdf"
+              onMouseEnter={() => setHoverState("Download résumé", "PDF")}
+              onMouseLeave={() => setHoverState(null)}
               className="hidden items-center gap-1.5 font-mono text-[8px] uppercase tracking-widest sm:flex"
             >
               <Download size={13} /> Download résumé
@@ -674,12 +678,17 @@ export function BookSpreadModal({
                           {resume.tools.join(" · ")}
                         </p>
                       </div>
-                      <button
-                        onClick={() => window.print()}
+                      <a
+                        href="/resume.pdf"
+                        download="Khadijat-Bakare-Resume.pdf"
+                        onMouseEnter={() =>
+                          setHoverState("Download résumé", "PDF")
+                        }
+                        onMouseLeave={() => setHoverState(null)}
                         className="mt-10 flex w-fit items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm text-paper"
                       >
                         <Download size={16} /> {resume.downloadLabel}
-                      </button>
+                      </a>
                     </>
                   )}
                   {activeModal === "contact" && (

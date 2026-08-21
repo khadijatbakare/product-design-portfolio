@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, LogOut, Mail, RotateCcw } from "lucide-react";
 import { siteIdentity } from "@/data/content";
+import { useEditorialHover } from "@/components/hover/EditorialHoverProvider";
 import {
   MAPPING_TABLE,
   isFlipAvailable,
@@ -137,7 +138,7 @@ export function MappingTable() {
       <p className="font-mono text-[8px] uppercase tracking-widest">
         Light ↔ Dark
       </p>
-      <div className="mt-3 max-h-36 space-y-2 overflow-y-auto">
+      <div className="mt-3 max-h-36 space-y-2 overflow-y-auto overscroll-contain">
         {MAPPING_TABLE.map((row) => (
           <div
             key={row.light}
@@ -153,6 +154,7 @@ export function MappingTable() {
   );
 }
 export function WinPanel({ state }: { readonly state: GameState }) {
+  const { setHoverState } = useEditorialHover();
   if (state.status !== "complete") return null;
   const winner =
     state.mode === "versus"
@@ -186,12 +188,16 @@ export function WinPanel({ state }: { readonly state: GameState }) {
           href="/resume.pdf"
           target="_blank"
           rel="noreferrer"
+          onMouseEnter={() => setHoverState("View résumé", "PDF")}
+          onMouseLeave={() => setHoverState(null)}
           className="flex items-center gap-1 border-b border-black/40 pb-1"
         >
           View résumé <ArrowUpRight size={11} />
         </a>
         <a
           href={`mailto:${siteIdentity.email}`}
+          onMouseEnter={() => setHoverState("Say hello", "Email")}
+          onMouseLeave={() => setHoverState(null)}
           className="flex items-center gap-1 border-b border-black/40 pb-1"
         >
           Say hello <Mail size={11} />

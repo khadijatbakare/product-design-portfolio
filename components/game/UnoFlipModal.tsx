@@ -121,6 +121,13 @@ export function UnoFlipModal({
     if (!open) return;
     triggerRef.current = document.activeElement as HTMLElement;
     const modal = modalRef.current;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyOverscroll = document.body.style.overscrollBehavior;
+    const previousRootOverscroll =
+      document.documentElement.style.overscrollBehavior;
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+    document.documentElement.style.overscrollBehavior = "none";
     modal?.querySelector<HTMLElement>("button, a")?.focus();
     const keys = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -148,6 +155,10 @@ export function UnoFlipModal({
     window.addEventListener("keydown", keys);
     return () => {
       window.removeEventListener("keydown", keys);
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.overscrollBehavior = previousBodyOverscroll;
+      document.documentElement.style.overscrollBehavior =
+        previousRootOverscroll;
       triggerRef.current?.focus();
     };
   }, [open, onClose]);

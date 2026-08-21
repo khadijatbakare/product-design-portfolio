@@ -35,6 +35,7 @@ export function LibraryCheckoutFooter({
 }: {
   readonly onOpen: (view: ModalView) => void;
 }) {
+  const { setHoverState } = useEditorialHover();
   return (
     <footer className="theme-checkout border-t border-black/15 bg-[#c8bda8] px-6 py-16 transition-[filter] duration-500 md:px-12">
       <div className="mx-auto max-w-4xl rounded-t-[2rem] border border-[#786a55] bg-[#9c8a6c] px-4 pt-5 shadow-[0_18px_35px_rgba(50,40,25,.25)] md:px-10 md:pt-8">
@@ -73,6 +74,10 @@ export function LibraryCheckoutFooter({
             <button
               type="button"
               onClick={() => onOpen("resume")}
+              onMouseEnter={() =>
+                setHoverState("View résumé on site", "Vol. 03")
+              }
+              onMouseLeave={() => setHoverState(null)}
               className="border-b border-[#493f32] pb-1"
             >
               View résumé on site →
@@ -80,6 +85,8 @@ export function LibraryCheckoutFooter({
             <a
               href="/resume.pdf"
               download="Khadijat-Bakare-Resume.pdf"
+              onMouseEnter={() => setHoverState("Download résumé", "PDF")}
+              onMouseLeave={() => setHoverState(null)}
               className="flex items-center gap-2 border-b border-[#493f32] pb-1"
             >
               <Download size={14} />
