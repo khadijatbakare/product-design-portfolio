@@ -645,38 +645,6 @@ export function CornerBookshelf({
           {libraryCopy.volumeCount}
         </text>
       </svg>
-      <nav
-        aria-label="Bookshelf index"
-        className="-mt-5 flex max-w-3xl flex-wrap justify-center gap-2 px-4 pb-5"
-      >
-        {volumes.map((volume) => (
-          <button
-            key={volume.id}
-            type="button"
-            onClick={() => onOpen(volume.contents, volume.id)}
-            className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest transition-colors hover:bg-black/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            {volume.volume} · {volume.spine}
-          </button>
-        ))}
-        <button
-          type="button"
-          onClick={onOpenGame}
-          className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          Play UNO Flip
-        </button>
-        {(Object.keys(curioCopy) as ShelfCurioId[]).map((id) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => onOpenCurio(id)}
-            className="min-h-11 rounded-full border border-current/20 px-4 py-2 font-mono text-[9px] uppercase tracking-widest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            {curioCopy[id].title}
-          </button>
-        ))}
-      </nav>
     </section>
   );
 }
