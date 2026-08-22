@@ -52,7 +52,20 @@ export function SiteHeader({
               <button
                 key={link.view}
                 type="button"
-                onClick={() => onOpen(link.view)}
+                onClick={() => {
+                  if (link.view === "work") {
+                    document.getElementById("selected-work")?.scrollIntoView({
+                      behavior: window.matchMedia(
+                        "(prefers-reduced-motion: reduce)",
+                      ).matches
+                        ? "auto"
+                        : "smooth",
+                      block: "start",
+                    });
+                    return;
+                  }
+                  onOpen(link.view);
+                }}
                 onMouseEnter={() => setHoverState(link.hover, link.meta)}
                 onMouseLeave={() => setHoverState(null)}
                 className="min-h-11 px-2 font-mono text-[10px] uppercase tracking-wider sm:px-3 sm:text-[10px]"

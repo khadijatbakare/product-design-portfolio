@@ -475,21 +475,19 @@ export function BookSpreadModal({
                     id="modal-title"
                     className="mt-10 font-serif text-5xl leading-none md:text-7xl"
                   >
-                    {activeModal === "resume" ? (
-                      resume.headline
-                    ) : isAbout ? (
-                      aboutMe.headline.map((line) => (
-                          <span
-                            key={line}
-                            className={`block ${line === aboutMe.emphasis ? "italic" : ""}`}
-                          >
-                            {line}
-                          </span>
-                        ))
-                    ) : (
-                      (volume?.heading ??
-                        "Let’s make sense of something together.")
-                    )}
+                    {activeModal === "resume"
+                      ? resume.headline
+                      : isAbout
+                        ? aboutMe.headline.map((line) => (
+                            <span
+                              key={line}
+                              className={`block ${line === aboutMe.emphasis ? "italic" : ""}`}
+                            >
+                              {line}
+                            </span>
+                          ))
+                        : (volume?.heading ??
+                          "Let’s make sense of something together.")}
                   </h2>
                   {volume && (
                     <p className="mt-8 max-w-md text-lg leading-8 text-black/65">

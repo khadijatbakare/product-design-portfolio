@@ -9,6 +9,7 @@ import { BookSpreadModal } from "@/components/modal/BookSpreadModal";
 import { LibraryCheckoutFooter } from "@/components/footer/LibraryCheckoutFooter";
 import { UnoFlipModal } from "@/components/game/UnoFlipModal";
 import { EditorialHoverProvider } from "@/components/hover/EditorialHoverProvider";
+import { SelectedWorkFeed } from "@/components/work/SelectedWorkFeed";
 import {
   aboutMe,
   getProjectsByVolume,
@@ -33,6 +34,10 @@ export default function Home() {
     if (view === "work") {
       setSelectedProject(null);
     }
+  }, []);
+  const openProject = useCallback((slug: string) => {
+    setSelectedProject(slug);
+    setActiveModal("work");
   }, []);
 
   useEffect(() => {
@@ -114,6 +119,7 @@ export default function Home() {
                   onOpenCurio={setActiveCurio}
                 />
               </div>
+              <SelectedWorkFeed onOpenProject={openProject} />
               <LibraryCheckoutFooter onOpen={openModal} />
             </motion.div>
           )}
