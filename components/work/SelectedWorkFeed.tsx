@@ -4,176 +4,176 @@ import Image from "next/image";
 import { useRef } from "react";
 import {
   motion,
+  type MotionValue,
   useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { projects, type Project } from "@/data/content";
 
 interface SelectedWorkFeedProps {
   readonly onOpenProject: (slug: string) => void;
 }
 
-function CatalogCard({
+function ProjectCard({
   project,
   index,
   total,
+  progress,
   onOpen,
 }: {
   readonly project: Project;
   readonly index: number;
   readonly total: number;
+  readonly progress: MotionValue<number>;
   readonly onOpen: (slug: string) => void;
 }) {
-  const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const scale = useTransform(scrollYProgress, [0, 0.72, 1], [1, 1, 0.96]);
-  const opacity = useTransform(scrollYProgress, [0, 0.78, 1], [1, 1, 0.76]);
+  const start = total > 1 ? index / total : 0;
+  const targetScale = index === total - 1 ? 1 : 0.96;
+  const scale = useTransform(progress, [start, 1], [1, targetScale]);
+  const opacity = useTransform(progress, [start, 1], [1, index === total - 1 ? 1 : 0.78]);
   const preview = project.visualAssets[0];
-  const verifiedMetrics = project.metrics.filter((metric) => metric.verified);
+  const verifiedMetric = project.metrics.find((metric) => metric.verified);
+  const tags = [project.category, project.platform, `${project.systemDecisions.length} decisions`];
 
   return (
     <article
-      ref={sectionRef}
-      className="relative min-h-[92vh]"
-      aria-labelledby={`project-${project.slug}-title`}
+      className="sticky mb-12 flex min-h-[72vh] items-center justify-center px-4 sm:mb-16"
+      style={{ top: `calc(5rem + ${index * 24}px)`, zIndex: index + 1 }}
+      aria-labelledby={`selected-${project.slug}-title`}
     >
       <motion.div
-        className="sticky top-20 overflow-hidden border border-[#dcd5c9] bg-[#faf7f2] text-[#23201d] shadow-[0_18px_55px_rgba(45,36,25,.12)] md:top-24"
         style={{
           scale: reducedMotion ? 1 : scale,
           opacity: reducedMotion ? 1 : opacity,
-          zIndex: index + 1,
         }}
+        className="relative flex w-full max-w-4xl origin-top flex-col items-start justify-between gap-8 rounded-[4px] border border-[#d5cec2] bg-[#faf7f2] p-6 text-[#23201d] shadow-[0_12px_40px_rgba(0,0,0,.08)] sm:p-10 md:flex-row"
       >
-        <div className="grid min-h-[72vh] md:grid-cols-[.9fr_1.1fr]">
-          <div className="flex flex-col p-6 sm:p-9 md:p-12">
-            <div className="flex items-center justify-between border-b border-[#dcd5c9] pb-4 font-mono text-[10px] uppercase tracking-[.16em] text-[#625b52]">
-              <span>
+        <div className="flex min-w-0 flex-1 flex-col justify-between space-y-7 self-stretch">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#625b52]">
                 [{String(index + 1).padStart(2, "0")}] / {String(total).padStart(2, "0")}
               </span>
-              <span>{project.category}</span>
+              <span className="text-[#a49b8e]" aria-hidden="true">•</span>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#8c2d19]">
+                {project.role}
+              </span>
             </div>
-            <p className="mt-8 font-mono text-[10px] uppercase tracking-[.16em] text-[#625b52]">
-              Selected work · {project.timeline}
-            </p>
-            <h2
-              id={`project-${project.slug}-title`}
-              className="mt-4 max-w-xl font-serif text-4xl leading-[1.02] sm:text-5xl"
+            <h3
+              id={`selected-${project.slug}-title`}
+              className="font-serif text-3xl font-medium leading-snug tracking-tight"
             >
               {project.title}
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-7 text-black/65">
+            </h3>
+            <p className="text-sm leading-7 text-[#57534e] sm:text-base">
               {project.summary}
             </p>
+          </div>
 
-            <dl className="mt-8 grid grid-cols-2 gap-x-5 gap-y-5 border-y border-[#dcd5c9] py-6">
-              {verifiedMetrics.length > 0 ? (
-                verifiedMetrics.slice(0, 4).map((metric) => (
-                  <div key={metric.label}>
-                    <dt className="font-mono text-[10px] uppercase tracking-wider text-[#625b52]">
-                      {metric.label}
-                    </dt>
-                    <dd className="mt-1 font-serif text-2xl">{metric.value}</dd>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-wider text-[#625b52]">Role</dt>
-                    <dd className="mt-1 text-sm leading-6">{project.role}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-wider text-[#625b52]">Platform</dt>
-                    <dd className="mt-1 text-sm leading-6">{project.platform}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-wider text-[#625b52]">Timeline</dt>
-                    <dd className="mt-1 text-sm leading-6">{project.timeline}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[10px] uppercase tracking-wider text-[#625b52]">Decisions documented</dt>
-                    <dd className="mt-1 font-serif text-2xl">{project.systemDecisions.length}</dd>
-                  </div>
-                </>
-              )}
-            </dl>
+          <div className="border-l-2 border-[#b38a2c] py-1 pl-3">
+            <span className="block font-mono text-[10px] uppercase tracking-wider text-[#625b52]">
+              {verifiedMetric ? "Verified outcome" : "Project marker"}
+            </span>
+            <p className="mt-1 font-mono text-xs leading-5">
+              {verifiedMetric
+                ? `${verifiedMetric.value} — ${verifiedMetric.label}`
+                : `${project.timeline} · ${project.team}`}
+            </p>
+          </div>
 
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#e8e2d8] pt-4">
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-[2px] bg-[#efeae1] px-2 py-1 font-mono text-[10px] text-[#57534e]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
             <a
               href={`#case-study-${project.slug}`}
               onClick={(event) => {
                 event.preventDefault();
                 onOpen(project.slug);
               }}
-              className="mt-8 flex min-h-11 w-fit items-center gap-2 border-b border-[#23201d] font-mono text-[10px] uppercase tracking-[.14em]"
+              className="inline-flex min-h-11 items-center font-mono text-xs font-medium uppercase tracking-wider text-[#8c2d19] underline-offset-4 hover:underline"
             >
-              Read case study <ArrowUpRight size={14} aria-hidden="true" />
+              Read case study ↗
             </a>
           </div>
-
-          <div
-            className="relative min-h-72 border-t border-[#dcd5c9] md:min-h-full md:border-l md:border-t-0"
-            style={{ background: preview?.media.placeholder ?? "#e8e1d5" }}
-          >
-            {preview && (
-              <Image
-                src={preview.media.src}
-                alt={preview.media.alt}
-                fill
-                sizes="(min-width: 768px) 48vw, 100vw"
-                className="object-cover p-5 sm:p-8"
-              />
-            )}
-            <div className="absolute inset-x-5 bottom-5 border border-[#dcd5c9] bg-[#faf7f2]/95 p-4 backdrop-blur sm:inset-x-8 sm:bottom-8">
-              <p className="font-mono text-[10px] uppercase tracking-[.14em] text-[#625b52]">
-                {preview?.spec ?? "Project preview"}
-              </p>
-              <p className="mt-2 font-serif text-sm leading-6">
-                {preview?.caption ?? project.summary}
-              </p>
-            </div>
-          </div>
         </div>
+
+        <figure
+          className="relative aspect-[4/3] w-full overflow-hidden rounded-[2px] border border-[#d5cec2] bg-[#eae4d9] shadow-inner md:w-[42%]"
+          style={{ background: preview?.media.placeholder ?? "#eae4d9" }}
+        >
+          {preview ? (
+            <Image
+              src={preview.media.src}
+              alt={preview.media.alt}
+              fill
+              sizes="(min-width: 768px) 370px, 90vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="grid h-full place-items-center font-mono text-xs uppercase tracking-widest text-[#625b52]">
+              Folio preview forthcoming
+            </div>
+          )}
+          {preview && (
+            <figcaption className="absolute inset-x-3 bottom-3 z-10 border border-[#d5cec2] bg-[#faf7f2]/95 p-3 font-mono text-[10px] leading-5 text-[#57534e] backdrop-blur">
+              {preview.spec ?? preview.caption}
+            </figcaption>
+          )}
+        </figure>
       </motion.div>
     </article>
   );
 }
 
 export function SelectedWorkFeed({ onOpenProject }: SelectedWorkFeedProps) {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
     <section
       id="selected-work"
-      className="scroll-mt-20 border-t border-current/10 px-4 pb-24 pt-20 md:px-12 md:pt-28"
+      ref={containerRef}
+      className="relative scroll-mt-20 bg-[#faf8f5] pb-32 pt-20"
       aria-labelledby="selected-work-heading"
     >
-      <header className="mx-auto mb-14 max-w-7xl md:mb-20">
-        <p className="font-mono text-[10px] uppercase tracking-[.18em]">
-          Selected work / archival index
-        </p>
-        <div className="mt-5 grid gap-5 md:grid-cols-[1fr_22rem] md:items-end">
+      <header className="mx-auto mb-12 flex max-w-4xl flex-col items-start justify-between gap-4 border-b border-[#e3dcce] px-4 pb-4 sm:flex-row sm:items-end sm:gap-6">
+        <div>
+          <span className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-[#625b52]">
+            Section 01 // Index
+          </span>
           <h2
             id="selected-work-heading"
-            className="max-w-3xl font-serif text-5xl leading-none md:text-7xl"
+            className="font-serif text-3xl tracking-tight text-[#23201d]"
           >
-            Projects filed by the decisions that shaped them.
+            Selected Works &amp; Systems
           </h2>
-          <p className="theme-muted leading-7">
-            Each folio pairs the argument with its evidence: context, constraints, system decisions, trade-offs, and what shipped.
-          </p>
         </div>
+        <span className="shrink-0 font-mono text-xs text-[#625b52]">
+          [ {projects.length} Case Studies ]
+        </span>
       </header>
-      <div className="mx-auto max-w-7xl">
+
+      <div className="w-full">
         {projects.map((project, index) => (
-          <CatalogCard
+          <ProjectCard
             key={project.slug}
             project={project}
             index={index}
             total={projects.length}
+            progress={scrollYProgress}
             onOpen={onOpenProject}
           />
         ))}
